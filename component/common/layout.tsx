@@ -4,9 +4,11 @@ import { useEffect } from 'react';
 import styles from '../../styles/layout.module.scss';
 import Button from '@material-ui/core/Button'
 import CustomAlert from './customAlert';
+import { useRouter } from 'next/router';
 
 declare var $:any;
 export default function Layout(props){
+    const router = useRouter();
     const [navHeight,setNavHeight] = React.useState(null);
 
     const [categories,setCategories] = React.useState([]);
@@ -14,6 +16,7 @@ export default function Layout(props){
 
     const [cart,setCart] = React.useState(0)
     const [wishlist,setWishlist] = React.useState(0)
+    const [user,setUser] = React.useState(null)
      
 
     useEffect(()=>{
@@ -34,7 +37,10 @@ export default function Layout(props){
         if(cart){
             setCart(cart.length)
         }
-        
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            setUser(user)
+        }
 
     },[])
     
@@ -57,7 +63,12 @@ export default function Layout(props){
         })
         
     }
-        
+    
+    const logout = () => {
+        localStorage.removeItem('user')
+        setUser(null);
+        router.push("/")
+    }
     
     return <div>
       <CustomAlert error={props.error} success={props.success} />
@@ -99,17 +110,18 @@ export default function Layout(props){
                             <img src="/assets/icons/perm_identity-24px.svg" className="mx-2" width="30px" alt="perm_identity-24px"/> 
                         </section>
                         <ul className={"dropdown-menu d-none shadow z-20"} style={{position:"fixed",top:navHeight-2,left:"77%",width:"20%",margin:"0 auto"}} aria-labelledby="navbarDropdownProfile">
-                        <div className="p-3">
+                            {!user?<div className="p-3">
                                 <h6 className="h6 p-0 m-0">Welcome</h6>
                                 <small className="text-sm">To access account and manage orders</small>
                                 <div className="my-2"></div>
                                 <Link href="/auth/login"><Button variant="outlined" color="secondary">
                                 Login / Register
                                 </Button></Link>
-                            </div>
+                            </div>:<></>}
+                            
                             <Link href="/account/profile"><div className="p-3 cursor-pointer">
-                                <h6 className="h6 p-0 m-0">Hello Rahul</h6>
-                                <small className="text-sm">6209460626</small>
+                                <h6 className="h6 p-0 m-0">Hello {user?.name}</h6>
+                                <small className="text-sm">{user?.phone}</small>
                                 <div className="my-2"></div> 
                             </div></Link>
                             
@@ -120,7 +132,7 @@ export default function Layout(props){
                             <li className="dropdown-item cursor-pointer">Gift Cards</li>
                             <li className="dropdown-item cursor-pointer">Contact Us</li>
                             <hr/>
-                            <li className="dropdown-item cursor-pointer">Logout</li>
+                            {user?<li className="dropdown-item cursor-pointer" onClick={logout}>Logout</li>:<div></div>}
                         </ul>
                     </span>
                     <span>
