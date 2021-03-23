@@ -77,14 +77,14 @@ export default function Layout(props){
             <div className="container-fluid">
                 <span className="navbar-brand">
                     <Link href="/">
-                        <img src="/logo.png" width="50px" alt="logo"/>
+                        <img src="/logo.png" width="150px" alt="logo"/>
                     </Link>
                 </span>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon" />
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul className="navbar-nav hidden md:flex me-auto mb-2 mb-lg-0">
                     {/* <li className="nav-item">
                     <span className="nav-link active" aria-current="page"></span>
                     </li>  */}
@@ -101,9 +101,8 @@ export default function Layout(props){
                                 </div>   
                             </ul>
                         </li> 
-                    })}
-                     
-                </ul>
+                    })} 
+                </ul> 
                 <div className="navbar-nav pb-2 p-md-0"> 
                     <span className={styles.dropdown}>
                         <section className="nav-link" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">

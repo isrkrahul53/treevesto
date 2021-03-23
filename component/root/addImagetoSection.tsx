@@ -1,14 +1,14 @@
 import Button from '@material-ui/core/Button'
 
-function Container({children}){
+function Container(props){
     return <div>
     <div className="container-fluid">
-        {children}
+        {props.children}
     </div>
     <div className="p-2" style={{position:"absolute",bottom:0,left:0,width:"100%"}}>
         <div className="d-flex justify-content-end">
             <div className="btn-group float-right"> 
-                <button className="btn btn-primary">Save</button>
+                <button className="btn btn-primary" onClick={props.submit}>Save</button>
             </div>
         </div>
     </div>
@@ -49,9 +49,10 @@ function SelectInput(props){
 }
 
 export default function AddImagetoSectionModal(props){
+
     
-    return <Container>
-{/*  
+    return <Container submit={props.submit}>
+    {/*  
     <SelectInput id="language" label="Language *" options={[
         {key:0,value:"English"},
         {key:1,value:"Hindi"},
@@ -59,7 +60,7 @@ export default function AddImagetoSectionModal(props){
      */}
     <BootstrapInputField id="image" label="Image *" type="file" change={props.image} />
 
-    <BootstrapInputField id="path" label="Image Path *" type="text" change={props.path} />
+    <BootstrapInputField id="link" label="Image Link *" type="text" change={props.link} />
     
     {/* <BootstrapTextArea id="desc" label="Product Description *" value={props.values.desc} change={props.desc} /> */}
 

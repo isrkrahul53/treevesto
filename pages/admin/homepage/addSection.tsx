@@ -1,17 +1,33 @@
 import React, { useEffect } from 'react'
 import AdminLayout from '../../../component/common/AdminLayout'
 import Button from '@material-ui/core/Button'
+import { useRouter } from 'next/router'
 
 
 export default function AddSection() {
     
+    const router = useRouter();
     const [section,setSection] = React.useState({
         title:'',
-        grid:""
+        grid:"4"
     })
      
 
     const handleSubmit = () => {
+ 
+        var formData = new FormData();
+        formData.append('title',section.title)
+        formData.append('grid',section.grid)
+
+        fetch(`http://treevesto55.herokuapp.com/section`,{
+            method:"POST",
+            body:formData
+        }).then(d=>d.json()).then(json=>{
+            console.log(json)
+            if(json.success == 1){
+                router.push('/admin/homepage')
+            }
+        })
         
     }
 

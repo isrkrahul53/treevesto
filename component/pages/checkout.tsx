@@ -12,7 +12,7 @@ function CheckoutHeader(props){
     <div className="container-fluid">
         <span className="navbar-brand">
             <Link href="/">
-                <img src="/logo.png" width="50px" alt="logo"/>
+                <img src="/logo.png" width="150px" alt="logo"/>
             </Link>
         </span>
 
@@ -39,7 +39,10 @@ export default function Checkout(props) {
 
     // Cart
     const [cart,setCart] = React.useState(null)
+    const [user,setUser] = React.useState(null)
     const [totalPrice,setTotalPrice] = React.useState(null)
+    const [selectedAddress,setSelectedAddress] = React.useState(null);
+
 
 
     useEffect(()=>{  
@@ -49,11 +52,19 @@ export default function Checkout(props) {
             case '/checkout/payment':setActive(3);break;
             default:setActive(null)
         }
-        var data = JSON.parse(localStorage.getItem('cart'))
-        if(data){ 
-            setCart(data)
-            updatePrice(data)
+        var cart = JSON.parse(localStorage.getItem('cart'))
+        var selectedAddress = localStorage.getItem('selectedAddress')
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(cart){ 
+            setCart(cart)
+            updatePrice(cart)
         } 
+        if(user){
+            setUser(user)
+        }
+        if(selectedAddress){
+            setSelectedAddress(selectedAddress)
+        }
 
     },[])
  
@@ -62,6 +73,13 @@ export default function Checkout(props) {
             updatePrice(props.cart)
         }
     },[props.cart]) 
+ 
+
+    useEffect(()=>{
+        if(props.pay){
+            checkout();
+        }
+    },[props.pay])
 
     const updatePrice = (y) => {
         var data = y;
@@ -74,6 +92,30 @@ export default function Checkout(props) {
         setTotalPrice(x);
     }
  
+    const checkout = () => {
+        var formData = new FormData();
+        formData.append('cart',JSON.stringify(cart))
+        formData.append('address',selectedAddress)
+        formData.append('userId',user.userId)
+        formData.append('totalAmount',totalPrice)
+        formData.append('orderType',"COD")
+        formData.append('orderStatus',"1")
+
+        fetch(`http://treevesto55.herokuapp.com/order`,{
+            method:"POST",
+            body:formData
+        }).then(d=>d.json()).then(json=>{ 
+            router.push({pathname:"/success",query:{
+                result:JSON.stringify(json.result),
+                user:JSON.stringify(user),
+            }})
+        })
+
+        // console.log(cart)
+        // console.log(selectedAddress) 
+        // console.log(user) 
+    }
+
     return <div>
         <CheckoutHeader active={active} />
 

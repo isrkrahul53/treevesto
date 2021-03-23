@@ -10,7 +10,7 @@ export default function Banner(props){
   <div className="carousel-inner">
       {props.images.map((data,key)=>(
         <div key={key} className={key == 0?"carousel-item active":"carousel-item"}>
-          <Link href={data.href}><img src={data.src} className="d-block w-100" alt={data} /></Link>
+          <Link href={data.href}><img src={data.src} className="d-block w-100" alt="Image" /></Link>
         </div>
       ))} 
   </div>

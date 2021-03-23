@@ -6,12 +6,26 @@ import { useEffect } from 'react';
 export default function AdminLayout(props) {
 
     const router = useRouter();
-
-
+    const [admin,setAdmin] = React.useState(null);
+ 
     useEffect(()=>{
-        var path = router.pathname;
+        var path = router.asPath;
+
+        if(!localStorage.getItem('admin')){
+            router.replace("/admin/auth") 
+        }else{ 
+            var admin = JSON.parse(localStorage.getItem('admin'))
+            if(admin){
+                setAdmin(admin)
+            }
+        }
 
     },[])
+
+    const logout = () => {
+        localStorage.removeItem('admin')
+        router.replace('/admin/auth/')
+    }
 
     return <div> 
         <nav className="navbar navbar-expand-lg navbar-light bg-light border shadow-sm">
@@ -43,6 +57,14 @@ export default function AdminLayout(props) {
                 <form className="d-flex">
                     {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                     <button className="btn btn-outline-success" type="submit">Search</button> */}
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <span className="nav-link">{admin?.email}</span>
+                        </li> 
+                        <li className="nav-item">
+                            <span className="nav-link cursor-pointer" onClick={logout}>Logout</span>
+                        </li> 
+                    </ul>
                 </form>
                 </div>
             </div>
@@ -79,7 +101,7 @@ export default function AdminLayout(props) {
                         </div>
                         <div className="accordion-item">
                             <h2 className="accordion-header" id="headingThree">
-                            <Link href="/admin/vendor/"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <Link href="/admin/vendors/"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 Vendors
                             </button></Link>
                             </h2>
@@ -90,11 +112,23 @@ export default function AdminLayout(props) {
                         </div>
                         <div className="accordion-item">
                             <h2 className="accordion-header" id="headingFour">
-                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            <Link href="/admin/users"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                 Users
-                            </button>
+                            </button></Link>
                             </h2>
                             <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                            <div className="accordion-body">
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingFive">
+                            <Link href="/admin/orders"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Orders
+                            </button></Link>
+                            </h2>
+                            <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                             <div className="accordion-body">
                                 
                             </div>

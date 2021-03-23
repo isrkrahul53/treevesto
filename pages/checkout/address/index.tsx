@@ -1,58 +1,106 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link';
 import Checkout from '../../../component/pages/checkout'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-export default function AddressPage() {
+import { useRouter } from 'next/router';
+export default function AddressPage(props) {
 
+    const router = useRouter();
+
+    const [selected,setSelected] = React.useState(null);
+    const [userAddress,setUserAddress] = React.useState([]);
     // Checkout
     const [address,setAddress] = React.useState({
-        userId:"",
+        userId:"", 
         name:"",
-        mobile:"",
+        phone:"",
         pincode:"",
         address:"",
         locality:"",
         state:"",
         country:""
-    });
+    }); 
 
-    const [error,setError] = React.useState({
-        userId:0,
-        name:0,
-        mobile:0,
-        pincode:0,
-        address:0,
-        locality:0,
-        state:0,
-        country:0
-    })
+    useEffect(()=>{
+        getUserAddress()
+    },[])
+    
+    const getUserAddress = () => {
+        if(localStorage.getItem('user')){
+            var data = JSON.parse(localStorage.getItem('user')) 
+            setAddress({...address,userId:data.userId,name:data.name,phone:data.phone})
+            fetch(`http://treevesto55.herokuapp.com/address/user/`+data.userId).then(d=>d.json()).then(json=>{
+                setUserAddress(json.result) 
+            })
+        }else{
+            router.replace("/auth/login")
+        }
 
+    }
+
+    const deleteAddress = (id) => {
+        if(confirm('Are you sure to delete this address')){
+            fetch(`http://treevesto55.herokuapp.com/address/`+id,{
+                method:"DELETE",
+            }).then(d=>d.json()).then(json=>{
+                getUserAddress();
+            })
+        }
+    }
 
     const handleSubmit = () => {
-        var data = [];
-        if(localStorage.getItem('address')){
-            data = JSON.parse(localStorage.getItem('address'));
-        }
-        data.push(address)
-        // localStorage.setItem('address',JSON.stringify(data))
-        Object.keys(address).forEach((el,key)=>{ if(address[el]){setError({...error,[address[el]]:1})} })
+        
+        var formData = new FormData();
+        formData.append('userId',address.userId)
+        formData.append('name',address.name) 
+        formData.append('phone',address.phone) 
+        formData.append('pincode',address.pincode) 
+        formData.append('address',address.address+", "+address.locality)
+        formData.append('state',address.state)
+        formData.append('country',address.country)
+
+        fetch(`http://treevesto55.herokuapp.com/address`,{
+            method:"POST",
+            body:formData
+        }).then(d=>d.json()).then(json=>{ 
+            getUserAddress();
+            router.replace(router.asPath)
+        })
     }
 
     return <div>
         <Checkout>
 
             <div className="border bg-white shadow-sm p-4">
+                <div className={selected?"text-right my-2":"text-right my-2 d-none"}>
+                    <Button disabled={!selected} variant="contained" color="secondary" onClick={e=>router.push("/checkout/payment")}>
+                    Continue
+                    </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                    {userAddress?.map((el,key)=>{
+                        return <div key={key} onClick={()=>{setSelected(el._id);localStorage.setItem('selectedAddress',el._id)}} className={selected==el._id?"border cursor-pointer my-1 shadow-sm p-2 bg-pink-100":"border cursor-pointer my-1 shadow-sm p-2"}>
+                            <span onClick={()=>deleteAddress(el._id)} className="cursor-pointer text-danger float-right text-xl">&times;</span>
+                            <span>{key+1}. {el.name} </span>
+                            <br/>
+                            <span>{el.phone}</span>
+                            <span>{el.address}</span>
+                            <span>{el.pincode}</span>
+                        </div>
+                    })} 
+                </div>
                 <h3 className="text-lg font-medium my-2">Contact Details</h3>
                 
                 <TextField className="my-2" id="name" label="Name *" variant="outlined" 
                 size="small" color="secondary" fullWidth 
                 defaultValue={address.name} onChange={(e)=>{setAddress({...address,name:e.target.value})}}
                 />
-                <TextField className="my-2" type="number" id="mobile" label="Mobile *" variant="outlined" 
+                <TextField className="my-2" type="text" id="phone" label="Mobile *" variant="outlined" 
                 size="small" color="secondary" fullWidth 
-                defaultValue={address.mobile} onChange={(e)=>{setAddress({...address,mobile:e.target.value})}}
+                defaultValue={address.phone} onChange={(e)=>{setAddress({...address,phone:e.target.value})}}
                 />
+
 
                 <h3 className="text-lg font-medium my-2">Address</h3>
                 <TextField className="my-2" type="number" id="pincode" label="Pin Code *" variant="outlined" 
@@ -87,3 +135,4 @@ export default function AddressPage() {
         </Checkout>
     </div>
 }
+ 

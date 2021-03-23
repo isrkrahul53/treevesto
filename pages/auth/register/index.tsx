@@ -87,9 +87,7 @@ export default function RegisterPage(){
         fetch(`http://treevesto55.herokuapp.com/user/register`,{
             method:"POST",
             body:formData
-        }).then(d=>d.json()).then(json=>{
-            console.log(formData)
-            console.log(json)
+        }).then(d=>d.json()).then(json=>{ 
             if(json.success==1){ 
                 router.replace("/auth/login")
             }else{

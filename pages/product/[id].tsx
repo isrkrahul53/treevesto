@@ -83,7 +83,7 @@ export default function Product(props) {
     return <div> 
         <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
 
-            <div className="ml-6 my-3 flex items-start justify-between">
+            <div className="m-2 md:ml-6 my-3 flex items-start justify-between">
                 <nav className="breadcrumb" aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
@@ -91,15 +91,15 @@ export default function Product(props) {
                     </ol>
                 </nav>
                 
-                <div className="btn-group m-2">
+                {/* <div className="btn-group m-2">
                     <button className="btn btn-primary" disabled={grid==1} onClick={()=>{setGrid(1)}}>1</button> 
                     <button className="btn btn-primary" disabled={grid==2} onClick={()=>{setGrid(2)}}>2</button> 
-                </div>
+                </div> */}
 
             </div>
 
-            {grid==2?<div className="flex items-start">
-                <div className="w-2/3 ml-6">
+            {grid==2?<div className="flex-row md:flex items-start">
+                <div className="w-full md:w-2/3 m-2 md:ml-6">
                     <div className={"grid grid-cols-"+grid+" gap-8"}>
                         {props.product?.productImages.map((el,key)=>(
                             <img key={key} src={el.src} className="w-100" />
@@ -107,14 +107,14 @@ export default function Product(props) {
                     </div>
                     
                 </div>
-                <div className="w-1/3 px-6"> 
+                <div className="w-full md:w-1/3 md:px-6"> 
                     <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} />
 
                 </div>
             </div>:<></>}
             
-            {grid==1?<div className="flex ml-6">
-                <div className="w-1/3 flex items-start">
+            {grid==1?<div className="flex-row md:flex m-2 md:ml-6">
+                <div className="w-full md:w-1/3 flex items-start">
                     <div className={"grid grid-cols-1 gap-2 w-32"}>
                         {props.product?.productImages.map((el,key)=>(
                             <img src={el.src} onClick={()=>{setSelectedImage(el.src)}}
@@ -124,7 +124,7 @@ export default function Product(props) {
                     <img src={selectedImage} className="w-75 mx-3" />
  
                 </div>
-                <div className="w-2/3 px-6">
+                <div className="w-full md:w-2/3 md:px-6">
                     <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} />
                 </div>
             </div>:<></>}
@@ -159,10 +159,12 @@ export const getStaticProps = async (context) => {
   }
 
 export const getStaticPaths = async () => {
+    const res = await fetch(`http://treevesto55.herokuapp.com/product`).then(d=>d.json())
+
+    const data = res.result.map((el)=>({params:{id:el._id}}))
+    
     return {
-      paths: [
-        // { params: {  }}
-      ],
-      fallback: true
+      paths: data,
+      fallback: false
     };
   }

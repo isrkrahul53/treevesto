@@ -8,14 +8,38 @@ export default function EditSection() {
     
     const router = useRouter();
 
-    const [section,setSection] = React.useState({
-        title:'Deals OF the day', 
-        grid:"4"
+    const [section,setSection] = React.useState({ 
+        title:'', 
+        grid:''
     })
-     
+    
+    useEffect(()=>{ 
+        var id = router.query.id; 
+        if(id){
+            fetch(`http://treevesto55.herokuapp.com/section/`+id).then(d=>d.json()).then(json=>{
+                var d = json.result;
+                console.log(json)
+                if(json.success == 1){
+                    setSection({title:d.title,grid:d.grid})
+                }
+            })
+        }
+    },[])
+
     const handleSubmit = () => {
-        
-    }
+        var id = router.query.id; 
+        var formData = new FormData();
+        formData.append('title',section.title)
+        formData.append('grid',section.grid)
+        fetch(`http://treevesto55.herokuapp.com/section/`+id,{
+                method:"PATCH",
+                body:formData
+            }).then(d=>d.json()).then(json=>{
+                if(json.success == 1){
+                    router.push('/admin/homepage')
+                }
+            })
+    } 
 
     return <AdminLayout>
 

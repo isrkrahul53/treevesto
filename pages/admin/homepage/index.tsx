@@ -41,20 +41,69 @@ function Cards(props){
     </div>
   }
   
-export default function CustomizeHomepage() {
-    const router = useRouter();
-    
-    const [images,setImages] = React.useState({
-        image:'',
-        path:''
+export default function CustomizeHomepage(props) {
+    const router = useRouter(); 
+    const [images,setImages] = React.useState({ 
+        image:null,
+        link:''
     })
+    console.log(props.cards)
+    const [banner,setBanner] = React.useState(props.banner) 
 
-    const [banner,setBanner] = React.useState([
-        {src:'/assets/images/banner/banner1.jpg',href:'/product'},
-        {src:'/assets/images/banner/banner2.jpg',href:'/product'},
-        {src:'/assets/images/banner/banner3.jpg',href:'/product'},
-    ])
+    const deleteBanner = (id) => {
+        if(confirm('Are you sure to delete this banner')){
+            fetch(`http://treevesto55.herokuapp.com/banner/`+id,{
+                method:"DELETE",
+            }).then(d=>d.json()).then(json=>{
+                if(json.success == 1){
+                    location.reload();
+                }
+            })
+        }
 
+    }
+    const deleteSection = (id) => {
+        if(confirm('Are you sure to delete this section')){
+            fetch(`http://treevesto55.herokuapp.com/section/`+id,{
+                method:"DELETE",
+            }).then(d=>d.json()).then(json=>{
+                if(json.success == 1){
+                    router.replace(router.asPath)
+                }
+            })
+        }
+
+    }
+    const deleteCard = (id) => {
+        if(confirm('Are you sure to delete this card')){
+            fetch(`http://treevesto55.herokuapp.com/card/`+id,{
+                method:"DELETE",
+            }).then(d=>d.json()).then(json=>{
+                if(json.success == 1){
+                    router.replace(router.asPath)
+                }
+            })
+        
+        }
+
+    }
+    const handleSubmit = (id) => {
+        
+        var formData = new FormData();
+        formData.append('image',images.image)
+        formData.append('link',images.link)
+        formData.append('sectionId',id)
+
+        fetch(`http://treevesto55.herokuapp.com/card`,{
+            method:"POST",
+            body:formData
+        }).then(d=>d.json()).then(json=>{
+            console.log(json)
+            if(json.success == 1){
+                router.replace(router.asPath)
+            }
+        })
+    }
     
     return <AdminLayout>
         <div className="p-3 text-xl border shadow-sm">Homepage</div>
@@ -64,7 +113,12 @@ export default function CustomizeHomepage() {
         <Banner images={banner} />
         <div className="grid grid-cols-3 gap-4 m-2 mx-4">
             {banner.map((element,key)=>(
-                <Link key={key} href={element.href}><img src={element.src} className="border shadow-sm"  /></Link>
+                <div key={key}>
+                    <div className="text-right">
+                        <span className="text-xl text-danger cursor-pointer" onClick={e=>deleteBanner(element.id)}>&times;</span>
+                    </div>
+                    <img src={element.src} className="border shadow-sm"  />
+                </div>
             ))}
         </div> 
 
@@ -74,27 +128,59 @@ export default function CustomizeHomepage() {
             </Button></Link>
         </div>
 
-        <div>
-            <h3 className="display-5 my-8 text-secondary"> SEction title 
-            <span className="btn btn-primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:0}})}>edit</span> </h3>
-            <div className={"grid grid-cols-4 gap-4"}>
-                {/* <img src="/assets/images/dealsOfDay/image1.jpg" width="80px" /> */}
-                <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
-                    image={e=>setImages({...images,image:e.target.value})} 
-                    path={e=>setImages({...images,path:e.target.value})} 
-                    value={images}
-                />} />
+        {props.sections?.map((el,key)=>(
+            <div key={key}>
+                <h3 className="display-5 my-8 text-secondary"> {el.title} 
+                </h3>
+                    <span className="btn btn-primary mx-2" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>Edit</span> 
+                    <span className="btn btn-danger mx-2" onClick={()=>deleteSection(el._id)}>Delete</span> 
+                <div className={"grid grid-cols-"+el.grid+" gap-4"}>
+                    {props.cards?.map((e,key)=>{ 
+                        return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
+                            <div className="text-right">
+                                <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
+                            </div>
+                            <img src={"http://treevesto55.herokuapp.com/"+e.image} width="100%" className="border shadow-sm" />
+                        </div> 
+                    })}
+                    <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
+                        image={e=>setImages({...images,image:e.target.files[0]})} 
+                        link={e=>setImages({...images,link:e.target.value})} 
+                        value={images}
+                        submit={()=>handleSubmit(el._id)}
+                        />} 
+                    />
+                </div>
+            
             </div>
-        
-        </div>
+        ))}
 
         
 
 
         <div className="text-right my-3">
             <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
-                Add New Card +
+                Add New Section +
             </Button></Link>
         </div>
     </AdminLayout> 
+}
+
+export const getStaticProps = async (context) => {
+
+    var banner = await fetch(`http://treevesto55.herokuapp.com/banner`).then(d=>d.json())
+    var sections = await fetch(`http://treevesto55.herokuapp.com/section`).then(d=>d.json())
+    var cards = await fetch(`http://treevesto55.herokuapp.com/card`).then(d=>d.json())
+    
+    banner = banner.result.map((el,key)=>{
+        return {id:el._id,href:el.link,src:"http://treevesto55.herokuapp.com/"+el.image}
+    })
+
+    return {
+        props: {
+            banner:banner,
+            sections:sections.result,
+            cards:cards.result,
+        }
+    };
 }

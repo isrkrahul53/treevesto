@@ -18,8 +18,9 @@ export default function OverviewPage() {
 
                 <div className="p-2">
 
-                    <div className="flex items-start border">
-                        <img src="/assets/images/user.jpg" className="w-1/5" alt="User"/>
+                    <div className="flex items-start border p-3">
+                        {/* <img src="/assets/images/user.jpg" className="w-1/5" alt="User"/> */}
+                        <div className="w-20 h-20 mr-2 bg-white shadow-sm border rounded"></div>
                         <div className="my-auto me-auto">
                             <div>Full Name</div>
                             <div>email@gmail.com</div>

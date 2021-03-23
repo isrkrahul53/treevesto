@@ -3,9 +3,8 @@ import Link from 'next/link';
 import Layout from "../../../component/common/layout";
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
- 
-  
-export default function LoginPage(){
+
+export default function AdminLoginPage() {
 
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
@@ -17,12 +16,13 @@ export default function LoginPage(){
     const router = useRouter();
     
     useEffect(()=>{ 
-        if(localStorage.getItem('user')){
+        if(localStorage.getItem('admin')){
             router.replace("/") 
         }
 
     },[])
      
+    
 
     const [values,setValues] = React.useState({ 
         phone:'', 
@@ -38,11 +38,11 @@ export default function LoginPage(){
         fetch(`http://treevesto55.herokuapp.com/user/login`,{
             method:"POST",
             body:formData
-        }).then(d=>d.json()).then(json=>{
+        }).then(d=>d.json()).then(json=>{ 
             if(json.success == 1){ 
-                var user = {token:json.token,name:json.name,email:json.email,userId:json.userId,phone:values.phone}
-                localStorage.setItem('user',JSON.stringify(user))
-                router.replace("/")
+                var admin = {token:json.token,name:json.name,email:json.email,adminId:json._id,phone:values.phone}
+                localStorage.setItem('admin',JSON.stringify(admin))
+                router.replace("/admin")
             }else{
                 setError(json.msg)
             }
@@ -51,16 +51,13 @@ export default function LoginPage(){
     
     
     return <div>
-        <Layout error={error} success={success}>
-            
-            <div className="container my-4">
+
+<div className="container my-4">
                 <div className="row">
                     <div className="col-12 col-md-4"></div>
 
                     <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
- 
-                        <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
-
+  
                         <form className="p-4">
                             <div className="my-3">
                                 <span className="mx-1 text-2xl">Login</span> 
@@ -95,7 +92,5 @@ export default function LoginPage(){
                     </div>
                 </div>
             </div>
-
-        </Layout>
     </div>
 }

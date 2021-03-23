@@ -12,7 +12,9 @@ import styles from './style.module.scss'
 import CustomAlert from '../../component/common/customAlert';
 
 function SingleProduct(props){
-  return <div className={"hover:shadow-lg product "+styles.product}>
+  const router = useRouter();
+
+  return <div className={"hover:shadow-lg product "+styles.product} onClick={()=>router.push("/product/"+props.id)}>
   <Banner indicator={false} images={props.images} />
   <div className="text-center p-2 relative bg-white d-none" style={{top:-50}}>
     <Button variant="contained" color="secondary" onClick={props.onclick} startIcon={<LocalMallOutlinedIcon />}>
@@ -94,12 +96,12 @@ export default function Product(props){
                 <FilterPage />
               </div>
               <div className="w-full md:w-4/5 pr-6">
-                <div className="btn-group m-2">
+                {/* <div className="btn-group m-2">
                   <button className="btn btn-primary" disabled={grid==2} onClick={()=>{setGrid(2)}}>2</button>
                   <button className="btn btn-primary" disabled={grid==4} onClick={()=>{setGrid(4)}}>4</button>
                   <button className="btn btn-primary" disabled={grid==5} onClick={()=>{setGrid(5)}}>5</button>
                   <button className="btn btn-primary" disabled={grid==6} onClick={()=>{setGrid(6)}}>6</button>
-                </div>
+                </div> */}
                 <div className="flex items-center justify-between border-b-2 pb-8">
                   <MaterialChipArray /> 
                   <select className="form-select w-25" name="sort" id="sort">
@@ -115,11 +117,19 @@ export default function Product(props){
                 <div className={"grid grid-cols-2 md:grid-cols-"+grid+" gap-4 p-2"}>
                   {props.products?.map((el,key)=>(
                     <div key={key}>
-                      <SingleProduct name={el.productName} price={el.regularPrice} images={el.productImages}
+                      <SingleProduct id={el._id} name={el.productName} price={el.regularPrice} images={el.productImages}
                       onclick={()=>{addtoWishlist(el)}} />
                     </div> 
                   ))}
                 </div>
+                {props.products.length == 0?<div className="p-4">
+                  <div className="display-6"> No Products Available </div>
+                  <div className="text-secondary"> 
+                  Go to homepage 
+                  <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
+                  </div>
+                 
+                </div>:<></>}
 
               </div>
 
