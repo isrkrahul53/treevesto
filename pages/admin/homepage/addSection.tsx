@@ -19,7 +19,7 @@ export default function AddSection() {
         formData.append('title',section.title)
         formData.append('grid',section.grid)
 
-        fetch(`http://treevesto55.herokuapp.com/section`,{
+        fetch(`https://api.treevesto.com:4000/section`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{

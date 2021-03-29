@@ -4,7 +4,7 @@ module.exports = (phase, { defaultConfig }) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
         env:{
-            apiUrl:"http://treevesto55.herokuapp.com/"
+            apiUrl:"https://api.treevesto.com:4000/"
         }
     }
   }

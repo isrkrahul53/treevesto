@@ -142,13 +142,13 @@ export default function Product(props){
 }
 
 export const getStaticProps = async (context) => {
-  const res = await fetch(`http://treevesto55.herokuapp.com/product/subcat/${context.params.category}`).then(d=>d.json())
+  const res = await fetch(`https://api.treevesto.com:4000/product/subcat/${context.params.category}`).then(d=>d.json())
 
   var data = []
   res.result.forEach(element => {
     var images = [];
     element.productImages.forEach(e => {
-      images.push({src:"http://treevesto55.herokuapp.com/"+e,href:"/product/"+element._id})
+      images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
     });
     data.push({...element,productImages:images})
   }); 
@@ -160,7 +160,7 @@ export const getStaticProps = async (context) => {
 }
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`http://treevesto55.herokuapp.com/category/all`).then(d=>d.json())
+  const res = await fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json())
   var data = [];
   res.result = res.result.filter(e=>(e.parentCatId != 0))
   res.result.forEach((el,key)=>{

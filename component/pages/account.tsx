@@ -14,12 +14,12 @@ export default function AccountPage(props) {
 
     return <div>
         <Layout>
-            <div className="w-75 mx-auto my-8">
+            <div className="w-5/6 md:w-75 mx-auto my-8">
                 <h3 className="text-lg font-medium">Account</h3>
                 <h3 className="text-sm">Rahul Kumar</h3>
                 <hr className="my-2" />
-                <div className="flex">
-                    <div className="w-1/5 border-r-2 border-gray-300">
+                <div className="flex-row md:flex">
+                    <div className="w-full md:w-1/5 border-r-2 border-gray-300">
                         <Link href="/account/overview">
                         <div className={active =="/account/overview"?"text-xl font-light py-1 text-red-500 border-r-4 border-red-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Overview</div>
                         </Link>
@@ -59,7 +59,7 @@ export default function AccountPage(props) {
                         <div className="text-xl font-light py-1 cursor-pointer">Privacy Policy</div> 
 
                     </div>
-                    <div className="w-4/5 p-3">
+                    <div className="w-full md:w-4/5 md:p-3">
                         {props.children}
                     </div>
                 </div>

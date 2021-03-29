@@ -52,7 +52,7 @@ export default function CustomizeHomepage(props) {
 
     const deleteBanner = (id) => {
         if(confirm('Are you sure to delete this banner')){
-            fetch(`http://treevesto55.herokuapp.com/banner/`+id,{
+            fetch(`https://api.treevesto.com:4000/banner/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -64,7 +64,7 @@ export default function CustomizeHomepage(props) {
     }
     const deleteSection = (id) => {
         if(confirm('Are you sure to delete this section')){
-            fetch(`http://treevesto55.herokuapp.com/section/`+id,{
+            fetch(`https://api.treevesto.com:4000/section/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -76,7 +76,7 @@ export default function CustomizeHomepage(props) {
     }
     const deleteCard = (id) => {
         if(confirm('Are you sure to delete this card')){
-            fetch(`http://treevesto55.herokuapp.com/card/`+id,{
+            fetch(`https://api.treevesto.com:4000/card/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -94,7 +94,7 @@ export default function CustomizeHomepage(props) {
         formData.append('link',images.link)
         formData.append('sectionId',id)
 
-        fetch(`http://treevesto55.herokuapp.com/card`,{
+        fetch(`https://api.treevesto.com:4000/card`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -140,7 +140,7 @@ export default function CustomizeHomepage(props) {
                             <div className="text-right">
                                 <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
                             </div>
-                            <img src={"http://treevesto55.herokuapp.com/"+e.image} width="100%" className="border shadow-sm" />
+                            <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
                         </div> 
                     })}
                     <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
@@ -168,12 +168,12 @@ export default function CustomizeHomepage(props) {
 
 export const getStaticProps = async (context) => {
 
-    var banner = await fetch(`http://treevesto55.herokuapp.com/banner`).then(d=>d.json())
-    var sections = await fetch(`http://treevesto55.herokuapp.com/section`).then(d=>d.json())
-    var cards = await fetch(`http://treevesto55.herokuapp.com/card`).then(d=>d.json())
+    var banner = await fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json())
+    var sections = await fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json())
+    var cards = await fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json())
     
     banner = banner.result.map((el,key)=>{
-        return {id:el._id,href:el.link,src:"http://treevesto55.herokuapp.com/"+el.image}
+        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
     })
 
     return {

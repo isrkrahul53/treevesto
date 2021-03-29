@@ -4,10 +4,7 @@ import Button from '@material-ui/core/Button'
 
 export default function OrdersPage() {
     return <div>
-        <AccountPage>
-
-
-
+        <AccountPage> 
 
             <div className="text-center">
                 <img src="/assets/images/no_orders.png" className="w-25 mx-auto"  alt="NO Orders"/>

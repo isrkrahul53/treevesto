@@ -16,7 +16,7 @@ export default function EditSection() {
     useEffect(()=>{ 
         var id = router.query.id; 
         if(id){
-            fetch(`http://treevesto55.herokuapp.com/section/`+id).then(d=>d.json()).then(json=>{
+            fetch(`https://api.treevesto.com:4000/section/`+id).then(d=>d.json()).then(json=>{
                 var d = json.result;
                 console.log(json)
                 if(json.success == 1){
@@ -31,7 +31,7 @@ export default function EditSection() {
         var formData = new FormData();
         formData.append('title',section.title)
         formData.append('grid',section.grid)
-        fetch(`http://treevesto55.herokuapp.com/section/`+id,{
+        fetch(`https://api.treevesto.com:4000/section/`+id,{
                 method:"PATCH",
                 body:formData
             }).then(d=>d.json()).then(json=>{

@@ -30,7 +30,7 @@ export default function AdminUserPage(props){
 }
 export const getStaticProps = async (context) => {
 
-  const users = await fetch(`http://treevesto55.herokuapp.com/user`).then(d=>d.json())
+  const users = await fetch(`https://api.treevesto.com:4000/user`).then(d=>d.json())
  
 
   return {

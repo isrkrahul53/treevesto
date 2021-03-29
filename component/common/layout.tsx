@@ -25,7 +25,7 @@ export default function Layout(props){
     })
     
     useEffect(()=>{
-        fetch(`http://treevesto55.herokuapp.com/category`).then(d=>d.json()).then(json=>{ 
+        fetch(`https://api.treevesto.com:4000/category`).then(d=>d.json()).then(json=>{ 
             setCategories(json.result)
         })
         
@@ -58,7 +58,7 @@ export default function Layout(props){
 
 
     const fetchSubCat = (x) => {
-        fetch(`http://treevesto55.herokuapp.com/subcategory/`+x).then(d=>d.json()).then(json=>{ 
+        fetch(`https://api.treevesto.com:4000/subcategory/`+x).then(d=>d.json()).then(json=>{ 
             setSubCategories(json.result) 
         })
         

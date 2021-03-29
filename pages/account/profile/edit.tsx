@@ -8,7 +8,7 @@ export default function EditProfilePage() {
     return <div>
         <AccountPage>
             <div className="border bg-white shadow-sm p-3">
-                <div className="w-5/6 mx-auto">
+                <div className="w-full md:w-5/6 mx-auto">
                     <h3 className="text-2xl font-medium">Edit Details</h3>
                     <hr className="my-3"/>
                     

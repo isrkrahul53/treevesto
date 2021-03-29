@@ -74,7 +74,7 @@ export default function Home(props) {
                 <div className={"grid grid-cols-"+el.grid+" gap-4"}>
                     {props.cards?.map((e,key)=>{ 
                         return <div key={key} className={el._id==e.sectionId?"":"d-none"}> 
-                            <Link href={e.link}><img src={"http://treevesto55.herokuapp.com/"+e.image} width="100%" className="border shadow-sm cursor-pointer" /></Link>
+                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm cursor-pointer" /></Link>
                         </div> 
                     })} 
                 </div>
@@ -102,12 +102,12 @@ export default function Home(props) {
 
 export const getStaticProps = async (context) => {
 
-  var banner = await fetch(`http://treevesto55.herokuapp.com/banner`).then(d=>d.json())
-  var sections = await fetch(`http://treevesto55.herokuapp.com/section`).then(d=>d.json())
-  var cards = await fetch(`http://treevesto55.herokuapp.com/card`).then(d=>d.json())
+  var banner = await fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json())
+  var sections = await fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json())
+  var cards = await fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json())
   
   banner = banner.result.map((el,key)=>{
-      return {id:el._id,href:el.link,src:"http://treevesto55.herokuapp.com/"+el.image}
+      return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
   })
 
   return {

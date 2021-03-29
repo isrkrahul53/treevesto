@@ -16,22 +16,24 @@ export default function OverviewPage() {
 
             <div className="">
 
-                <div className="p-2">
+                <div className="md:p-2">
 
-                    <div className="flex items-start border p-3">
+                    <div className="flex-row md:flex items-start border p-3">
                         {/* <img src="/assets/images/user.jpg" className="w-1/5" alt="User"/> */}
-                        <div className="w-20 h-20 mr-2 bg-white shadow-sm border rounded"></div>
-                        <div className="my-auto me-auto">
-                            <div>Full Name</div>
-                            <div>email@gmail.com</div>
-                            <div>6209460626</div>
+                        <div className="flex items-center me-auto">
+                            <div className="w-20 h-20 mr-2 bg-white shadow-sm border rounded"></div>
+                            <div className="my-auto">
+                                <div>Full Name</div>
+                                <div>email@gmail.com</div>
+                                <div>6209460626</div>
+                            </div>
                         </div>
                         <Link href="/account/profile/edit"><Button variant="contained" color="secondary" className="m-2">
                           Edit Profile
                         </Button></Link>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 my-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 my-4">
     
 
                         <div className="text-center p-2 py-4 border bg-white shadow-sm">

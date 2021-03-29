@@ -19,14 +19,17 @@ export default function VendorPage(props) {
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
   };
-  
-  
-  const getProductsByVendorId = (id) => {
-    fetch(`http://treevesto55.herokuapp.com/product/vendor/`+id).then(d=>d.json()).then(json=>{
-      setProducts(json.result)
-    })
+   
+  useEffect(()=>{
+    if(selectedVendor != ""){
+      fetch(`https://api.treevesto.com:4000/product/vendor/`+selectedVendor).then(d=>d.json()).then(json=>{
+        setProducts(json.result)
+      })
+    }else{
+      setProducts([])
+    }
 
-  }
+  },[selectedVendor])
 
 
     return <AdminLayout>
@@ -66,13 +69,12 @@ export default function VendorPage(props) {
         </div>:<></>}
 
 
-        {navigation == 'products'?<div>
-                  {selectedVendor}
+        {navigation == 'products'?<div> 
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-8"></div>
               <div className="col-md-4">
-                <select className="form-select my-3" defaultValue={selectedVendor} onChange={e=>getProductsByVendorId(e.target.value)}>
+                <select className="form-select my-3" defaultValue={selectedVendor} onChange={e=>setSelectedVendor(e.target.value)}>
                   <option value="">Select Vendor</option> 
                   {props.vendors.map((el,key)=>(
                     <option key={key} value={el._id}>{el.name}</option>
@@ -84,10 +86,10 @@ export default function VendorPage(props) {
           </div>
 
 
-            <div className="grid grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
               {products.map((el,key)=>(
                 <div key={key} className="bg-white border shadow-sm">
-                  <img src={"http://treevesto55.herokuapp.com/"+el.productImages[0]} alt=""/>
+                  <img src={"https://api.treevesto.com:4000/"+el.productImages[0]} alt=""/>
                   <div className="p-1">
                     <div>
                       <span className="text-sm"> {el.productName.length>18?el.productName.substr(0,18):el.productName} </span>
@@ -115,7 +117,7 @@ export default function VendorPage(props) {
 
 export const getStaticProps = async (context) => {
 
-  const vendors = await fetch(`http://treevesto55.herokuapp.com/vendor`).then(d=>d.json())
+  const vendors = await fetch(`https://api.treevesto.com:4000/vendor`).then(d=>d.json())
  
 
   return {

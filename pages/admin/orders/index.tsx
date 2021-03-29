@@ -45,7 +45,7 @@ export default function AdminOrdersPage(props){
 }
 export const getStaticProps = async (context) => {
  
-  const orders = await fetch(`http://treevesto55.herokuapp.com/order`).then(d=>d.json())
+  const orders = await fetch(`https://api.treevesto.com:4000/order`).then(d=>d.json())
   
   return {
     props: { 

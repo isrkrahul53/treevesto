@@ -19,7 +19,7 @@ export default function HomepageBanner() {
         formData.append('image',values.image)
         formData.append('link',values.link)
 
-        fetch(`http://treevesto55.herokuapp.com/banner`,{
+        fetch(`https://api.treevesto.com:4000/banner`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{

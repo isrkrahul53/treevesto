@@ -20,7 +20,7 @@ export default function SuccessPage(){
             setUser(JSON.parse(data.user.toString()))
             setOID(order._id)
             console.log(data)
-            fetch(`http://treevesto55.herokuapp.com/address/`+order.address).then(d=>d.json()).then(json=>{ 
+            fetch(`https://api.treevesto.com:4000/address/`+order.address).then(d=>d.json()).then(json=>{ 
                 console.log(json)
                 if(json.success == 1){
                     setAddress(json.result)
@@ -52,7 +52,7 @@ export default function SuccessPage(){
                     <div className="text-2xl my-3 py-2 border-b-2">Orders</div>
                     {cart?.map((el,key)=>(
                         <div key={key} className="flex items-center">
-                            <img src={"http://treevesto55.herokuapp.com/"+el.image} alt=""/>
+                            <img src={"https://api.treevesto.com:4000/"+el.image} alt=""/>
                             <div className="p-4 bg-light border shadow-sm rounded mr-2"></div>
                             <div>
                                 <div>{el.name}</div>

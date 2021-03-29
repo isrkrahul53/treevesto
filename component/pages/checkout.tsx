@@ -101,7 +101,7 @@ export default function Checkout(props) {
         formData.append('orderType',"COD")
         formData.append('orderStatus',"1")
 
-        fetch(`http://treevesto55.herokuapp.com/order`,{
+        fetch(`https://api.treevesto.com:4000/order`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 
