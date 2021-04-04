@@ -51,7 +51,7 @@ export const getStaticProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const orders = await axios.get(`https://api.treevesto.com:4000/order`)
+  const orders = await axios.get(`https://api.treevesto.com:4000/order`,{httpsAgent:agent})
   
   return {
     props: { 
