@@ -118,5 +118,5 @@ export const getStaticProps = async (context) => {
           sections:sections.data.result,
           cards:cards.data.result,
       }
-  };
+  }; 
 }

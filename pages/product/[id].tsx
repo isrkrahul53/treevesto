@@ -139,7 +139,7 @@ export const getStaticProps = async (context) => {
     const agent = new https.Agent({  
         rejectUnauthorized: false
     });
-    const res = await axios.get(`https://api.treevesto.com:4000/product/${context.params.id}`)
+    const res = await axios.get(`https://api.treevesto.com:4000/product/${context.params.id}`,{httpsAgent:agent})
     
     var data = []
     res.data.result.forEach(element => {
@@ -162,7 +162,7 @@ export const getStaticPaths = async () => {
     const agent = new https.Agent({  
         rejectUnauthorized: false
     });
-    const res = await axios.get(`https://api.treevesto.com:4000/product`)
+    const res = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
 
     const data = res.data.result.map((el)=>({params:{id:el._id}}))
     
