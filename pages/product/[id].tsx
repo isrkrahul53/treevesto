@@ -4,13 +4,8 @@ import { useRouter } from 'next/router';
 import Layout from '../../component/common/layout'; 
 import ProductPage from '../../component/pages/productPage';
 
-           
-
-
-
-
-
-
+import axios from 'axios';
+import https from 'https'
 
                                                          
 export default function Product(props) {
@@ -159,9 +154,13 @@ export const getStaticProps = async (context) => {
   }
 
 export const getStaticPaths = async () => {
-    const res = await fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json())
+    
+    const agent = new https.Agent({  
+        rejectUnauthorized: false
+    });
+    const res = await axios.get(`https://api.treevesto.com:4000/product`)
 
-    const data = res.result.map((el)=>({params:{id:el._id}}))
+    const data = res.data.result.map((el)=>({params:{id:el._id}}))
     
     return {
       paths: data,

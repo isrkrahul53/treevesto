@@ -11,6 +11,10 @@ import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import styles from './style.module.scss'
 import CustomAlert from '../../component/common/customAlert';
 
+import axios from 'axios';
+import https from 'https'
+
+
 function SingleProduct(props){
   const router = useRouter();
 
@@ -142,10 +146,13 @@ export default function Product(props){
 }
 
 export const getStaticProps = async (context) => {
-  const res = await fetch(`https://api.treevesto.com:4000/product/subcat/${context.params.category}`).then(d=>d.json())
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  const res = await axios.get(`https://api.treevesto.com:4000/product/subcat/${context.params.category}`,{httpsAgent:agent})
 
   var data = []
-  res.result.forEach(element => {
+  res.data.result.forEach(element => {
     var images = [];
     element.productImages.forEach(e => {
       images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
@@ -160,10 +167,13 @@ export const getStaticProps = async (context) => {
 }
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json())
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  const res = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
   var data = [];
-  res.result = res.result.filter(e=>(e.parentCatId != 0))
-  res.result.forEach((el,key)=>{
+  res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
+  res.data.result.forEach((el,key)=>{
     data[key] = {params:{category:el._id}}
   })
   

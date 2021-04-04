@@ -1,6 +1,9 @@
 import React from 'react'
 import AdminLayout from "../../../component/common/AdminLayout";
 
+import axios from 'axios';
+import https from 'https'
+
 export default function AdminOrdersPage(props){
 
   const [selected,setSelected] = React.useState(null);
@@ -45,11 +48,14 @@ export default function AdminOrdersPage(props){
 }
 export const getStaticProps = async (context) => {
  
-  const orders = await fetch(`https://api.treevesto.com:4000/order`).then(d=>d.json())
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  const orders = await axios.get(`https://api.treevesto.com:4000/order`)
   
   return {
     props: { 
-      orders:orders.result
+      orders:orders.data.result
     }
   };
 }

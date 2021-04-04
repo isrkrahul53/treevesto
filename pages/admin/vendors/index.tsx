@@ -7,6 +7,9 @@ import StoreIcon from '@material-ui/icons/Store';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
+import axios from 'axios';
+import https from 'https'
+
 export default function VendorPage(props) {
   const router = useRouter();
  
@@ -117,12 +120,15 @@ export default function VendorPage(props) {
 
 export const getStaticProps = async (context) => {
 
-  const vendors = await fetch(`https://api.treevesto.com:4000/vendor`).then(d=>d.json())
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  const vendors = await axios.get(`https://api.treevesto.com:4000/vendor`)
  
 
   return {
     props: {
-      vendors:vendors.result, 
+      vendors:vendors.data.result, 
     }
   };
 }

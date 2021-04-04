@@ -1,5 +1,8 @@
 import AdminLayout from "../../../component/common/AdminLayout";
 
+import axios from 'axios';
+import https from 'https'
+
 export default function AdminUserPage(props){
     return <AdminLayout>
     <div className="p-3 text-xl border shadow-sm">Users</div>
@@ -30,12 +33,15 @@ export default function AdminUserPage(props){
 }
 export const getStaticProps = async (context) => {
 
-  const users = await fetch(`https://api.treevesto.com:4000/user`).then(d=>d.json())
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  const users = await axios.get(`https://api.treevesto.com:4000/user`)
  
 
   return {
     props: {
-      users:users.result, 
+      users:users.data.result, 
     }
   };
 }

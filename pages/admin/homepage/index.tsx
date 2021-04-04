@@ -7,6 +7,9 @@ import { useRouter } from 'next/router';
 import MaterialModal from '../../../component/material/materialModal';
 import AddImagetoSectionModal from '../../../component/root/addImagetoSection';
 
+import axios from 'axios';
+import https from 'https'
+
 function Card(props){
     return <div className="bg-white border rounded shadow-sm mb-2">
     <div className="d-flex align-items-center justify-content-between p-3">
@@ -167,20 +170,21 @@ export default function CustomizeHomepage(props) {
 }
 
 export const getStaticProps = async (context) => {
-
-    var banner = await fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json())
-    var sections = await fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json())
-    var cards = await fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json())
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    });
+    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
+    var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
+    var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
     
-    banner = banner.result.map((el,key)=>{
+    banner = banner.data.result.map((el,key)=>{
         return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
     })
-
     return {
         props: {
             banner:banner,
-            sections:sections.result,
-            cards:cards.result,
+            sections:sections.data.result,
+            cards:cards.data.result,
         }
     };
 }
