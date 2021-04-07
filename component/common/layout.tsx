@@ -5,6 +5,7 @@ import styles from '../../styles/layout.module.scss';
 import Button from '@material-ui/core/Button'
 import CustomAlert from './customAlert';
 import { useRouter } from 'next/router';
+import Sidebar from './sidebar';
 
 declare var $:any;
 export default function Layout(props){
@@ -21,11 +22,11 @@ export default function Layout(props){
 
     useEffect(()=>{
         var x = document.getElementById("header").offsetHeight
-        setNavHeight(x-24) 
+        setNavHeight(x-22) 
     })
     
     useEffect(()=>{
-        fetch(`https://api.treevesto.com:4000/category`).then(d=>d.json()).then(json=>{ 
+        fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
             setCategories(json.result)
         })
         
@@ -57,12 +58,12 @@ export default function Layout(props){
     },[props.wishlist])
 
 
-    const fetchSubCat = (x) => {
-        fetch(`https://api.treevesto.com:4000/subcategory/`+x).then(d=>d.json()).then(json=>{ 
-            setSubCategories(json.result) 
-        })
+    // const fetchSubCat = (x) => {
+    //     fetch(`https://api.treevesto.com:4000/subcategory/`+x).then(d=>d.json()).then(json=>{ 
+    //         setSubCategories(json.result) 
+    //     })
         
-    }
+    // }
     
     const logout = () => {
         localStorage.removeItem('user')
@@ -72,39 +73,35 @@ export default function Layout(props){
     
     return <div>
       <CustomAlert error={props.error} success={props.success} />
-
-        <nav id="header" className="navbar navbar-expand-lg navbar-light bg-white border shadow-sm p-0 fixed top-0 left-0 w-full z-30">
-            <div className="container-fluid">
-                <span className="navbar-brand">
+        <div id="header" className="container-fluid navbar navbar-expand-lg navbar-light bg-white py-0 pb-1 shadow-sm fixed top-0 w-full z-40">
+            <div className="flex items-center">
+                <span className="navbar-brand flex items-center">
+                    <div className="md:hidden"><Sidebar data={categories} /></div>
                     <Link href="/">
-                        <img src="/logo.png" width="150px" alt="logo"/>
+                        <img src="/logo.png" className="w-24 md:w-40" alt="logo"/>
                     </Link>
                 </span>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon" />
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav hidden md:flex me-auto mb-2 mb-lg-0">
-                    {/* <li className="nav-item">
-                    <span className="nav-link active" aria-current="page"></span>
-                    </li>  */}
-                    {categories.map((el,key)=>{
-                        return <li key={key} className={"nav-item py-3 "+styles.dropdown} onMouseEnter={()=>{fetchSubCat(el._id)}} onMouseLeave={()=>{setSubCategories(null)}}>
+                <ul className="navbar-nav hidden md:flex me-auto mb-2 mb-lg-0"> 
+                    {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
+                        <li key={key} className={"nav-item py-3 "+styles.dropdown}>
                             <section className="nav-link h5 p-3" id="navbarDropdownMen" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {el.catName}
                             </section>
                             <ul className={"dropdown-menu d-none shadow z-20"} style={{position:"fixed",top:navHeight,left:"5%",width:"40%",margin:"0 auto"}} aria-labelledby="navbarDropdownMen">
                                 <div className="container p-0">
-                                    {subcategories?subcategories.map((e,k)=>{
-                                        return <div key={k}><Link href={"/"+e._id}><li className="dropdown-item cursor-pointer"> {e.catName} </li></Link></div>
-                                    }):<div className="p-3 text-xl flex items-center"> <div className="spinner-border text-danger"></div> <div className="px-3">Loading ...</div> </div>}
+                                    {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+                                        <div key={k}><Link href={"/"+e._id}><li className="dropdown-item cursor-pointer"> {e.catName} </li></Link></div>
+                                    ))}
                                 </div>   
                             </ul>
-                        </li> 
-                    })} 
+
+                        </li>
+                    ))}
                 </ul> 
-                <div className="navbar-nav pb-2 p-md-0"> 
-                    <span className={styles.dropdown}>
+            </div>
+            <div className="ml-auto">
+                <ul className="flex ml-auto items-center"> 
+                    <li className={"hidden md:block "+styles.dropdown}>
                         <section className="nav-link" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="/assets/icons/perm_identity-24px.svg" className="mx-2" width="30px" alt="perm_identity-24px"/> 
                         </section>
@@ -133,32 +130,29 @@ export default function Layout(props){
                             <hr/>
                             {user?<li className="dropdown-item cursor-pointer" onClick={logout}>Logout</li>:<div></div>}
                         </ul>
-                    </span>
-                    <span>
-                        <span className="nav-link">
-                            <div className="flex items-start">
-                                <Link href="/wishlist"><img src="/assets/icons/favorite_border-24px.svg" className="mx-2" width="30px" alt="favorite_border-24px"/></Link>
-                                <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded"> {wishlist} </sup>
-                            </div>
-                        </span> 
-                    </span>
-                    <span>
-                        <span className="nav-link">
-                            <Link href="/checkout/cart">
-                                <div className="flex items-start">
-                                    <img src="/assets/icons/local_mall-24px.svg" className="mx-2" width="30px" alt="local_mall-24px"/>
-                                    <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup>
-                                </div>
-                            </Link>
-                        </span> 
-                    </span>
+                    </li> 
+                    <li className="flex items-center justify-end">
+                    <Link href="/wishlist">
+                        <div className="flex items-start">
+                            <img src="/assets/icons/favorite_border-24px.svg" className="mx-2" width="30px" alt="favorite_border-24px"/>
+                            <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded"> {wishlist} </sup>
+                        </div>
+                    </Link> 
+                    </li>
+                    <li className="flex items-center justify-end">
+                    <Link href="/checkout/cart">
+                        <div className="flex items-start">
+                            <img src="/assets/icons/local_mall-24px.svg" className="mx-2" width="30px" alt="local_mall-24px"/>
+                            <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup>
+                        </div>
+                    </Link>
+                    </li>   
                     
-                    
-                    
-                </div>
-                </div>
+                </ul>
             </div>
-        </nav>
+
+        </div>
+         
         <div style={{height:navHeight+18}}></div>
         {props.children}
 

@@ -45,34 +45,12 @@ export default function Home(props) {
         <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/>
         <Banner images={banner} />
 
-        <div className="container">
-          {/* <div className="btn-group my-4"> 
-            <button className="btn btn-primary" onClick={()=>setGrid1(2)}>2</button> 
-            <button className="btn btn-primary" onClick={()=>setGrid1(4)}>4</button>
-            <button className="btn btn-primary" onClick={()=>setGrid1(5)}>5</button>
-            <button className="btn btn-primary" onClick={()=>setGrid1(6)}>6</button>
-          </div> */}
-
-          {/* <div id="deals"> 
-            <Cards title={"Deals of the day"} grid={grid1} images={[
-              {src:"/assets/images/dealsOfDay/image1.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image2.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image3.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image4.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image5.jpg",href:"/6046410675273a0015f7d4f5"},
-            ]} /> 
-          </div> */}
-
-          {/* <div className="btn-group my-4"> 
-            <button className="btn btn-primary" onClick={()=>setGrid2(2)}>2</button> 
-            <button className="btn btn-primary" onClick={()=>setGrid2(4)}>4</button>
-            <button className="btn btn-primary" onClick={()=>setGrid2(5)}>5</button>
-            <button className="btn btn-primary" onClick={()=>setGrid2(6)}>6</button>
-          </div> */}
+        <div className="container"> 
+        
           {props.sections?.map((el,key)=>(
             <div key={key}>
                 <h3 className="display-5 my-8 text-secondary"> {el.title}  </h3>
-                <div className={"grid grid-cols-"+el.grid+" gap-4"}>
+                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
                     {props.cards?.map((e,key)=>{ 
                         return <div key={key} className={el._id==e.sectionId?"":"d-none"}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm cursor-pointer" /></Link>
@@ -82,15 +60,6 @@ export default function Home(props) {
             
             </div>
           ))}
-          {/* <div id="biggestdeals"> 
-            <Cards title={"BIGGEST DEALS ON TOP BRANDS"} grid={grid2} images={[
-              {src:"/assets/images/dealsOfDay/image1.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image2.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image3.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image4.jpg",href:"/6046410675273a0015f7d4f5"},
-              {src:"/assets/images/dealsOfDay/image5.jpg",href:"/6046410675273a0015f7d4f5"},
-            ]} /> 
-          </div> */}
  
 
         </div>

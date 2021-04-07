@@ -18,7 +18,7 @@ import https from 'https'
 function SingleProduct(props){
   const router = useRouter();
 
-  return <div className={"hover:shadow-lg product "+styles.product} onClick={()=>router.push("/product/"+props.id)}>
+  return <div className={"hover:shadow-lg product cursor-pointer "+styles.product} onClick={()=>router.push("/product/"+props.id)}>
   <Banner indicator={false} images={props.images} />
   <div className="text-center p-2 relative bg-white d-none" style={{top:-50}}>
     <Button variant="contained" color="secondary" onClick={props.onclick} startIcon={<LocalMallOutlinedIcon />}>
@@ -107,8 +107,8 @@ export default function Product(props){
                   <button className="btn btn-primary" disabled={grid==6} onClick={()=>{setGrid(6)}}>6</button>
                 </div> */}
                 <div className="flex items-center justify-between border-b-2 pb-8">
-                  <MaterialChipArray /> 
-                  <select className="form-select w-25" name="sort" id="sort">
+                  {/* <MaterialChipArray />  */}
+                  <select className="form-select w-full md:w-1/4 ml-auto" name="sort" id="sort">
                     <option value="">Recommended</option>
                     <option value="">Better Discount</option>
                     <option value="">Popularity</option>
