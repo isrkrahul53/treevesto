@@ -12,7 +12,7 @@ function CheckoutHeader(props){
     <div className="container-fluid">
         <span className="navbar-brand">
             <Link href="/">
-                <img src="/logo.png" width="150px" alt="logo"/>
+                <img src="/logo.png" className="w-24 md:w-40" alt="logo"/>
             </Link>
         </span>
 
@@ -24,7 +24,7 @@ function CheckoutHeader(props){
             <h5 className={props.active == 3?"text-xl p-2 border-b-4 text-4xl text-green-500 border-green-500":"text-xl p-2"}>Payment</h5>
         </div>
 
-        <div className="flex items-center">
+        <div className="items-center hidden md:flex">
             <img src="/assets/images/checkout/security-icon-27.jpg" width="50px" alt="security-icon-27"/>
             <h5 className="text-xl">100% Secure</h5>
         </div>

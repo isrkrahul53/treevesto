@@ -122,9 +122,9 @@ export default function Sidebar(props) {
   return (
     <div>
         <React.Fragment>
-            <Button onClick={toggleDrawer('left', true)}>
-              <MenuIcon />
-            </Button>
+              <MenuIcon onClick={toggleDrawer('left', true)} />
+            {/* <Button onClick={toggleDrawer('left', true)}>
+            </Button> */}
             <SwipeableDrawer
                 anchor={'left'}
                 open={state['left']}

@@ -42,10 +42,10 @@ export default function Home(props) {
       
       <Layout error={error} success={success} close={closeAlert}>
  
-        <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/>
+        {/* <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/> */}
         <Banner images={banner} />
 
-        <div className="container"> 
+        <div className="container my-2"> 
         
           {props.sections?.map((el,key)=>(
             <div key={key}>
