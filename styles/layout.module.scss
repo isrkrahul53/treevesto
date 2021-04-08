@@ -1,6 +1,11 @@
 .zIndex_10 {
     z-index: -10 !important;
 }
+.dropdown {
+    section {
+        border-bottom: 4px solid white;
+    }
+}
 .dropdown:hover {
     section {
         border-bottom: 4px solid #fb56c1;
