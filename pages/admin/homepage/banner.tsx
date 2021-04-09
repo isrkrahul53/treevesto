@@ -31,9 +31,9 @@ export default function HomepageBanner() {
 
     return <AdminLayout>
 
-        <div className="p-3 text-xl border shadow-sm mb-2">Banners</div>
+        <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Banners</div>
         
-        <form className="my-4">
+        <form className="my-2 bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
 
             <input type="file" name="image" id="image" defaultValue={values.image} 
             onChange={e=>setValues({...values,image:e.target.files[0]})} className="form-control my-2"  />

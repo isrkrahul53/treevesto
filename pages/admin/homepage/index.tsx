@@ -109,63 +109,69 @@ export default function CustomizeHomepage(props) {
     }
     
     return <AdminLayout>
-        <div className="p-3 text-xl border shadow-sm">Homepage</div>
+        <div className="p-3 text-xl bg-white border shadow-sm" style={{borderRadius:"10px"}}>Homepage</div>
 
         <div className="my-2"></div>
 
-        <Banner images={banner} />
-        <div className="grid grid-cols-3 gap-4 m-2 mx-4">
-            {banner.map((element,key)=>(
-                <div key={key}>
-                    <div className="text-right">
-                        <span className="text-xl text-danger cursor-pointer" onClick={e=>deleteBanner(element.id)}>&times;</span>
+        <section className="border-t-4 border-b-4" style={{height:"480px",overflow:"auto",borderRadius:"10px"}}>
+            <div className="bg-white shadow-sm border overflow-hidden mb-2" style={{borderRadius:"10px"}}>
+                <Banner images={banner} />
+            </div>
+            <div className="grid grid-cols-3 gap-4 bg-white p-3 shadow-sm border" style={{borderRadius:"10px"}}>
+                {banner.map((element,key)=>(
+                    <div key={key}>
+                        <div className="text-right">
+                            <span className="text-xl text-danger cursor-pointer" onClick={e=>deleteBanner(element.id)}>&times;</span>
+                        </div>
+                        <img src={element.src} className="border shadow-sm"  />
                     </div>
-                    <img src={element.src} className="border shadow-sm"  />
+                ))}
+            </div> 
+
+            <div className="text-right my-3">
+                <Link href="/admin/homepage/banner"><Button variant="contained" color="secondary">
+                    Add New Banner +
+                </Button></Link>
+            </div>
+
+            {props.sections?.map((el,key)=>(
+                <div key={key} className="p-2 bg-white shadow-sm border overflow-hidden mb-2" style={{borderRadius:"10px"}}>
+                    <h3 className="display-5 my-8 text-secondary"> {el.title} 
+                    </h3>
+                        <span className="btn btn-primary mx-2" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>Edit</span> 
+                        <span className="btn btn-danger mx-2" onClick={()=>deleteSection(el._id)}>Delete</span> 
+                    <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                        {props.cards?.map((e,key)=>{ 
+                            return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
+                                <div className="text-right">
+                                    <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
+                                </div>
+                                <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
+                            </div> 
+                        })}
+                        <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
+                            image={e=>setImages({...images,image:e.target.files[0]})} 
+                            link={e=>setImages({...images,link:e.target.value})} 
+                            value={images}
+                            submit={()=>handleSubmit(el._id)}
+                            />} 
+                        />
+                    </div>
+                
                 </div>
             ))}
-        </div> 
 
-        <div className="text-right my-3">
-            <Link href="/admin/homepage/banner"><Button variant="contained" color="secondary">
-                Add New Banner +
-            </Button></Link>
-        </div>
-
-        {props.sections?.map((el,key)=>(
-            <div key={key}>
-                <h3 className="display-5 my-8 text-secondary"> {el.title} 
-                </h3>
-                    <span className="btn btn-primary mx-2" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>Edit</span> 
-                    <span className="btn btn-danger mx-2" onClick={()=>deleteSection(el._id)}>Delete</span> 
-                <div className={"grid grid-cols-"+el.grid+" gap-4"}>
-                    {props.cards?.map((e,key)=>{ 
-                        return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
-                            <div className="text-right">
-                                <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
-                            </div>
-                            <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
-                        </div> 
-                    })}
-                    <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
-                        image={e=>setImages({...images,image:e.target.files[0]})} 
-                        link={e=>setImages({...images,link:e.target.value})} 
-                        value={images}
-                        submit={()=>handleSubmit(el._id)}
-                        />} 
-                    />
-                </div>
             
+
+
+            <div className="text-right my-3">
+                <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
+                    Add New Section +
+                </Button></Link>
             </div>
-        ))}
 
-        
+        </section>
 
-
-        <div className="text-right my-3">
-            <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
-                Add New Section +
-            </Button></Link>
-        </div>
     </AdminLayout> 
 }
 

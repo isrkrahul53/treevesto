@@ -2,15 +2,21 @@ import React from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
 export default function AdminLayout(props) {
 
     const router = useRouter();
-    const [admin,setAdmin] = React.useState(null);
- 
-    useEffect(()=>{
-        var path = router.asPath;
+    const path = router.asPath.split("/");
+    const navs = ["dashboard","homepage","vendors","users","orders"] 
 
+    const [admin,setAdmin] = React.useState(null);
+    const [expand,setExpand] = React.useState(navs.filter(e=>path.filter(a=>a===e).length > 0)[0] || "");
+ 
+    useEffect(()=>{  
+        
         if(!localStorage.getItem('admin')){
             router.replace("/admin/auth") 
         }else{ 
@@ -28,54 +34,131 @@ export default function AdminLayout(props) {
     }
 
     return <div> 
-        <nav className="navbar navbar-expand-lg navbar-light bg-light border shadow-sm">
-            <div className="container-fluid">
-                <span className="navbar-brand">Admin</span>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon" />
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                    <span className="nav-link active" aria-current="page"><Link href="/">Home</Link></span>
-                    </li>
-                    <li className="nav-item">
-                    <span className="nav-link">Link</span>
-                    </li>
-                    <li className="nav-item dropdown">
-                    <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </span>
-                    <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><span className="dropdown-item">Action</span></li>
-                        <li><span className="dropdown-item">Another action</span></li>
-                        <li><hr className="dropdown-divider" /></li>
-                        <li><span className="dropdown-item">Something else here</span></li>
-                    </ul>
-                    </li> 
-                </ul>
-                <form className="d-flex">
-                    {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button className="btn btn-outline-success" type="submit">Search</button> */}
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <span className="nav-link">{admin?.email}</span>
-                        </li> 
-                        <li className="nav-item">
-                            <span className="nav-link cursor-pointer" onClick={logout}>Logout</span>
-                        </li> 
-                    </ul>
-                </form>
-                </div>
-            </div>
-        </nav> 
 
         <div className="container my-3">
+            <nav className="navbar navbar-expand-lg navbar-light bg-white border shadow-sm mb-3" style={{borderRadius:"10px"}}>
+                <div className="container-fluid">
+                    <span className="navbar-brand">
+                        <img src="/logo.png" alt="logo" className="w-24" />
+                    </span>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon" />
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                        <span className="nav-link active" aria-current="page"><Link href="/">Home</Link></span>
+                        </li>
+                        <li className="nav-item">
+                        <span className="nav-link">Link</span>
+                        </li>
+                        <li className="nav-item dropdown">
+                        <span className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </span>
+                        <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><span className="dropdown-item">Action</span></li>
+                            <li><span className="dropdown-item">Another action</span></li>
+                            <li><hr className="dropdown-divider" /></li>
+                            <li><span className="dropdown-item">Something else here</span></li>
+                        </ul>
+                        </li> 
+                    </ul>
+                    <form className="d-flex">
+                        {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                        <button className="btn btn-outline-success" type="submit">Search</button> */}
+                        <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <span className="nav-link">{admin?.email}</span>
+                            </li> 
+                            <li className="nav-item">
+                                <span className="nav-link cursor-pointer" onClick={logout}>Logout</span>
+                            </li> 
+                        </ul>
+                    </form>
+                    </div>
+                </div>
+            </nav> 
             <div className="row">
                 <div className="col-md-3">
 
-                    <div className="accordion" id="accordionExample">
-                        <div className="accordion-item">
+                    <Link href="/admin/"><div className={expand === ""?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                     style={{borderRadius:"10px"}}>
+                         Dashboard
+                    </div></Link>
+
+                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
+                    style={{borderRadius:"10px",overflow:"hidden"}}>
+                        <div className={expand === "homepage"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
+                        onClick={e=>setExpand(expand === "homepage" ? "":"homepage")}>
+                            <div>Homepage</div>
+                            {expand !== "homepage"?<ExpandMoreIcon />:<ExpandLessIcon />} 
+                        </div>
+                        {expand === "homepage"?<>
+                            <List>
+                                <Link href="/admin/homepage/"><ListItem button>
+                                    <ListItemText>Index</ListItemText>
+                                </ListItem></Link>
+                                <Link href="/admin/homepage/banner"><ListItem button>
+                                    <ListItemText>Banners</ListItemText>
+                                </ListItem></Link>
+                                <Link href="/admin/homepage/addSection"><ListItem button>
+                                    <ListItemText>Add New Section</ListItemText>
+                                </ListItem></Link>
+                            </List>
+                        </>:<></>}
+                    </div>
+
+                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
+                    style={{borderRadius:"10px",overflow:"hidden"}}>
+                        <div className={expand === "vendors"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
+                        onClick={e=>setExpand(expand === "vendors" ? "":"vendors")}>
+                            <div>Vendors</div>
+                            {expand !== "vendors"?<ExpandMoreIcon />:<ExpandLessIcon />} 
+                        </div>
+                        {expand === "vendors"?<>
+                            <List>
+                                <Link href="/admin/vendors/"><ListItem button>
+                                    <ListItemText>Index</ListItemText>
+                                </ListItem></Link>
+                            </List>
+                        </>:<></>}
+                    </div>
+
+                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
+                    style={{borderRadius:"10px",overflow:"hidden"}}>
+                        <div className={expand === "users"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
+                        onClick={e=>setExpand(expand === "users" ? "":"users")}>
+                            <div>Users</div>
+                            {expand !== "users"?<ExpandMoreIcon />:<ExpandLessIcon />} 
+                        </div>
+                        {expand === "users"?<>
+                            <List>
+                                <Link href="/admin/users/"><ListItem button>
+                                    <ListItemText>Index</ListItemText>
+                                </ListItem></Link>
+                            </List>
+                        </>:<></>}
+                    </div>
+                     
+                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
+                    style={{borderRadius:"10px",overflow:"hidden"}}>
+                        <div className={expand === "orders"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
+                        onClick={e=>setExpand(expand === "orders" ? "":"orders")}>
+                            <div>Orders</div>
+                            {expand !== "orders"?<ExpandMoreIcon />:<ExpandLessIcon />} 
+                        </div>
+                        {expand === "orders"?<>
+                            <List>
+                                <Link href="/admin/orders/"><ListItem button>
+                                    <ListItemText>Index</ListItemText>
+                                </ListItem></Link>
+                            </List>
+                        </>:<></>}
+                    </div>
+
+                    {/* <div className="accordion" id="accordionExample">
+                        <div className="accordion-item" style={{borderRadius:"10px"}}>
                             <h2 className="accordion-header" id="headingOne">
                             <Link href="/admin/"><button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Dashboard
@@ -85,7 +168,7 @@ export default function AdminLayout(props) {
                                 
                             </div>
                         </div>
-                        <div className="accordion-item">
+                        <div className="accordion-item" style={{borderRadius:"10px"}}>
                             <h2 className="accordion-header" id="headingTwo">
                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Homepage
@@ -99,7 +182,7 @@ export default function AdminLayout(props) {
                             </div>
                             </div>
                         </div>
-                        <div className="accordion-item">
+                        <div className="accordion-item" style={{borderRadius:"10px"}}>
                             <h2 className="accordion-header" id="headingThree">
                             <Link href="/admin/vendors/"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 Vendors
@@ -110,7 +193,7 @@ export default function AdminLayout(props) {
                             </div>
                             </div>
                         </div>
-                        <div className="accordion-item">
+                        <div className="accordion-item" style={{borderRadius:"10px"}}>
                             <h2 className="accordion-header" id="headingFour">
                             <Link href="/admin/users"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                 Users
@@ -122,7 +205,7 @@ export default function AdminLayout(props) {
                             </div>
                             </div>
                         </div>
-                        <div className="accordion-item">
+                        <div className="accordion-item" style={{borderRadius:"10px"}}>
                             <h2 className="accordion-header" id="headingFive">
                             <Link href="/admin/orders"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                 Orders
@@ -134,8 +217,8 @@ export default function AdminLayout(props) {
                             </div>
                             </div>
                         </div>
-                        </div> 
-                    </div>
+                    </div>  */}
+                </div>
 
                 <div className="col-md-9">
                     {props.children}

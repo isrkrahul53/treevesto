@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import AccountPage from "../../component/pages/account";
 import Button from '@material-ui/core/Button'
@@ -11,6 +12,15 @@ function Card(props){
 }
 
 export default function OverviewPage() {
+    const [user,setUser] = React.useState(null)
+    
+    useEffect(()=>{
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            setUser(user)
+        }
+    },[])
+
     return <div>
         <AccountPage>
 
@@ -23,9 +33,9 @@ export default function OverviewPage() {
                         <div className="flex items-center me-auto">
                             <div className="w-20 h-20 mr-2 bg-white shadow-sm border rounded"></div>
                             <div className="my-auto">
-                                <div>Full Name</div>
-                                <div>email@gmail.com</div>
-                                <div>6209460626</div>
+                                <div>{user?.name || ""}</div>
+                                <div>{user?.email}</div>
+                                <div>{user?.phone}</div>
                             </div>
                         </div>
                         <Link href="/account/profile/edit"><Button variant="contained" color="secondary" className="m-2">

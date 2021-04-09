@@ -33,9 +33,9 @@ export default function AddSection() {
 
     return <AdminLayout>
 
-        <div className="p-3 text-xl border shadow-sm mb-2">Add New Section</div>
+        <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Add New Section</div>
 
-        <form>
+        <form className="bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
             <input type="text" name="title" id="title" onChange={e=>setSection({...section,title:e.target.value})} defaultValue={section.title} className="form-control my-2" placeholder="Enter title of the card" />
             <select name="grid" id="grid" onChange={e=>setSection({...section,grid:e.target.value})} defaultValue={section.grid} className="form-select my-2">
                 <option value="4">4</option>

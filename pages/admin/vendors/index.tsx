@@ -36,7 +36,7 @@ export default function VendorPage(props) {
 
 
     return <AdminLayout>
-        <div className="p-3 text-xl border shadow-sm">Vendor</div>
+        <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Vendor</div>
         <div className="my-2"></div> 
 
 
@@ -47,7 +47,7 @@ export default function VendorPage(props) {
         </BottomNavigation>
         
         {navigation == 'vendors'?<div>
-            <table className="table table-hover border p-2 shadow-sm my-2 bg-white">
+            <table className="table table-hover border-4 p-2 shadow-md my-3 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
               <thead>
                 <tr>
                   <th>S.no</th>

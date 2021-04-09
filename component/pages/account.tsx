@@ -3,20 +3,36 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Layout from "../common/layout";
+// import {user} from "../../src/user";
 
 export default function AccountPage(props) {
 
     const [active,setActive] = React.useState(null)
+    const [error,setError] = React.useState("");
+    const [success,setSuccess] = React.useState("");
+    const closeAlert = () => { 
+      setError("")
+      setSuccess("") 
+    }
     const router = useRouter();
+
+    const [user,setUser] = React.useState(null)
+
+
     useEffect(() => {
         setActive(router.asPath)
+        
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            setUser(user)
+        }
     }, [])
-
+    
     return <div>
-        <Layout>
+        <Layout error={error} success={success} close={closeAlert}>
             <div className="w-5/6 md:w-75 mx-auto my-8">
                 <h3 className="text-lg font-medium">Account</h3>
-                <h3 className="text-sm">Rahul Kumar</h3>
+                <h3 className="text-sm">{user?.name || user?.email}</h3>
                 <hr className="my-2" />
                 <div className="flex-row md:flex">
                     <div className="w-full md:w-1/5 border-r-2 border-gray-300">

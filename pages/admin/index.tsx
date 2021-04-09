@@ -5,7 +5,7 @@ import AdminLayout from '../../component/common/AdminLayout'
 export default function AdminPage(){
 
     return <AdminLayout>
-        <div className="p-3 text-xl border shadow-sm">Dashboard</div>
+        <div className="p-3 text-xl bg-white border shadow-sm" style={{borderRadius:"10px"}}>Dashboard</div>
         
         
 

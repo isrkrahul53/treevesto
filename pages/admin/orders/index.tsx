@@ -11,9 +11,9 @@ export default function AdminOrdersPage(props){
   console.log(props.orders)
 
   return <AdminLayout>
-  <div className="p-3 text-xl border shadow-sm">Orders</div>
-  <br className="my-2" />
-  <table className="table table-hover border p-2 shadow-sm my-2 bg-white">
+  <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Orders</div>
+  
+  <table className="table table-hover border p-2 shadow-md my-2 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
       <thead>
       <tr>
           <th>S.no</th>

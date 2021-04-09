@@ -5,8 +5,8 @@ import https from 'https'
 
 export default function AdminUserPage(props){
     return <AdminLayout>
-    <div className="p-3 text-xl border shadow-sm">Users</div>
-    <table className="table table-hover border p-2 shadow-sm my-2 bg-white">
+    <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Users</div>
+    <table className="table table-hover border p-2 shadow-md my-2 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
         <thead>
         <tr>
             <th>S.no</th>

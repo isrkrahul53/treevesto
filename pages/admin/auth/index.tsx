@@ -52,11 +52,11 @@ export default function AdminLoginPage() {
     
     return <div>
 
-<div className="container my-4">
+        <div className="container my-4">
                 <div className="row">
                     <div className="col-12 col-md-4"></div>
 
-                    <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
+                    <div className="col-12 col-md-4 p-0 bg-white shadow-sm border" style={{borderRadius:"10px"}}>
   
                         <form className="p-4">
                             <div className="my-3">
