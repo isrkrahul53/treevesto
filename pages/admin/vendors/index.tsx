@@ -13,7 +13,7 @@ import https from 'https'
 export default function VendorPage(props) {
   const router = useRouter();
  
-  
+  console.log(props.vendors)
   const [navigation, setNavigation] = React.useState('products');
   const [selectedVendor, setSelectedVendor] = React.useState("");
 
@@ -35,6 +35,18 @@ export default function VendorPage(props) {
   },[selectedVendor])
 
 
+
+  const deleteVendor = (x) => {
+    if(confirm('Are you sure to delete this vendor')){
+      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+        method:"DELETE"
+      }).then(d=>d.json()).then(json=>{
+        router.replace(router.asPath)
+      })
+
+    }
+  }
+
     return <AdminLayout>
         <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Vendor</div>
         <div className="my-2"></div> 
@@ -54,7 +66,8 @@ export default function VendorPage(props) {
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
-                  <th>Pincode</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,7 +77,8 @@ export default function VendorPage(props) {
                     <td>{el.name}</td>
                     <td>{el.email}</td>
                     <td>{el.phone}</td>
-                    <td>{el.pincode}</td>
+                    {el.status !== 0 ? <td className="text-success">Verified</td>:<td className="text-danger">Pending</td>}
+                    <td className="text-primary cursor-pointer" onClick={e=>deleteVendor(el._id)}>delete</td>
                   </tr> 
                 ))}
               </tbody>

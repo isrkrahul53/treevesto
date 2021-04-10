@@ -88,10 +88,10 @@ export default function Layout(props){
                             <section className="nav-link text-2xl px-3" id="navbarDropdownMen" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {el.catName}
                             </section>
-                            <ul className={"dropdown-menu d-none shadow z-0"} style={{position:"fixed",top:navHeight,left:"5%",width:"80%",margin:"0 auto"}} aria-labelledby="navbarDropdownMen">
+                            <ul className={"dropdown-menu d-none shadow z-0"} style={{position:"fixed",top:navHeight,left:"5%",width:"50%",margin:"0 auto"}} aria-labelledby="navbarDropdownMen">
                                 <div className="container p-0">
                                     {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
-                                        <div key={k}><Link href={"/"+e._id}><li className="dropdown-item cursor-pointer"> {e.catName} </li></Link></div>
+                                        <div key={k}><Link href={"/"+e._id}><li className="dropdown-item border-r-4 border-gray-800 hover:bg-pink-400 hover:text-gray-50 cursor-pointer text-2xl"> {e.catName} </li></Link></div>
                                     ))}
                                 </div>   
                             </ul>
