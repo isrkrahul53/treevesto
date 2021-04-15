@@ -105,10 +105,11 @@ export default function Checkout(props) {
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 
-            router.push({pathname:"/success",query:{
-                result:JSON.stringify(json.result),
-                user:JSON.stringify(user),
-            }})
+            console.log(json)
+            // router.push({pathname:"/success",query:{
+            //     result:JSON.stringify(json.result),
+            //     user:JSON.stringify(user),
+            // }})
         })
 
         // console.log(cart)
