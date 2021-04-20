@@ -128,7 +128,7 @@ export default function CustomizeHomepage(props) {
                 ))}
             </div> 
 
-            <div className="text-right my-3">
+            <div className="text-right m-3">
                 <Link href="/admin/homepage/banner"><Button variant="contained" color="secondary">
                     Add New Banner +
                 </Button></Link>
@@ -153,8 +153,8 @@ export default function CustomizeHomepage(props) {
                             image={e=>setImages({...images,image:e.target.files[0]})} 
                             link={e=>setImages({...images,link:e.target.value})} 
                             value={images}
-                            submit={()=>handleSubmit(el._id)}
                             />} 
+                            submit={()=>handleSubmit(el._id)}
                         />
                     </div>
                 
@@ -164,7 +164,7 @@ export default function CustomizeHomepage(props) {
             
 
 
-            <div className="text-right my-3">
+            <div className="text-right m-3">
                 <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
                     Add New Section +
                 </Button></Link>

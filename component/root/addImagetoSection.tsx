@@ -5,13 +5,6 @@ function Container(props){
     <div className="container-fluid">
         {props.children}
     </div>
-    <div className="p-2" style={{position:"absolute",bottom:0,left:0,width:"100%"}}>
-        <div className="d-flex justify-content-end">
-            <div className="btn-group float-right"> 
-                <button className="btn btn-primary" onClick={props.submit}>Save</button>
-            </div>
-        </div>
-    </div>
 </div>
 }
 
@@ -51,7 +44,7 @@ function SelectInput(props){
 export default function AddImagetoSectionModal(props){
 
     
-    return <Container submit={props.submit}>
+    return <Container>
     {/*  
     <SelectInput id="language" label="Language *" options={[
         {key:0,value:"English"},
