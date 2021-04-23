@@ -69,7 +69,7 @@ export default function Home(props) {
  
         {/* <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/> */}
 
-        <div className="text-center p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
+        <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
           <div className="text-secondary">Limited time : Online only !</div>
           <div className="display-4">FINAL CLEARANCE</div>
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
@@ -85,25 +85,42 @@ export default function Home(props) {
           {/* =========================================== */}
           {/* Featured Products */}
           {/* =========================================== */}
+          <div className="hidden md:block">
+            <Paper className="my-2">
+              <Tabs
+                value={navigation}
+                onChange={handleNavigationChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                  <Tab label="New Products" />
+                  <Tab label="Special Products" />
+                  <Tab label="Featured Products" />
+              </Tabs>
+            </Paper>
+          </div>
 
-          <Paper className="my-2">
-            <Tabs
-              value={navigation}
-              onChange={handleNavigationChange}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-            >
-              <Tab label="New Products" />
-              <Tab label="Special Products" />
-              <Tab label="Featured Products" />
-            </Tabs>
-          </Paper>
+          <div className="md:hidden">
+            <Paper className="my-2">
+              <Tabs
+                value={navigation}
+                onChange={handleNavigationChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              > 
+                  <Tab label="New" />
+                  <Tab label="Special" />
+                  <Tab label="Featured" />
+              </Tabs>
+            </Paper>
+          </div>
 
           <div className="my-2"></div>
 
           {navigation === 0?<>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {product.filter((a,i)=>i>=0 && i<=4).map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
                   <img src={e.image} alt="" className="w-full" />
@@ -122,7 +139,7 @@ export default function Home(props) {
           </>:<></>}
 
           {navigation === 1?<>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {product.filter((a,i)=>i>=4 && i<=8).map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
                   <img src={e.image} alt="" className="w-full" />
@@ -141,7 +158,7 @@ export default function Home(props) {
           </>:<></>}
 
           {navigation === 2?<>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {product.filter((a,i)=>i>=8 && i<=12).map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
                   <img src={e.image} alt="" className="w-full" />

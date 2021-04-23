@@ -1,8 +1,10 @@
+import React from 'react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 declare var $:any;
 
 export default function ProductCarousel(props){
+  const [grid,setGrid] = React.useState(5)
   var ar=[];
   for(var i=0;i<props.product.length;i++){
     if(i%5==0){
@@ -11,6 +13,15 @@ export default function ProductCarousel(props){
   }
  
   useEffect(()=>{
+    console.log(document.body.offsetWidth)
+  })
+
+  useEffect(()=>{
+    if(document.body.offsetWidth > 800){
+      setGrid(5)
+    }else{
+      setGrid(2)
+    }
     try{
       $('#ProductCarousel').carousel({
         interval: 1000,
@@ -27,11 +38,11 @@ export default function ProductCarousel(props){
     <button type="button" data-bs-target="#ProductCarousel" data-bs-slide-to={1} aria-label="Slide 2" />
     <button type="button" data-bs-target="#ProductCarousel" data-bs-slide-to={2} aria-label="Slide 3" />
   </div>
-  <div className="carousel-inner px-24 py-3">
+  <div className="carousel-inner md:px-24 py-3">
     {ar.map((a,i)=>(
     <div key={i} className={i == 0?"carousel-item active":"carousel-item"}>
-      <div className="grid grid-cols-5 gap-4">
-          {props.product.filter((el,k)=>k>=0+i && k<=4+i).map((e,key)=>(
+      <div className={"grid grid-cols-"+grid+" gap-4"}>
+          {props.product.filter((el,k)=>k>=0+i && k<=grid-1+i).map((e,key)=>(
           <div key={key} className="border-2 shadow-sm">
             <img src={e.image} alt="" className="w-full" />
             <div className="p-2">

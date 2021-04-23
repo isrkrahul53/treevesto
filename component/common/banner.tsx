@@ -15,11 +15,11 @@ export default function Banner(props){
       ))} 
   </div>
   {props.indicator?<button className="carousel-control-prev" type="button" data-bs-target="#Banner" data-bs-slide="prev">
-    <span className="carousel-control-prev-icon" aria-hidden="true" />
+    <span className="carousel-control-prev-icon bg-dark md:p-4" aria-hidden="true" />
     <span className="visually-hidden">Previous</span>
   </button>:<></>}
   {props.indicator?<button className="carousel-control-next" type="button" data-bs-target="#Banner" data-bs-slide="next">
-    <span className="carousel-control-next-icon" aria-hidden="true" />
+    <span className="carousel-control-next-icon bg-dark md:p-4" aria-hidden="true" />
     <span className="visually-hidden">Next</span>
   </button>:<></>} 
 </div>
