@@ -18,13 +18,19 @@ export default function CartItem(props) {
                         </div>
                     </div>
                 <hr />
-                <div className="my-2">
-                    <Button className="mx-2" variant="outlined" color="inherit" onClick={()=>props.deleteCartItem(el.id)}>
+                <div className="my-2 flex items-center">
+                    {/* <Button className="mx-2" variant="outlined" color="inherit" onClick={()=>props.deleteCartItem(el.id)}>
                         Delete
-                    </Button>
-                    <Button className="mx-2" variant="outlined" color="secondary" onClick={()=>props.movetoWishlist(el)}>
+                    </Button> */}
+                    <div onClick={()=>props.deleteCartItem(el.id)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                        Delete
+                    </div>
+                    {/* <Button className="mx-2" variant="outlined" color="secondary" onClick={()=>props.movetoWishlist(el)}>
                         Move to Wishlist
-                    </Button>
+                    </Button> */}
+                    <div onClick={()=>props.movetoWishlist(el)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                        Move to Wishlist
+                    </div>
                 </div>
             </div>
         ))}

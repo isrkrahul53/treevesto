@@ -81,9 +81,12 @@ export default function AddressPage(props) {
 
             <div className="border bg-white shadow-sm p-4">
                 <div className={selected?"text-right my-2":"text-right my-2 d-none"}>
-                    <Button disabled={!selected} variant="contained" color="secondary" onClick={e=>router.push("/checkout/payment")}>
+                    {/* <Button disabled={!selected} variant="contained" onClick={e=>router.push("/checkout/payment")}>
                     Continue
-                    </Button>
+                    </Button> */}
+                    <button type="submit" disabled={!selected} onClick={e=>router.push("/checkout/payment")} className="px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                        Continue
+                    </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-1">
                     {userAddress?.map((el,key)=>{
@@ -100,48 +103,52 @@ export default function AddressPage(props) {
                 <h3 className="text-lg font-medium my-2">Contact Details</h3>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField className="my-2" name="name" label="Name *" variant="outlined"
-                    size="small" color="secondary" fullWidth inputRef={register({required:true})}
+                    size="small" fullWidth inputRef={register({required:true})}
                     helperText={errors.name && (<span className="text-danger">Name is required</span>)}
                     defaultValue={address.name} onChange={(e)=>{setAddress({...address,name:e.target.value})}}
                     />
                     
                     <TextField className="my-2" type="text" name="phone" label="Mobile *" variant="outlined" 
-                    size="small" color="secondary" fullWidth inputRef={register({required:true,minLength:10,maxLength:10})}
+                    size="small" fullWidth inputRef={register({required:true,minLength:10,maxLength:10})}
                     helperText={errors.phone && (<span className="text-danger">Enter valid 10 digit mobile number</span>)} 
                     defaultValue={address.phone} onChange={(e)=>{setAddress({...address,phone:e.target.value})}}
                     />
  
                     <h3 className="text-lg font-medium my-2">Address</h3>
                     <TextField className="my-2" type="number" name="pincode" label="Pin Code *" variant="outlined" 
-                    size="small" color="secondary" fullWidth  inputRef={register({required:true})}
+                    size="small" fullWidth  inputRef={register({required:true})}
                     helperText={errors.pincode && (<span className="text-danger">Pincode is required</span>)}
                     defaultValue={address.pincode} onChange={(e)=>{setAddress({...address,pincode:e.target.value})}}
                     />
                     <TextField className="my-2" name="address" label="Address ( House no, Building, Street, Area )*" 
-                    variant="outlined" size="small" color="secondary" fullWidth  inputRef={register({required:true})}
+                    variant="outlined" size="small" fullWidth  inputRef={register({required:true})}
                     helperText={errors.pincode && (<span className="text-danger">Address is required</span>)}
                     defaultValue={address.address} onChange={(e)=>{setAddress({...address,address:e.target.value})}}
                     />
                     <TextField className="my-2" name="locality" label="Locality / Town *" variant="outlined" 
-                    size="small" color="secondary" fullWidth 
+                    size="small" fullWidth 
                     defaultValue={address.locality} onChange={(e)=>{setAddress({...address,locality:e.target.value})}}
                     />
                     <div className="flex items-center">
                         <TextField className="my-2 px-1" name="state" label="State *" variant="outlined" size="small" 
-                        color="secondary" fullWidth inputRef={register({required:true})}
+                     fullWidth inputRef={register({required:true})}
                         helperText={errors.state && (<span className="text-danger">State is required</span>)}
                         defaultValue={address.state} onChange={(e)=>{setAddress({...address,state:e.target.value})}}
                         />
                         <TextField className="my-2 px-1" name="country" label="Country *" variant="outlined" 
-                        size="small" color="secondary" fullWidth inputRef={register({required:true})}
+                        size="small" fullWidth inputRef={register({required:true})}
                         helperText={errors.country && (<span className="text-danger">Country is required</span>)}
                         defaultValue={address.country} onChange={(e)=>{setAddress({...address,country:e.target.value})}}
                         />
                     </div>
 
-                    <Button variant="contained" color="secondary" fullWidth type="submit" >
+                    {/* <Button variant="contained" fullWidth type="submit" >
                     Add Address
-                    </Button>
+                    </Button> */}
+                    
+                    <button type="submit" className="w-full my-4 px-4 py-1 rounded text-xl cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                        Add Address
+                    </button>
 
                 </form>
  

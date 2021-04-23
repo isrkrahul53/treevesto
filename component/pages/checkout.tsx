@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
+import Layout from '../common/layout';
 
 function CouponSVG(){
     return <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="coupons-base-couponIcon"><g fill="none" fillRule="evenodd" transform="rotate(45 6.086 5.293)"><path stroke="#000" d="M17.5 10V1a1 1 0 0 0-1-1H5.495a1 1 0 0 0-.737.323l-4.136 4.5a1 1 0 0 0 0 1.354l4.136 4.5a1 1 0 0 0 .737.323H16.5a1 1 0 0 0 1-1z"></path><circle cx="5.35" cy="5.35" r="1.35" fill="#000" fillRule="nonzero"></circle></g></svg>
@@ -37,6 +38,13 @@ export default function Checkout(props) {
     const [active,setActive] = React.useState(null);
     const router = useRouter();
 
+    const [error,setError] = React.useState("");
+    const [success,setSuccess] = React.useState("");
+    const closeAlert = () => { 
+      setError("")
+      setSuccess("") 
+    }
+    
     // Cart
     const [cart,setCart] = React.useState(null)
     const [user,setUser] = React.useState(null)
@@ -118,9 +126,9 @@ export default function Checkout(props) {
     }
 
     return <div>
-        <CheckoutHeader active={active} />
-
-        <div className="">
+        {/* <CheckoutHeader active={active} /> */}
+        <Layout error={error} success={success}>
+            <div className="">
                 <div className="w-full md:w-2/3 mx-auto flex-row md:flex">
 
                     {/* First column */}
@@ -138,9 +146,12 @@ export default function Checkout(props) {
                                 <CouponSVG />
                                 <span className="text-lg px-2">Apply Coupons</span>
                             </div>
-                            <Button variant="outlined" color="secondary">
-                              Apply
-                            </Button>
+                            {/* <Button variant="outlined" color="secondary">
+                                Apply
+                            </Button> */}
+                            <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                                Apply
+                            </div>
                         </div>
                         <hr />
                         <div className="py-3">
@@ -164,9 +175,13 @@ export default function Checkout(props) {
                                 <div>Rs. {totalPrice} </div>
                             </div>
                             {active == 1?<Link href="/checkout/address">
-                            <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
-                              Place Order
-                            </Button></Link>:<></>}
+                            {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
+                                Place Order
+                            </Button> */}
+                            <button type="button" disabled={totalPrice == 0} className="w-full my-4 px-4 py-1 rounded text-xl cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                                Place Order
+                            </button>
+                            </Link>:<></>}
                             
                         </div>
 
@@ -174,5 +189,6 @@ export default function Checkout(props) {
                     </div>
                 </div>
             </div>
+        </Layout>
     </div>
 }

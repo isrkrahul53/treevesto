@@ -4,15 +4,19 @@ import React, { useEffect } from "react";
 
 function Card(props){
     return <div className="border bg-white shadow-sm">
-    <div className="float-right"><span onClick={()=>{props.deleteWishlistItem()}} className="cursor-pointer text-xl p-1 px-2 rounded shadow-sm border-2 border-red-500 text-red-500">&times;</span></div>
+    <div className="float-right"><span onClick={()=>{props.deleteWishlistItem()}} className="cursor-pointer text-xl p-1 px-2 rounded shadow-sm border-2 border-gray-500 text-gray-500">&times;</span></div>
     <img src={props.image}  className="w-100" />
     <div className="p-2">
         <div className="text-md">{props.name} </div>
         <div className="text-lg">Rs. {props.price}</div>
         <hr className="my-2" />
-        <Button variant="text" color="secondary" fullWidth onClick={()=>{props.movetoCart()}}>
+        {/* <Button variant="text" color="secondary" fullWidth onClick={()=>{props.movetoCart()}}>
           Move to Bag
-        </Button>
+        </Button> */}
+        
+        <div onClick={()=>{props.movetoCart()}} className="w-full px-4 py-1 text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+        Move to Bag
+        </div>
     </div>
 </div>
 }

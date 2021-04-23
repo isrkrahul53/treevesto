@@ -3,13 +3,13 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router';
 import Layout from '../../component/common/layout'; 
 import ProductPage from '../../component/pages/productPage';
+import TextField from '@material-ui/core/TextField'
 
 import axios from 'axios';
 import https from 'https'
 
                                                          
-export default function Product(props) {
-    console.log(props.product)
+export default function Product(props) { 
     const router = useRouter();
 
     const [error,setError] = React.useState("");
@@ -23,10 +23,16 @@ export default function Product(props) {
     const [selectedImage,setSelectedImage] = React.useState(null)
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([])
- 
+    const [navigation,setNavigation] = React.useState(0)
+
+    const handleNavigationChange  = (x) => {
+        setNavigation(x)
+    }
+
     useEffect(()=>{
         setSelectedImage(props.product?.productImages[0].src)
     },[props.product])
+
 
 
     useEffect(()=>{
@@ -93,7 +99,7 @@ export default function Product(props) {
 
             </div>
 
-            {grid==2?<div className="flex-row md:flex items-start">
+            {/* {grid==2?<div className="flex-row md:flex items-start">
                 <div className="w-full md:w-2/3 m-2 md:ml-6">
                     <div className={"grid grid-cols-"+grid+" gap-8"}>
                         {props.product?.productImages.map((el,key)=>(
@@ -106,7 +112,7 @@ export default function Product(props) {
                     <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} />
 
                 </div>
-            </div>:<></>}
+            </div>:<></>} */}
             
             {grid==1?<div className="flex-row md:flex m-2 md:ml-6">
                 <div className="w-full md:w-1/3 flex items-start">
@@ -124,6 +130,38 @@ export default function Product(props) {
                 </div>
             </div>:<></>}
 
+            <div className="m-2 md:ml-6 my-4">
+                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                    <li className="nav-item" role="presentation">
+                    <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Seller DETAILS-tab" data-bs-toggle="tab" data-bs-target="#Seller DETAILS" role="tab" aria-controls="Seller DETAILS" aria-selected="false">Seller DETAILS</span>
+                    </li>
+                </ul>
+                <div className="tab-content" id="myTabContent">
+                    <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
+                        <TextField id="pincode" label="Pincode" variant="outlined" size="small" color="primary" fullWidth />
+                        <p className="text-secondary">Please enter PIN code to check delivery time & Pay on Delivery Availability</p>
+                        <div className="my-3">
+                            <p> 100% Original Products</p>
+                            <p> Free Delivery on order above Rs. 799</p>
+                            <p>Pay on delivery might be available</p>
+                            <p>Easy 30 days returns and exchanges</p>
+                            <p>Try & Buy might be available</p> 
+                        </div>
+                    </div> 
+                    <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
+                        <p>{props.product?.productDesc}</p>
+                    </div> 
+                    <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Seller DETAILS" role="tabpanel" aria-labelledby="Seller DETAILS-tab">
+                        <div>Seller: TCNS Clothing Co. Ltd</div>
+                    </div> 
+                </div>
+            </div>
             
  
 

@@ -38,9 +38,14 @@ export default function OverviewPage() {
                                 <div>{user?.phone}</div>
                             </div>
                         </div>
-                        <Link href="/account/profile/edit"><Button variant="contained" color="secondary" className="m-2">
+                        <Link href="/account/profile/edit">
+                        {/* <Button variant="contained" color="secondary" className="m-2">
                           Edit Profile
-                        </Button></Link>
+                        </Button> */}
+                        <div className="px-4 py-2 m-2 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                        Edit Profile
+                        </div>
+                        </Link>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 my-4">

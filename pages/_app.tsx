@@ -1,5 +1,7 @@
 import '../styles/globals.css'
-declare var $:any;
+// import '../loader.js'
+
+
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
 }

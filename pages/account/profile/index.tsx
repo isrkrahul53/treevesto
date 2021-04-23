@@ -34,9 +34,14 @@ export default function ProfilePage() {
                         <div>Jamshedpur</div>
                     </div>
 
-                    <Link href="/account/profile/edit"><Button variant="contained" color="secondary" fullWidth className="my-4">
+                    <Link href="/account/profile/edit">
+                    {/* <Button variant="contained" color="secondary" fullWidth className="my-4">
                       Edit Profile
-                    </Button></Link>
+                    </Button> */}
+                    <div className="px-4 py-2 my-4 w-full text-center text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                    Edit Profile
+                    </div>
+                    </Link>
 
 
                 </div>

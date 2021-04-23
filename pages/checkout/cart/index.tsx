@@ -74,9 +74,12 @@ export default function CartPage() {
             
             <div className="flex items-center justify-between p-3 border rounded bg-white shadow-sm">
                 <div className="text-xl">Check delivery time & services</div>
-                <Button variant="outlined" color="secondary">
+                {/* <Button variant="outlined" color="secondary">
                     Enter PIN Code
-                </Button>
+                </Button> */}
+                <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                    Enter PIN Code
+                </div>
             </div>
 
             <div className="p-3 border rounded bg-white shadow-sm my-2">

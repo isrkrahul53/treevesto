@@ -10,7 +10,7 @@ import Banner from '../../component/common/banner';
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import styles from './style.module.scss'
 import CustomAlert from '../../component/common/customAlert';
-
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined'
 import axios from 'axios';
 import https from 'https'
 
@@ -21,9 +21,13 @@ function SingleProduct(props){
   return <div className={"hover:shadow-lg product cursor-pointer "+styles.product} onClick={()=>router.push("/product/"+props.id)}>
   <Banner indicator={false} images={props.images} />
   <div className="text-center p-2 relative bg-white d-none" style={{top:-50}}>
-    <Button variant="contained" color="secondary" onClick={props.onclick} startIcon={<LocalMallOutlinedIcon />}>
+    {/* <Button variant="contained" color="secondary" onClick={props.onclick} startIcon={<LocalMallOutlinedIcon />}>
       Wishlist
-    </Button>
+    </Button> */}
+    <button type="button" onClick={props.onclick} className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+    <FavoriteBorderOutlinedIcon />Wishlist
+    </button>
+    
     <h5 className="py-1">Sizes : S, M, XL</h5>
   </div>
   <section className="p-2">

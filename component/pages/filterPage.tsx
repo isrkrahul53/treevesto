@@ -14,7 +14,7 @@ export default function FilterPage() {
     return <div>
         <div className="flex items-center ml-6 mb-2 justify-between">
             <h5 className="text-2xl">Filter</h5>
-            <Button variant="text" color="secondary">
+            <Button variant="text" color="primary">
             Clear All
             </Button>
         </div>
@@ -23,25 +23,25 @@ export default function FilterPage() {
             <ul className="p-0 my-1">
             <li>
                 <FormControlLabel label="Kurtas" className="-my-4" control={
-                <Checkbox checked={state.checkedA} size="small" name="checkedA" color="secondary" 
+                <Checkbox checked={state.checkedA} size="small" name="checkedA" color="primary" 
                 onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
                 />
             </li>
             <li>
                 <FormControlLabel label="Plazzos" className="-my-4" control={
-                <Checkbox checked={state.checkedB} size="small" name="checkedB" color="secondary" 
+                <Checkbox checked={state.checkedB} size="small" name="checkedB" color="primary" 
                 onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
                 /> 
             </li>
             <li>
                 <FormControlLabel label="Leggings" className="-my-4" control={
-                <Checkbox checked={state.checkedC} size="small" name="checkedC" color="secondary" 
+                <Checkbox checked={state.checkedC} size="small" name="checkedC" color="primary" 
                 onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
                 /> 
             </li>
             <li>
                 <FormControlLabel label="Trousers" className="-my-4" control={
-                <Checkbox checked={state.checkedD} size="small" name="checkedD" color="secondary" 
+                <Checkbox checked={state.checkedD} size="small" name="checkedD" color="primary" 
                 onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
                 /> 
             </li>
