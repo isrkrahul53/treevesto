@@ -42,7 +42,7 @@ export default function ProductPage(props) {
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
             <div className="p-2 border-2 border-dark mx-1">
-                <a target="_blank" href={"whatsapp://send?text="+router.asPath}>
+                <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
                     <WhatsAppIcon />
                 </a>
 

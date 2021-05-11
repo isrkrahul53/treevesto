@@ -27,7 +27,6 @@ function RatingUI(props){
                                                          
 export default function Product(props) { 
     const router = useRouter();
-
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
     const closeAlert = () => { 
@@ -105,9 +104,9 @@ export default function Product(props) {
                 <title>{props.product?.productName}</title>
                 <meta name="description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."}></meta>
                 <meta property="og:title" content={props.product?.productName} />
-                <meta property="og:url" content={router.asPath} />
+                <meta property="og:url" content={"https://admiring-bardeen-fc41ec.netlify.app"+router.asPath} />
                 <meta property="og:description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."} />
-                <meta property="og:image" content={props.product?.productImages[0].src}></meta>
+                <meta property="og:image:secure_url" content={props.product?.productImages[0].src}></meta>
                 <meta property="og:type" content="article" />
 
             </Head>
