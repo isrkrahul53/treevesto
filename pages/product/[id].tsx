@@ -102,11 +102,11 @@ export default function Product(props) {
     return <div> 
         <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
             <Head>
-                <title>your keyword rich title of the website and/or webpage</title>
-                <meta name="description" content="description of your website/webpage, make sure you use keywords!"></meta>
-                <meta property="og:title" content="short title of your website/webpage" />
-                <meta property="og:url" content={"https://admiring-bardeen-fc41ec.netlify.app/product/"+props.product?._id} />
-                <meta property="og:description" content="description of your website/webpage" />
+                <title>{props.product?.productName}</title>
+                <meta name="description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."}></meta>
+                <meta property="og:title" content={props.product?.productName} />
+                <meta property="og:url" content={router.asPath} />
+                <meta property="og:description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."} />
                 <meta property="og:image" content={props.product?.productImages[0].src}></meta>
                 <meta property="og:type" content="article" />
 

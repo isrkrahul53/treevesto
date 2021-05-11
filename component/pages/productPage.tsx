@@ -6,9 +6,11 @@ import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 
 import TextField from '@material-ui/core/TextField'
 import CustomAlert from '../common/customAlert';
+import { useRouter } from 'next/router';
 
 export default function ProductPage(props) {
-     
+    
+    const router = useRouter();
     const [size,setSize] = React.useState("M");
 
     return  <div> 
@@ -40,7 +42,7 @@ export default function ProductPage(props) {
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
             <div className="p-2 border-2 border-dark mx-1">
-                <a target="_blank" href={"whatsapp://send?text="+props.data?.productName}>
+                <a target="_blank" href={"whatsapp://send?text="+router.asPath}>
                     <WhatsAppIcon />
                 </a>
 
