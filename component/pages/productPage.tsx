@@ -40,8 +40,9 @@ export default function ProductPage(props) {
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
             <div className="p-2 border-2 border-dark mx-1">
-                <a href={"whatsapp://send?text="+props.data?.productName}></a>
-                <WhatsAppIcon />
+                <a target="_blank" href={"whatsapp://send?text="+props.data?.productName}>
+                    <WhatsAppIcon />
+                </a>
 
             </div>
         </div> 
