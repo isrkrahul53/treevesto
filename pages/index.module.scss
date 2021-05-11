@@ -1,0 +1,23 @@
+.women {
+    section {
+        visibility: hidden;
+        transform: scale(0);
+        transition: all 0.4s;
+        opacity: 0.9;
+    }
+    footer {
+        visibility: visible;
+        transform: scale(1);
+        transition: all 0.4s;
+    }
+}
+.women:hover {
+ section {
+     visibility: visible;
+     transform: scale(1);
+ }   
+ footer {
+    visibility: hidden;
+    transform: scale(0);
+ }
+}

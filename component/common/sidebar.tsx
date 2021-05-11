@@ -88,16 +88,16 @@ export default function Sidebar(props) {
         aria-controls="panel1a-content"
         id="panel1a-header"
         >
-        <Typography> {el.catName} </Typography>
+        <Typography component={"span"} variant={'body2'}> {el.catName} </Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <Typography> 
+        <Typography component={"span"} variant={'body2'}> 
             <List>
                 {props.data.filter(e=>e.parentCatId === el._id).map((text, index) => (
-                    <ListItem button key={text}>
-                    {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                    <Link href={"/"+text._id}><ListItemText primary={text.catName} /></Link>
-                </ListItem>
+                  <ListItem button key={index}>
+                      {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                      <Link href={"/"+text._id}><ListItemText primary={text.catName} /></Link>
+                  </ListItem>
                 ))}
             </List>
         </Typography>

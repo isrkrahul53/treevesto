@@ -106,20 +106,43 @@ export default function Checkout(props) {
         formData.append('address',selectedAddress)
         formData.append('userId',user.userId)
         formData.append('totalAmount',totalPrice)
+        formData.append('customerPhone',"6209460626")
+        formData.append('customerState',"Jharkhand")
         formData.append('orderType',"COD")
-        formData.append('orderStatus',"1")
 
         fetch(`https://api.treevesto.com:4000/order`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 
-            console.log(json)
-            // router.push({pathname:"/success",query:{
-            //     result:JSON.stringify(json.result),
-            //     user:JSON.stringify(user),
-            // }})
-        })
+            // console.log(json)
+            if(json.success === 1 && json.result){
+                
+                cart.forEach(el=>{
+                    var formData = new FormData();
+                    formData.append('userId',user.userId)
+                    formData.append('address',selectedAddress)
+                    formData.append('orderStatus',"1")
 
+                    Object.keys(el).map((key,i)=>{
+                        if(el[key] != null && el[key] != ''){
+                            formData.append(key,el[key]) 
+                        }
+                    })
+                    
+                    fetch(`https://api.treevesto.com:4000/orderedproduct`,{
+                        method:"POST",
+                        body:formData
+                    }).then(d=>d.json()).then(json=>{ 
+
+                    })
+                })
+
+                router.push({pathname:"/success",query:{
+                    result:JSON.stringify(json.result),
+                    user:JSON.stringify(user),
+                }})
+            }
+        })
         // console.log(cart)
         // console.log(selectedAddress) 
         // console.log(user) 
@@ -140,20 +163,25 @@ export default function Checkout(props) {
                     </div>
                     {/* SEcond Column */}
                     <div className="w-full md:w-1/3 border-l-2 border-gray-200 p-3">
-                        <h4 className="text-lg font-medium text-secondary">COUPONS</h4>
+                        {active === 1?<>
+                            <div className="flex items-center">
+                                <input type="text" name="coupoun" className="form-control" placeholder="Discount code" />
+                                <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                                    Apply
+                                </div>
+                            </div>
+                        </>:<></>}
+                        {/* <h4 className="text-lg font-medium text-secondary">COUPONS</h4>
                         <div className="flex items-center justify-between my-3">
                             <div className="flex items-center">
                                 <CouponSVG />
                                 <span className="text-lg px-2">Apply Coupons</span>
                             </div>
-                            {/* <Button variant="outlined" color="secondary">
-                                Apply
-                            </Button> */}
                             <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                                 Apply
                             </div>
-                        </div>
-                        <hr />
+                        </div> */}
+                        {/* <hr /> */}
                         <div className="py-3">
                             <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
                             <div className="flex items-center justify-between">

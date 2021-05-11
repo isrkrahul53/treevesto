@@ -10,7 +10,7 @@ export default function AdminLayout(props) {
 
     const router = useRouter();
     const path = router.asPath.split("/");
-    const navs = ["dashboard","homepage","vendors","users","orders"] 
+    const navs = ["dashboard","homepage","vendors","users","orders","category","coupons"] 
 
     const [admin,setAdmin] = React.useState(null);
     const [expand,setExpand] = React.useState(navs.filter(e=>path.filter(a=>a===e).length > 0)[0] || "");
@@ -109,53 +109,30 @@ export default function AdminLayout(props) {
                         </>:<></>}
                     </div>
 
-                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
-                    style={{borderRadius:"10px",overflow:"hidden"}}>
-                        <div className={expand === "vendors"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
-                        onClick={e=>setExpand(expand === "vendors" ? "":"vendors")}>
-                            <div>Vendors</div>
-                            {expand !== "vendors"?<ExpandMoreIcon />:<ExpandLessIcon />} 
-                        </div>
-                        {expand === "vendors"?<>
-                            <List>
-                                <Link href="/admin/vendors/"><ListItem button>
-                                    <ListItemText>Index</ListItemText>
-                                </ListItem></Link>
-                            </List>
-                        </>:<></>}
-                    </div>
+                    <Link href="/admin/vendors"><div className={expand === "vendors"?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                     style={{borderRadius:"10px"}}>
+                         Vendors
+                    </div></Link> 
+ 
+                    <Link href="/admin/users"><div className={expand === "users"?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                    style={{borderRadius:"10px"}}>
+                        Users
+                    </div></Link>
 
-                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
-                    style={{borderRadius:"10px",overflow:"hidden"}}>
-                        <div className={expand === "users"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
-                        onClick={e=>setExpand(expand === "users" ? "":"users")}>
-                            <div>Users</div>
-                            {expand !== "users"?<ExpandMoreIcon />:<ExpandLessIcon />} 
-                        </div>
-                        {expand === "users"?<>
-                            <List>
-                                <Link href="/admin/users/"><ListItem button>
-                                    <ListItemText>Index</ListItemText>
-                                </ListItem></Link>
-                            </List>
-                        </>:<></>}
-                    </div>
-                     
-                    <div className="mb-2 cursor-pointer text-xl border shadow-sm"
-                    style={{borderRadius:"10px",overflow:"hidden"}}>
-                        <div className={expand === "orders"?"p-3 bg-green-100 flex items-center justify-between":"p-3 hover:bg-green-100 bg-gray-50 flex items-center justify-between"} 
-                        onClick={e=>setExpand(expand === "orders" ? "":"orders")}>
-                            <div>Orders</div>
-                            {expand !== "orders"?<ExpandMoreIcon />:<ExpandLessIcon />} 
-                        </div>
-                        {expand === "orders"?<>
-                            <List>
-                                <Link href="/admin/orders/"><ListItem button>
-                                    <ListItemText>Index</ListItemText>
-                                </ListItem></Link>
-                            </List>
-                        </>:<></>}
-                    </div>
+                    <Link href="/admin/orders"><div className={expand === "orders"?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                    style={{borderRadius:"10px"}}>
+                        Orders
+                    </div></Link>
+
+                    <Link href="/admin/category"><div className={expand === "category"?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                    style={{borderRadius:"10px"}}>
+                        Category
+                    </div></Link>
+
+                    <Link href="/admin/coupons"><div className={expand === "coupons"?"p-3 mb-2 bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm":"p-3 mb-2 hover:bg-green-100 bg-gray-50 cursor-pointer text-xl border shadow-sm"}
+                    style={{borderRadius:"10px"}}>
+                        Coupons
+                    </div></Link>
 
                     {/* <div className="accordion" id="accordionExample">
                         <div className="accordion-item" style={{borderRadius:"10px"}}>

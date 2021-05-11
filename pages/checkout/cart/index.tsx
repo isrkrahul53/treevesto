@@ -40,7 +40,7 @@ export default function CartPage() {
     },[cart])
 
     const deleteCartItem = (x) => {
-        var data = cart.filter(e=>e.id!=x)
+        var data = cart.filter(e=>e.productId!=x)
         setCart(data)
         localStorage.setItem('cart',JSON.stringify(data))
         setError('Item Deleted !') 
@@ -48,9 +48,10 @@ export default function CartPage() {
 
     
     const movetoWishlist = (pro) => { 
-        var data = wishlist.filter(e=>e.id==pro.id)
+        var data = wishlist.filter(e=>e.productId==pro.productId)
         var x = [...wishlist,{
-            id:pro.id,qty:1,
+            productId:pro.productId,qty:1,
+            vendorId:pro.vendorId,
             image:pro.image,
             name:pro.name,
             price:pro.price
@@ -58,7 +59,7 @@ export default function CartPage() {
         if(data.length == 0){
             setWishlist(x)
             localStorage.setItem('wishlist',JSON.stringify(x));
-            deleteCartItem(pro.id)
+            deleteCartItem(pro.productId)
             setSuccess('Item moved wishlist')
         }else{
             setError('Already exist to wishlist')
@@ -72,17 +73,15 @@ export default function CartPage() {
         <Checkout cart={cart}>
             <CustomAlert error={error} success={success} />
             
-            <div className="flex items-center justify-between p-3 border rounded bg-white shadow-sm">
-                <div className="text-xl">Check delivery time & services</div>
-                {/* <Button variant="outlined" color="secondary">
-                    Enter PIN Code
-                </Button> */}
-                <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
-                    Enter PIN Code
-                </div>
-            </div>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item active text-2xl" aria-current="page">My Bag ( {cart.length} )</li>
+                </ol>
+            </nav>
 
-            <div className="p-3 border rounded bg-white shadow-sm my-2">
+            
+
+            <div className="my-4">
                 <div className="flex items-center">
                     <SettingSVG />
                     <div className="text-xl px-2">Available Offers</div>        
@@ -90,7 +89,7 @@ export default function CartPage() {
                 <span className="text-sm text-secondary">10% Instant Discount with Standard Chartered Credit and Debit Cards on a min spend of Rs 4000. TCA</span>
             </div>
             
-            <div className="flex items-center p-2 border bg-white shadow-sm my-2">
+            <div className="flex items-center my-4">
                 <img src="/assets/images/checkout/free-delivery-truck-icon-2049-thumb.png" width="30px" />
                 <div className="text-lg mx-2">Yah ! No Convenience fee on this order.</div>
             </div>

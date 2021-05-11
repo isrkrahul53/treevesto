@@ -1,15 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import RangeSlider from '../material/range';
 
-export default function FilterPage() {
+export default function FilterPage(props) {
     
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedC: true,
-        checkedD: true,
-      });
+    const categoryList = ["Kurta","Plazzos","Leggings","Trousers"]
+    const colourList = ["Red","Blue","Green","Orange"]
+    
 
     return <div>
         <div className="flex items-center ml-6 mb-2 justify-between">
@@ -18,33 +16,31 @@ export default function FilterPage() {
             Clear All
             </Button>
         </div>
-        <div className="bg-white border shadow-sm py-3 pl-6">
-            <h5 className="text-xl">Categories</h5>
+        <div className="py-3 pl-6">
+            <h5 className="text-lg font-medium">Categories</h5>
             <ul className="p-0 my-1">
-            <li>
-                <FormControlLabel label="Kurtas" className="-my-4" control={
-                <Checkbox checked={state.checkedA} size="small" name="checkedA" color="primary" 
-                onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
-                />
-            </li>
-            <li>
-                <FormControlLabel label="Plazzos" className="-my-4" control={
-                <Checkbox checked={state.checkedB} size="small" name="checkedB" color="primary" 
-                onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
-                /> 
-            </li>
-            <li>
-                <FormControlLabel label="Leggings" className="-my-4" control={
-                <Checkbox checked={state.checkedC} size="small" name="checkedC" color="primary" 
-                onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
-                /> 
-            </li>
-            <li>
-                <FormControlLabel label="Trousers" className="-my-4" control={
-                <Checkbox checked={state.checkedD} size="small" name="checkedD" color="primary" 
-                onChange={e=>setState({ ...state, [e.target.name]: e.target.checked })} /> } 
-                /> 
-            </li>
+                {categoryList.map((e,k)=>(
+                    <li key={k}>
+                        <FormControlLabel label={e} className="-my-4" control={
+                        <Checkbox size="small" name={e} checked={props.values.category.find(d=>d===e)?true:false} 
+                        color="primary" onChange={props.change.handleCategoryChange} /> } 
+                        />
+                    </li>
+                ))}
+            </ul>
+            <h5 className="text-lg font-medium">Price Range </h5>
+            <RangeSlider min={10} max={1200} change={props.change.handleRangeChange} value={props.values.priceRange} />
+
+            <h5 className="text-lg font-medium">Colour</h5>
+            <ul className="p-0 my-1">
+                {colourList.map((e,k)=>(
+                    <li key={k}>
+                        <FormControlLabel label={e} className="-my-4" control={
+                        <Checkbox size="small" checked={props.values.colour.find(d=>d===e)?true:false}  
+                        name={e} color="primary" onChange={props.change.handleColourChange} /> } 
+                        />
+                    </li>
+                ))}
             </ul>
 
         </div>

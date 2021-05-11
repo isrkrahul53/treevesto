@@ -51,19 +51,19 @@ export default function MaterialModal(props) {
   const body = ( 
     <div className={classes.paper}> 
       <div className="d-flex justify-content-between align-items-center">
-        <h3> {props.name} </h3> 
+        <h3 className="text-2xl"> {props.name} </h3> 
         <div className="cursor-pointer h2" onClick={handleClose}>&times;</div>
       </div>
       <hr/>
       {props.content}
       
-      <div className="p-2" style={{position:"absolute",bottom:0,left:0,width:"100%"}}>
+      {/* <div className="p-2" style={{position:"absolute",bottom:0,left:0,width:"100%"}}>
           <div className="d-flex justify-content-end">
               <div className="btn-group float-right"> 
                   <button className="btn btn-primary" onClick={()=>{props.submit();handleClose()}}>Save</button>
               </div>
           </div>
-      </div>
+      </div> */}
       
     {/* <MaterialModal /> */}
     </div> 

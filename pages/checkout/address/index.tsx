@@ -57,29 +57,35 @@ export default function AddressPage(props) {
     }
 
     const onSubmit = (data) => {
-        console.log(data)
-        // var formData = new FormData();
-        // formData.append('userId',address.userId)
-        // formData.append('name',address.name) 
-        // formData.append('phone',address.phone) 
-        // formData.append('pincode',address.pincode) 
-        // formData.append('address',address.address+", "+address.locality)
-        // formData.append('state',address.state)
-        // formData.append('country',address.country)
+        // console.log(data)
+        var formData = new FormData();
+        formData.append('userId',address.userId)
+        formData.append('name',address.name) 
+        formData.append('phone',address.phone) 
+        formData.append('pincode',address.pincode) 
+        formData.append('address',address.address+", "+address.locality)
+        formData.append('state',address.state)
+        formData.append('country',address.country)
 
-        // fetch(`https://api.treevesto.com:4000/address`,{
-        //     method:"POST",
-        //     body:formData
-        // }).then(d=>d.json()).then(json=>{ 
-        //     getUserAddress();
-        //     router.replace(router.asPath)
-        // })
+        fetch(`https://api.treevesto.com:4000/address`,{
+            method:"POST",
+            body:formData
+        }).then(d=>d.json()).then(json=>{ 
+            getUserAddress();
+            router.replace(router.asPath)
+        })
     }
 
     return <div>
         <Checkout>
-
-            <div className="border bg-white shadow-sm p-4">
+            
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb items-center">
+                    <li className="breadcrumb-item"><a href="/checkout/cart">Bag</a></li>
+                    <li className="breadcrumb-item active text-2xl" aria-current="page">Shipping</li>
+                </ol>
+            </nav>
+            <div className="">
                 <div className={selected?"text-right my-2":"text-right my-2 d-none"}>
                     {/* <Button disabled={!selected} variant="contained" onClick={e=>router.push("/checkout/payment")}>
                     Continue

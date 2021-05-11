@@ -1,8 +1,24 @@
+.product {
+    footer {
+        display: none;
+        opacity: 0;
+        transition: all 0.7s;
+        transform: translateY(0px);
+    }
+}
 .product:hover {
-    div {
-        display: block  !important;
+    footer {
+        display: block;
+        opacity: 1;
+        transform: translateY(-50px);
     }
     section {
         display: none !important;
     }
+}
+
+.filter {
+    position: fixed;   
+    bottom:0;
+    height: 400px;
 }

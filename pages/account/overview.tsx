@@ -51,46 +51,46 @@ export default function OverviewPage() {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 my-4">
     
 
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        <Link href="/account/orders"><div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-orders.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Orders</div>
                             <div className="text-sm text-secondary">Check your order status</div>
-                        </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        </div></Link>
+                        <Link href="/wishlist"><div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-collections.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Collection & Wishlist</div>
                             <div className="text-sm text-secondary">All your curated product collection</div>
-                        </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        </div></Link>
+                        <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-myntra-credit.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Myntra Credits</div>
                             <div className="text-sm text-secondary">Manage all your refunds and gift cards</div>
                         </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-myntrapoints.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">MynCash</div>
                             <div className="text-sm text-secondary">Earn MynCash as you shop and use them in checkout</div>
                         </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-cards.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Saved Cards</div>
                             <div className="text-sm text-secondary">Save your cards for faster checkout</div>
                         </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        <Link href="/account/addresses"><div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-address.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Addresses</div>
                             <div className="text-sm text-secondary">Save addresses for hassle-free checkout</div>
-                        </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        </div></Link>
+                        <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-coupons.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Coupouns</div>
                             <div className="text-sm text-secondary">Manage coupouns for addition discount</div>
                         </div>
-                        <div className="text-center p-2 py-4 border bg-white shadow-sm">
+                        <Link href="/account/profile"><div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-edit.png" className="w-10 mx-auto" />
                             <div className="text-xl font-medium">Profile Details</div>
                             <div className="text-sm text-secondary">Change your profile Details and password</div>
-                        </div>
+                        </div></Link>
                     </div>
 
                 </div>

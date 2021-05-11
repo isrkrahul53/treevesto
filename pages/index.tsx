@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import Banner from '../component/common/banner'
 import Layout from '../component/common/layout'
@@ -7,11 +7,12 @@ import MaterialModal from '../component/material/modal'
 import axios from 'axios';
 import https from 'https'
 import ProductCarousel from '../component/common/productCarousel';
+import style from './index.module.scss'
 
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+ 
 function Cards(props){
   return <div>
     <h3 className="display-5 my-8 text-secondary"> {props.title} </h3>
@@ -42,6 +43,7 @@ export default function Home(props) {
 
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
+ 
 
   var product = [
     {title:"Light grey kurti",price:"321",image:"/assets/images/products/product1/image1.jpg"},
@@ -75,6 +77,44 @@ export default function Home(props) {
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
           <div className="my-4">
             <span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span>
+          </div>
+        </div>
+
+
+        {/* Category Section */}
+        <div className="container my-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+
+            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image1.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
+              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
+                <div className="text-xl">Womens</div>
+                <div className="cursor-pointer">Dress New Material</div>
+                <div className="cursor-pointer">Saree</div>
+                <div className="cursor-pointer">Suit</div>
+              </section>
+              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Womens</footer>
+            </div>
+
+            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image2.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
+              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
+                <div className="text-xl">Men's</div>
+                <div className="cursor-pointer">Dress New Material</div>
+                <div className="cursor-pointer">Saree</div>
+                <div className="cursor-pointer">Suit</div>
+              </section>
+              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Men's</footer>
+            </div>
+
+            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image3.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
+              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
+                <div className="text-xl">Accessories</div>
+                <div className="cursor-pointer">Dress New Material</div>
+                <div className="cursor-pointer">Saree</div>
+                <div className="cursor-pointer">Suit</div>
+              </section>
+              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Accessories</footer>
+            </div>
+
           </div>
         </div>
 
@@ -182,8 +222,8 @@ export default function Home(props) {
           {/* Product Slider */}
           {/* =========================================== */}
 
-          <h3 className="display-5 my-8 text-secondary"> Trending Products  </h3>
-          <ProductCarousel product={product} indicator={true} />
+          {/* <h3 className="display-5 my-8 text-secondary"> Trending Products  </h3>
+          <ProductCarousel product={product} indicator={true} /> */}
 
 
           {/* =========================================== */}

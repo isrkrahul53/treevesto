@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button' 
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+
 import TextField from '@material-ui/core/TextField'
 import CustomAlert from '../common/customAlert';
 
@@ -28,21 +30,31 @@ export default function ProductPage(props) {
             <div onClick={()=>{setSize("XXL")}} className={size == "XXL"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>XXL</div>
         </div>
 
-        <div className="flex items-center justify-around md:justify-start fixed left-0 bottom-0 w-full md:w-3/5 xl:w-2/5 md:static md:my-3">
-            {/* <Button variant="contained" size="large" className="bg-dark text-white" onClick={()=>{props.addtoCart(size)}} startIcon={<LocalMallOutlinedIcon />}>
-            Add to Bag
-            </Button> */}
+        {/* Mobile */}
+        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 w-full py-1 border-t-2 border-dark bg-white shadow-sm">
+            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                <LocalMallOutlinedIcon /> Add Bag
+            </div>
+            <div className="px-1"></div>
+            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                <FavoriteBorderOutlinedIcon /> Wishlist
+            </div>
+            <div className="p-2 border-2 border-dark mx-1">
+                <a href={"whatsapp://send?text="+props.data?.productName}></a>
+                <WhatsAppIcon />
+
+            </div>
+        </div> 
+
+        {/* Desktop */}
+        <div className="md:flex items-center justify-around w-3/5 hidden my-2">
             <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                 <LocalMallOutlinedIcon /> Add To Bag
             </div>
             <div className="px-1"></div>
-            {/* <Button variant="contained" color="secondary" onClick={()=>{props.addtoWishlist()}} startIcon={<FavoriteBorderOutlinedIcon />}>
-            Whishlist
-            </Button> */}
             <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
-
         </div> 
 
         {/* <hr/>

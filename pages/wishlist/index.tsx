@@ -47,7 +47,7 @@ export default function Wishlist() {
  
 
     const deleteWishlistItem = (x) => {
-        var data = wishlist.filter(e=>e.id!=x)
+        var data = wishlist.filter(e=>e.productId!=x)
         setWishlist(data)
         localStorage.setItem('wishlist',JSON.stringify(data))
         setError('Item Deleted !') 
@@ -57,7 +57,8 @@ export default function Wishlist() {
     const movetoCart = (pro) => {  
         var data = cart.filter(e=>e.id==pro.id)
         var x = [...cart,{
-            id:pro.id,qty:1,
+            productId:pro.id,qty:1,
+            vendorId:pro.vendorId,
             image:pro.image,
             name:pro.name,
             price:pro.price
@@ -65,7 +66,7 @@ export default function Wishlist() {
         if(data.length == 0){
             setCart(x)
             localStorage.setItem('cart',JSON.stringify(x));
-            deleteWishlistItem(pro.id)
+            deleteWishlistItem(pro.productId)
             setSuccess('Item moved cart')
         }else{
             setError('Already exist to cart')
@@ -86,7 +87,7 @@ export default function Wishlist() {
                         {wishlist?wishlist.map((el,key)=>(
                             <div key={key}>
                                 <Card  name={el.name} price={el.price} image={el.image} 
-                                movetoCart={()=>{movetoCart(el)}} deleteWishlistItem={()=>{deleteWishlistItem(el.id)}} />
+                                movetoCart={()=>{movetoCart(el)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
                             </div>
                         )):<div></div>} 
                         

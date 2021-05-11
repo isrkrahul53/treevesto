@@ -6,14 +6,16 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import StoreIcon from '@material-ui/icons/Store';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CloseIcon from '@material-ui/icons/Close';
 
 import axios from 'axios';
 import https from 'https'
 
 export default function VendorPage(props) {
-  const router = useRouter();
- 
   console.log(props.vendors)
+  const router = useRouter();
   const [navigation, setNavigation] = React.useState('products');
   const [selectedVendor, setSelectedVendor] = React.useState("");
 
@@ -47,16 +49,45 @@ export default function VendorPage(props) {
     }
   }
 
+  const approve = (x,y) => {
+    if(confirm('Are you sure to approve it !')){
+      const formData = new FormData();
+      formData.append(y,"2")
+      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+        method:"PATCH",
+        body:formData
+      }).then(d=>d.json()).then(json=>{
+        router.replace(router.asPath)
+        setNavigation("verification")
+      })
+    }
+  }
+
+  const disapprove = (x,y) => {
+    if(confirm('Are you sure to disapprove it !')){
+      const formData = new FormData();
+      formData.append(y,"-1")
+      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+        method:"PATCH",
+        body:formData
+      }).then(d=>d.json()).then(json=>{
+        router.replace(router.asPath)
+        setNavigation("verification")
+      })
+    }
+  }
+
     return <AdminLayout>
         <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Vendor</div>
-        <div className="my-2"></div> 
+        <div className="my-2 border shadow-sm rounded overflow-hidden">
+          <BottomNavigation value={navigation} onChange={handleNavigationChange}>
+              <BottomNavigationAction label="Vendors" value="vendors" icon={<StoreIcon />} />
+              <BottomNavigationAction label="Products" value="products" icon={<AppsIcon />} />
+              <BottomNavigationAction label="Verification" value="verification" icon={<AssignmentTurnedInIcon />} />
+          </BottomNavigation>
+        </div> 
 
 
-        <BottomNavigation value={navigation} onChange={handleNavigationChange}>
-            <BottomNavigationAction label="Vendors" value="vendors" icon={<StoreIcon />} />
-            <BottomNavigationAction label="Products" value="products" icon={<AppsIcon />} />
-            <BottomNavigationAction label="Verification" value="verification" icon={<AssignmentTurnedInIcon />} />
-        </BottomNavigation>
         
         {navigation == 'vendors'?<div>
             <table className="table table-hover border-4 p-2 shadow-md my-3 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
@@ -84,6 +115,52 @@ export default function VendorPage(props) {
               </tbody>
             </table>
         </div>:<></>}
+
+        {navigation === 'verification'?<>
+            <table className="table table-hover border-4 p-2 shadow-md my-3 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
+              <thead>
+                <tr> 
+                  <th>Purpose</th>
+                  <th>Vendor</th>
+                  <th>Store Name</th>
+                  <th>Verify</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              {props.vendors.filter(e=>e.gstin_verified && e.gstin_verified === "1").map((e,key)=>(
+                <tr key={key}> 
+                  <td> GST Verification </td>
+                  <td> {e.name} </td>
+                  <td> {e.store_name || '-'} </td>
+                  <td> {e.gstNo} </td>
+                  <td> 
+                    <CheckBoxIcon className="mr-1 cursor-pointer text-success" onClick={()=>approve(e._id,"gstin_verified")} />
+                    <CloseIcon className="mr-1 cursor-pointer text-danger" onClick={()=>disapprove(e._id,"gstin_verified")} />
+                  </td>
+                </tr>
+              ))}
+              {props.vendors.filter(e=>e.signature_verified && e.signature_verified === "1").map((e,key)=>(
+                <tr key={key}> 
+                  <td> Signature Verification </td>
+                  <td> {e.name} </td>
+                  <td> {e.store_name || '-'} </td>
+                  <td className="flex"> 
+                    <img src={"https://api.treevesto.com:4000/"+e.signature_docs} width="20px" className="rounded shadow-sm border" alt=""/>
+                    <a href={"https://api.treevesto.com:4000/"+e.signature_docs} target="_blank">
+                      <VisibilityIcon className="mx-2 cursor-pointer" />
+                    </a>
+                  </td>
+                  <td>
+                    <CheckBoxIcon className="mr-1 cursor-pointer text-success" onClick={()=>approve(e._id,"signature_verified")} />
+                    <CloseIcon className="mr-1 cursor-pointer text-danger" onClick={()=>disapprove(e._id,"signature_verified")} />
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+
+        </>:<></>}
 
 
         {navigation == 'products'?<div> 
