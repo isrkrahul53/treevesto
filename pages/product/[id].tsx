@@ -197,7 +197,7 @@ export default function Product(props) {
                         </div>
                     </div>
                     {props.review.map((e,k)=>(
-                        <div className="bg-white border shadow-sm rounded p-3">
+                        <div key={k} className="bg-white border shadow-sm rounded p-3">
                             <div className="flex items-center">
                                 <div className={
                                     e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
