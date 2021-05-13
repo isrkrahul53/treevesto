@@ -50,10 +50,10 @@ export default function AccountPage(props) {
                         <div className={active =="/account/coupouns"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Coupouns</div>
                         </Link>
                         <Link href="/account/credits">
-                        <div className={active =="/account/credits"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Myntra Credit</div>
+                        <div className={active =="/account/credits"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Treevest Credit</div>
                         </Link>
                         <Link href="/account/cash">
-                        <div className={active =="/account/cash"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>MynCash</div>
+                        <div className={active =="/account/cash"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>TreevestoCash</div>
                         </Link>
                         <hr className="my-2 w-5/6" />
                         <h3 className="font-medium pt-2">Account</h3>
@@ -67,7 +67,7 @@ export default function AccountPage(props) {
                         <div className={active =="/account/addresses"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Addresses</div>
                         </Link>
                         <Link href="/account/insiders">
-                        <div className={active =="/account/insiders"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Myntra Insider</div>
+                        <div className={active =="/account/insiders"?"text-xl font-light py-1 text-gray-500 border-r-4 border-gray-500 cursor-pointer":"text-xl font-light py-1 cursor-pointer"}>Treevesto Insider</div>
                         </Link>
                         <hr className="my-2 w-5/6" />
                         <h3 className="font-medium pt-2">Legal</h3>

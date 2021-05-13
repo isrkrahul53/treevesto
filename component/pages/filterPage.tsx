@@ -10,13 +10,13 @@ export default function FilterPage(props) {
     
 
     return <div>
-        <div className="flex items-center ml-6 mb-2 justify-between">
+        <div className="flex items-center justify-between">
             <h5 className="text-2xl">Filter</h5>
             <Button variant="text" color="primary">
             Clear All
             </Button>
         </div>
-        <div className="py-3 pl-6">
+        <div className="py-3">
             <h5 className="text-lg font-medium">Price Range </h5>
             <RangeSlider min={props.min} max={props.max} change={props.change.handleRangeChange} value={props.values.priceRange} />
 

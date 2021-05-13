@@ -91,8 +91,8 @@ export default function Product(props){
     const [size, setSize] = React.useState([]);
     const [colour, setColour] = React.useState([]);
     const [priceRange, setPriceRange] = React.useState([
-      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0,
-      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0
+      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0,
+      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0
     ]);
     const filterData={size,colour,priceRange}
  
@@ -100,9 +100,9 @@ export default function Product(props){
       var colour="color=",size="size=",from="from=",to="to=";
       filterData.colour.map((e,k)=>colour+=k!=0?","+e:""+e)
       filterData.size.map((e,k)=>size+=k!=0?","+e:""+e)
-      from = filterData.priceRange[0].toString()
-      to = filterData.priceRange[1].toString()
-      fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+from+`&`+to).then(d=>d.json()).then(json=>{
+      from += filterData.priceRange[0].toString()
+      to += filterData.priceRange[1].toString()
+      fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+from+`&`+to+`&catId=`+router.query.category).then(d=>d.json()).then(json=>{
         if(json.success === 1){
           var data = []
           json.result.forEach(element => {
@@ -155,56 +155,50 @@ export default function Product(props){
                 </ol>
             </nav>
           <div className="row">
-            <div className="col-md-3 hidden md:block">
-                <FilterPage values={filterData} change={filterChange} 
-                min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0} 
-                max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0} 
-                colourList={props.products?.map(e=>e.colour)}
-                sizeList={props.products?.map(e=>e.size)}
-                />
-
-            </div>
-            <div className="col-md-9">
-
-                <div className="flex-row md:flex items-center">
-                  <div className="hidden md:block">
-                    <MaterialChipArray data={filterData} 
-                    delSize={e=>setSize(size.filter((d,k)=>k!==e))}
-                    delColour={e=>setColour(size.filter((d,k)=>k!==e))}
-                     />
-                  </div>
-                  <article className="flex items-center justify-between md:ml-auto my-2 md:my-0">
-                    <div className="hidden md:block">
-                      <div className="btn-group mx-1">
-                        <button className="btn btn-primary" disabled={grid==4} onClick={()=>{setGrid(4)}}>4</button>
-                        <button className="btn btn-primary" disabled={grid==5} onClick={()=>{setGrid(5)}}>5</button>
-                        <button className="btn btn-primary" disabled={grid==6} onClick={()=>{setGrid(6)}}>6</button>
-                      </div>
-                    </div>
-                    <select className="form-select" name="sort" id="sort">
-                      <option value="">Recommended</option>
-                      <option value="">Better Discount</option>
-                      <option value="">Popularity</option>
-                      <option value="">Price : Low to high</option>
-                      <option value="">Price : High to low</option>
-                    </select>
-                    <FilterBar values={filterData} change={filterChange}
-                    min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0} 
-                    max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0} 
+              {props.products.length != 0?<>
+                <div className="col-md-3 hidden md:block">
+                    <FilterPage values={filterData} change={filterChange} 
+                    min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0} 
+                    max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0} 
                     colourList={props.products?.map(e=>e.colour)}
                     sizeList={props.products?.map(e=>e.size)}
                     />
-                  </article>
                 </div>
-                 
-                {products.length == 0?<div className="p-4">
+              </>:<></>}
+
+            <div className="col-md-9">
+
+                {props.products.length == 0?<div className="p-4">
                   <div className="display-6"> No Products Available </div>
                   <div className="text-secondary"> 
                   Go to homepage 
                   <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
                   </div>
                 </div>:<>
-                  <div className={"grid grid-cols-2 md:grid-cols-"+grid+" gap-4 p-2"}>
+                  <div className="flex-row md:flex items-center">
+                    <div className="hidden md:block">
+                      <MaterialChipArray data={filterData} 
+                      delSize={e=>setSize(size.filter((d,k)=>k!==e))}
+                      delColour={e=>setColour(size.filter((d,k)=>k!==e))}
+                      />
+                    </div>
+                    <article className="flex items-center justify-between md:ml-auto my-2 md:my-0">
+                      <select className="form-select" name="sort" id="sort">
+                        <option value="">Recommended</option>
+                        <option value="">Better Discount</option>
+                        <option value="">Popularity</option>
+                        <option value="">Price : Low to high</option>
+                        <option value="">Price : High to low</option>
+                      </select>
+                      <FilterBar values={filterData} change={filterChange}
+                      min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0} 
+                      max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0} 
+                      colourList={props.products?.map(e=>e.colour)}
+                      sizeList={props.products?.map(e=>e.size)}
+                      />
+                    </article>
+                  </div>
+                  <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-"+grid+" gap-4 p-2"}>
                     {products?.map((el,key)=>(
                       <div key={key}>
                         <SingleProduct id={el._id} name={el.productName} price={el.sellingPrice} images={el.productImages}

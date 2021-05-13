@@ -63,13 +63,13 @@ export default function OverviewPage() {
                         </div></Link>
                         <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-myntra-credit.png" className="w-10 mx-auto" />
-                            <div className="text-xl font-medium">Myntra Credits</div>
+                            <div className="text-xl font-medium">Treevesto Credits</div>
                             <div className="text-sm text-secondary">Manage all your refunds and gift cards</div>
                         </div>
                         <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-myntrapoints.png" className="w-10 mx-auto" />
-                            <div className="text-xl font-medium">MynCash</div>
-                            <div className="text-sm text-secondary">Earn MynCash as you shop and use them in checkout</div>
+                            <div className="text-xl font-medium">TreevestoCash</div>
+                            <div className="text-sm text-secondary">Earn TreevestoCash as you shop and use them in checkout</div>
                         </div>
                         <div className="cursor-pointer text-center p-2 py-4 border bg-white shadow-sm">
                             <img src="/assets/images/profile/profile-cards.png" className="w-10 mx-auto" />

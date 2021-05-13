@@ -21,7 +21,7 @@ import Button from '@material-ui/core/Button'
 
 
 export default function AdminCouponsPage(props){
-  
+  console.log(props.coupon)
   const router = useRouter();
   const {register,handleSubmit,errors} = useForm()
 
@@ -36,13 +36,13 @@ export default function AdminCouponsPage(props){
   const onSubmit = (data) => {
     setLoading(true)
     var formData = new FormData();
-    formData.append("discountType",discountType)
-    formData.append("couponActive","1")
     Object.keys(data).map((key,i)=>{
       if(data[key] != null && data[key] != ''){
-          formData.append(key,data[key]) 
+        formData.append(key,data[key]) 
       }
     })
+    formData.append("discountType",discountType)
+    formData.append("couponActive","1")
 
     fetch(`https://api.treevesto.com:4000/coupon`,{
       method:"POST",
@@ -51,6 +51,7 @@ export default function AdminCouponsPage(props){
       router.replace(router.asPath)
       setNavigation('active')
       setLoading(false)
+      console.log(json)
     })
   }
 
@@ -59,7 +60,7 @@ export default function AdminCouponsPage(props){
   const updateCoupon = (id,x) => {
     var formData = new FormData();
     formData.append("couponActive",x)
-    if(confirm('Are you sure to '+x==="1"?"Activate":"Deactivate"+' it !')){
+    if(confirm('Are you sure to '+(x==="1"?"Activate":"Disable")+' it !')){
       fetch(`https://api.treevesto.com:4000/coupon/`+id,{
         method:"PATCH",
         body:formData
@@ -109,12 +110,14 @@ export default function AdminCouponsPage(props){
           <td> {e.couponName} </td>
           <td> {e.couponDesc} </td>
           <td>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </td>
-          <td>  
+          <td className="flex items-center">  
               {/* <AirlineSeatIndividualSuiteIcon className="text-danger cursor-pointer" /> */}
               <Button variant="contained" color="secondary" size="small" onClick={()=>updateCoupon(e._id,"0")}>
                 Disable
               </Button>
-              {/* <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>delte</div> */}
+              <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                <DeleteIcon />
+              </div>
           </td>
 
         </tr>
@@ -142,12 +145,15 @@ export default function AdminCouponsPage(props){
           <td> {key+1} </td>
           <td> {e.couponName} </td>
           <td> {e.couponDesc} </td>
-          <td> {e.discountPercent || e.discountPrice} </td>
-          <td> 
+          <td>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </td>
+          <td className="flex items-center"> 
           {/* <AccessibilityNewIcon className="text-success cursor-pointer" /> */}
               <Button variant="contained" color="primary" size="small" onClick={()=>updateCoupon(e._id,"1")}>
                 Activate
               </Button>
+              <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                <DeleteIcon />
+              </div>
           </td>
 
         </tr>

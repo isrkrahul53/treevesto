@@ -94,10 +94,10 @@ export default function Layout(props){
             <div className="ml-auto">
                 <ul className="flex ml-auto items-center"> 
                     <li className={"hidden md:block dropdown"}>
-                        <section className="" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/assets/icons/perm_identity-24px.svg" className="mx-1" width="20px" alt="perm_identity-24px"/> 
+                        <img onClick={e=>router.push("/account/overview")} src="/assets/icons/perm_identity-24px.svg" className="mx-1 cursor-pointer" width="20px" alt="perm_identity-24px"/>
+                        {/* <section className="" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         </section>
-                        <ul className={"dropdown-menu dropdown-menu-left shadow z-40"} style={{width:"100% !important"}} aria-labelledby="navbarDropdownProfile">
+                        <ul className={"dropdown-menu shadow z-40"} aria-labelledby="navbarDropdownProfile">
                             {!user?<div className="p-3">
                                 <h6 className="h6 p-0 m-0">Welcome</h6>
                                 <small className="text-sm">To access account and manage orders</small>
@@ -107,8 +107,8 @@ export default function Layout(props){
                                 </Button></Link>
                             </div>:<></>}
                             
-                            <Link href="/account/profile"><div className="p-3 cursor-pointer">
-                                <h6 className="h6 p-0 m-0">Hello {user?.name}</h6>
+                            <Link href="/account/profile"><div className="p-3 cursor-pointer hover:bg-gray-100">
+                                <h6 className="h6 p-0 m-0">{user?.name || user?.email}</h6>
                                 <small className="text-sm">{user?.phone}</small>
                                 <div className="my-2"></div> 
                             </div></Link>
@@ -121,7 +121,7 @@ export default function Layout(props){
                             <li className="dropdown-item cursor-pointer">Contact Us</li>
                             <hr/>
                             {user?<li className="dropdown-item cursor-pointer" onClick={logout}>Logout</li>:<div></div>}
-                        </ul>
+                        </ul> */}
                     </li> 
                     <li className="flex items-center justify-end">
                     <Link href="/wishlist">

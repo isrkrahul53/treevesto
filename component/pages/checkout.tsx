@@ -220,7 +220,7 @@ export default function Checkout(props) {
                             {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
                                 Place Order
                             </Button> */}
-                            <button type="button" disabled={totalPrice == 0} className="w-full my-4 px-4 py-1 rounded text-xl cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                            <button type="button" disabled={totalPrice <= 0} className="w-full my-4 px-4 py-1 rounded text-xl cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                                 Place Order
                             </button>
                             </Link>:<></>}

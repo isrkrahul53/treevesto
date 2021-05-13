@@ -12,13 +12,14 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import axios from 'axios';
 import https from 'https'
+import Button from '@material-ui/core/Button'
 
 export default function VendorPage(props) {
   console.log(props.vendors)
   const router = useRouter();
   const [navigation, setNavigation] = React.useState('products');
   const [selectedVendor, setSelectedVendor] = React.useState("");
-
+  var isLoading = false;
   const [products,setProducts] = React.useState([])
   
   const handleNavigationChange = (event, newValue) => {
@@ -26,9 +27,11 @@ export default function VendorPage(props) {
   };
    
   useEffect(()=>{
+    isLoading = true;
     if(selectedVendor != ""){
       fetch(`https://api.treevesto.com:4000/product/vendor/`+selectedVendor).then(d=>d.json()).then(json=>{
         setProducts(json.result)
+        isLoading = false;
       })
     }else{
       setProducts([])
@@ -108,8 +111,8 @@ export default function VendorPage(props) {
                     <td>{el.name}</td>
                     <td>{el.email}</td>
                     <td>{el.phone}</td>
-                    {el.status !== 0 ? <td className="text-success">Verified</td>:<td className="text-danger">Pending</td>}
-                    <td className="text-primary cursor-pointer" onClick={e=>deleteVendor(el._id)}>delete</td>
+                    {el.verified !== 0 ? <td className="text-success">Verified</td>:<td className="text-danger">Pending</td>}
+                    <td className="text-primary cursor-pointer" onClick={e=>deleteVendor(el._id)}><CloseIcon /></td>
                   </tr> 
                 ))}
               </tbody>
@@ -179,28 +182,36 @@ export default function VendorPage(props) {
             </div>
           </div>
 
+            {isLoading?<>
+              <div className="text-center">
+                <div className="spinner-border text-primary"></div>
+              </div>
+            </>:<>
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                {products.map((el,key)=>(
+                  <div key={key} className="bg-white border shadow-sm">
+                    <img src={"https://api.treevesto.com:4000/"+el.productImages[0]} alt=""/>
+                    <div className="p-1">
+                      <div>
+                        <span className="text-sm"> {el.productName.length>16?el.productName.substr(0,16):el.productName} </span>
+                        <span className="text-sm"> {el.productName.length>16?"...":""} </span>
+                        <div> Rs. {el.sellingPrice} </div>
+                        {/* <div className="p-1 px-3 text-center text-sm cursor-pointer border-2 border-dark rounded bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Set Attribute</div> */}
+                      </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-              {products.map((el,key)=>(
-                <div key={key} className="bg-white border shadow-sm">
-                  <img src={"https://api.treevesto.com:4000/"+el.productImages[0]} alt=""/>
-                  <div className="p-1">
-                    <div>
-                      <span className="text-sm"> {el.productName.length>18?el.productName.substr(0,18):el.productName} </span>
-                      <span className="text-sm"> {el.productName.length>18?"...":""} </span>
                     </div>
-
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+              
+              {products.length == 0?<div className="px-4">
+                <div className="text-2xl"> No Products Available </div>
+                <div className="text-secondary"> 
+                Go to homepage  
+                </div> 
+              </div>:<div></div>}
             
-            {products.length == 0?<div className="px-4">
-              <div className="text-2xl"> No Products Available </div>
-              <div className="text-secondary"> 
-              Go to homepage  
-              </div> 
-            </div>:<div></div>}
+            </>}
 
         </div>:<div></div>}
 

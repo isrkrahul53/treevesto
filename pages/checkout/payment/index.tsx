@@ -18,7 +18,7 @@ export default function PaymentPage() {
             
             <div className="text-right">
 
-                <img src="/assets/images/payment.jpg" alt="" className="w-2/3" />
+                <img src="/assets/images/payment.jpeg" alt="" className="w-2/3" />
                 {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
                   Cash on Delivery
                 </Button> */}

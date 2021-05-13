@@ -37,6 +37,7 @@ export default function Product(props) {
 
     const [grid,setGrid] = React.useState(1);
     const [selectedImage,setSelectedImage] = React.useState(null)
+    const [vendordata,setVendordata] = React.useState(null)
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([])
     const [navigation,setNavigation] = React.useState(0)
@@ -47,8 +48,11 @@ export default function Product(props) {
 
     useEffect(()=>{
         setSelectedImage(props.product?.productImages[0].src)
+        fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
+            setVendordata(json.result[0])
+        }).catch(err=>console.log(err.message))
     },[props.product])
-
+    
 
 
     useEffect(()=>{
@@ -166,7 +170,8 @@ export default function Product(props) {
                             <p>{props.product?.productDesc}</p>
                         </div> 
                         <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Seller DETAILS" role="tabpanel" aria-labelledby="Seller DETAILS-tab">
-                            <div>Seller: TCNS Clothing Co. Ltd</div>
+                            <div>Seller: <span className="text-xl px-2"> {vendordata?.store_name} </span> </div>
+                            <div className="text-lg text-secondary"> {vendordata?.completeAddress}</div>
                         </div> 
                     </div>
                 </div>
