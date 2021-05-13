@@ -91,8 +91,8 @@ export default function Product(props){
     const [size, setSize] = React.useState([]);
     const [colour, setColour] = React.useState([]);
     const [priceRange, setPriceRange] = React.useState([
-      props.product?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0,
-      props.product?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0
+      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0,
+      props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0
     ]);
     const filterData={size,colour,priceRange}
  
@@ -157,8 +157,8 @@ export default function Product(props){
           <div className="row">
             <div className="col-md-3 hidden md:block">
                 <FilterPage values={filterData} change={filterChange} 
-                min={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))} 
-                max={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))} 
+                min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0} 
+                max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0} 
                 colourList={props.products?.map(e=>e.colour)}
                 sizeList={props.products?.map(e=>e.size)}
                 />
@@ -189,8 +189,8 @@ export default function Product(props){
                       <option value="">Price : High to low</option>
                     </select>
                     <FilterBar values={filterData} change={filterChange}
-                    min={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))} 
-                    max={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))} 
+                    min={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0} 
+                    max={props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0} 
                     colourList={props.products?.map(e=>e.colour)}
                     sizeList={props.products?.map(e=>e.size)}
                     />
