@@ -9,12 +9,12 @@ export default function FilterPage(props) {
     const colourList = props.colourList
     
 
-    return <div>
+    return <div className="pl-4">
         <div className="flex items-center justify-between">
-            <h5 className="text-2xl">Filter</h5>
-            <Button variant="text" color="primary">
+            {/* <h5 className="text-3xl">Filters</h5> */}
+            {/* <Button variant="text" color="primary">
             Clear All
-            </Button>
+            </Button> */}
         </div>
         <div className="py-3">
             <h5 className="text-lg font-medium">Price Range </h5>

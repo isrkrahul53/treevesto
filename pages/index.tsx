@@ -93,7 +93,7 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <Layout error={error} success={success} close={closeAlert}>
+      <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
  
         {/* <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/> */}
 
