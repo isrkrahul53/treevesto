@@ -48,6 +48,8 @@ export default function Checkout(props) {
     // Cart
     const [cart,setCart] = React.useState(null)
     const [user,setUser] = React.useState(null)
+    const [discount,setDiscount] = React.useState(0)
+    const [couponUsed,setCouponUsed] = React.useState(null)
     const [totalPrice,setTotalPrice] = React.useState(null)
     const [selectedAddress,setSelectedAddress] = React.useState(null);
 
@@ -63,16 +65,14 @@ export default function Checkout(props) {
         var cart = JSON.parse(localStorage.getItem('cart'))
         var selectedAddress = localStorage.getItem('selectedAddress')
         var user = JSON.parse(localStorage.getItem('user'))
-        if(cart){ 
-            setCart(cart)
-            updatePrice(cart)
-        } 
-        if(user){
-            setUser(user)
-        }
-        if(selectedAddress){
-            setSelectedAddress(selectedAddress)
-        }
+        var discount = localStorage.getItem('discount')
+        var couponUsed = localStorage.getItem('couponUsed')
+        
+        cart && setCart(cart);updatePrice(cart)
+        user && setUser(user)
+        selectedAddress && setSelectedAddress(selectedAddress)
+        discount && setDiscount(Number(discount))
+        couponUsed && setCouponUsed(couponUsed)
 
     },[])
  
@@ -88,6 +88,21 @@ export default function Checkout(props) {
             checkout();
         }
     },[props.pay])
+
+    const applyCoupon = (coupon) => {
+        if(coupon.discountType === "Rs"){
+            setTotalPrice(totalPrice - coupon.discount)
+            setDiscount(coupon.discount)
+            localStorage.setItem("discount",coupon.discount)
+        }else{
+            var dis = ((coupon.discount/100)*totalPrice)
+            setTotalPrice(totalPrice - dis)
+            setDiscount(dis)
+            localStorage.setItem("discount",dis.toString())
+        }
+        setCouponUsed(coupon._id)
+        localStorage.setItem("couponUsed",coupon._id)
+    }
 
     const updatePrice = (y) => {
         var data = y;
@@ -106,6 +121,8 @@ export default function Checkout(props) {
         formData.append('address',selectedAddress)
         formData.append('userId',user.userId)
         formData.append('totalAmount',totalPrice)
+        formData.append('couponDiscount',discount.toString())
+        formData.append('couponId',couponUsed)
         formData.append('customerPhone',"6209460626")
         formData.append('customerState',"Jharkhand")
         formData.append('orderType',"COD")
@@ -116,7 +133,8 @@ export default function Checkout(props) {
         }).then(d=>d.json()).then(json=>{ 
             // console.log(json)
             if(json.success === 1 && json.result){
-                
+                localStorage.removeItem("discount")
+                localStorage.removeItem("couponUsed")
                 cart.forEach(el=>{
                     var formData = new FormData();
                     formData.append('userId',user.userId)
@@ -163,25 +181,21 @@ export default function Checkout(props) {
                     </div>
                     {/* SEcond Column */}
                     <div className="w-full md:w-1/3 border-l-2 border-gray-200 p-3">
-                        {active === 1?<>
-                            <div className="flex items-center">
-                                <input type="text" name="coupoun" className="form-control" placeholder="Discount code" />
-                                <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
-                                    Apply
+                        {/* {active === 1?<>
+                        </>:<></>}  */}
+                        {props.coupon?.map((e,k)=>(
+                            <div key={k} className={couponUsed != e._id?"border-2 bg-white shadow-sm my-1 py-2 px-2 rounded":"border bg-light shadow-sm my-1 py-2 px-2 rounded"}>
+                                <div className="text-lg font-medium flex items-center"> 
+                                    <CouponSVG /> <span className="px-2">{e.couponName}</span> 
+                                    <div className="ml-auto">
+                                        <Button variant="text" color="primary" disabled={discount != 0} onClick={()=>applyCoupon(e)}>
+                                            {couponUsed != e._id?"Apply":"Applied !"}
+                                        </Button>
+                                    </div>
                                 </div>
+                                <div className="text-sm text-secondary"> {e.couponDesc} </div>
                             </div>
-                        </>:<></>}
-                        {/* <h4 className="text-lg font-medium text-secondary">COUPONS</h4>
-                        <div className="flex items-center justify-between my-3">
-                            <div className="flex items-center">
-                                <CouponSVG />
-                                <span className="text-lg px-2">Apply Coupons</span>
-                            </div>
-                            <div className="px-4 py-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
-                                Apply
-                            </div>
-                        </div> */}
-                        {/* <hr /> */}
+                        ))}
                         <div className="py-3">
                             <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
                             <div className="flex items-center justify-between">
@@ -190,7 +204,7 @@ export default function Checkout(props) {
                             </div>
                             <div className="flex items-center justify-between">
                                 <h4 className="text-md">Discount on MRP</h4>
-                                <div>Rs.0</div>
+                                <div>Rs. {discount} </div>
                             </div>
                             {/* <div className="flex items-center justify-between">
                                 <h4 className="text-md">Convenience fee</h4>

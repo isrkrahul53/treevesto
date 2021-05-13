@@ -18,10 +18,10 @@ import https from 'https'
 
 function SingleProduct(props){
   const router = useRouter();
-  console.log(props.images)
-  return <div className={"cursor-pointer "+styles.product} >
+  
+  return <div className={"cursor-pointer rounded "+styles.product} >
   <Banner indicator={false} images={props.images} />
-  <footer className="text-center p-2 bg-white shadow-sm border">
+  <footer className="hidden text-center p-2 bg-white shadow-sm border">
     {/* <Button variant="contained" color="secondary" onClick={props.onclick} startIcon={<LocalMallOutlinedIcon />}>
       Wishlist
     </Button> */}
@@ -29,19 +29,20 @@ function SingleProduct(props){
     <FavoriteBorderOutlinedIcon /> Wishlist
     </button>
     
-    <h5 className="py-1">Sizes : S, M, XL</h5>
   </footer>
-  <section className="p-2 border bg-white shadow-sm">
-    <h6> {props.name} </h6>
-    <h6>Rs. <span className="text-2xl">{props.price}</span> </h6>
-  </section>
+  <Link href={"/product/"+props.id}>
+    <section className="p-2 bg-white">
+      <h6> {props.name} </h6>
+      <h6>Rs. <span className="text-2xl">{props.price}</span> </h6>
+      <h5 className="py-1">Sizes : S, M, XL</h5>
+    </section>
+  </Link>
 </div>
 }
 
 
 export default function Product(props){
  
-
     const router = useRouter();
     
     const [error,setError] = React.useState("");
@@ -50,6 +51,7 @@ export default function Product(props){
     const [showFilter,setShowFilter] = React.useState(false)
 
     const [grid,setGrid] = React.useState(5)
+    const [products,setProducts] = React.useState(props.products)
     const [cart,setCart] = React.useState([])
     const [wishlist,setWishlist] = React.useState([])
     const [selectedFilters,setSelectedFilters] = React.useState(null)
@@ -86,15 +88,40 @@ export default function Product(props){
     }
     
     // FilterPage
-    const [category, setCategory] = React.useState([]);
+    const [size, setSize] = React.useState([]);
     const [colour, setColour] = React.useState([]);
-    const [priceRange, setPriceRange] = React.useState([240,450]);
+    const [priceRange, setPriceRange] = React.useState([
+      props.product?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b)):0,
+      props.product?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b)):0
+    ]);
+    const filterData={size,colour,priceRange}
  
-    const handleCategoryChange = (e) => {
+    useEffect(()=>{
+      var colour="color=",size="size=",from="from=",to="to=";
+      filterData.colour.map((e,k)=>colour+=k!=0?","+e:""+e)
+      filterData.size.map((e,k)=>size+=k!=0?","+e:""+e)
+      from = filterData.priceRange[0].toString()
+      to = filterData.priceRange[1].toString()
+      fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+from+`&`+to).then(d=>d.json()).then(json=>{
+        if(json.success === 1){
+          var data = []
+          json.result.forEach(element => {
+            var images = [];
+            element.productImages.forEach(e => {
+              images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
+            });
+            data.push({...element,productImages:images})
+          }); 
+          setProducts(data)
+        }
+      }).catch(err=>console.log(err))
+    },[filterData.colour,filterData.size,filterData.priceRange])
+
+    const handleSizeChange = (e) => {
         if(e.target.checked){
-            setCategory([...category,e.target.name])
+            setSize([...size,e.target.name])
         }else{
-            setCategory(category.filter(d=>d != e.target.name))
+            setSize(size.filter(d=>d != e.target.name))
         }
     }
     const handleColourChange = (e) => {
@@ -109,8 +136,7 @@ export default function Product(props){
         setPriceRange(newValue);
     };
     
-    const filterChange={handleCategoryChange,handleColourChange,handleRangeChange}
-    const filterData={category,colour,priceRange}
+    const filterChange={handleSizeChange,handleColourChange,handleRangeChange}
 
     return <div>
       <Head>
@@ -130,14 +156,22 @@ export default function Product(props){
             </nav>
           <div className="row">
             <div className="col-md-3 hidden md:block">
-                <FilterPage values={filterData} change={filterChange} />
+                <FilterPage values={filterData} change={filterChange} 
+                min={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))} 
+                max={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))} 
+                colourList={props.products?.map(e=>e.colour)}
+                sizeList={props.products?.map(e=>e.size)}
+                />
 
             </div>
             <div className="col-md-9">
 
                 <div className="flex-row md:flex items-center">
                   <div className="hidden md:block">
-                    <MaterialChipArray data={filterData} delCategory={e=>setCategory(category.filter((d,k)=>k!==e))} />
+                    <MaterialChipArray data={filterData} 
+                    delSize={e=>setSize(size.filter((d,k)=>k!==e))}
+                    delColour={e=>setColour(size.filter((d,k)=>k!==e))}
+                     />
                   </div>
                   <article className="flex items-center justify-between md:ml-auto my-2 md:my-0">
                     <div className="hidden md:block">
@@ -154,28 +188,33 @@ export default function Product(props){
                       <option value="">Price : Low to high</option>
                       <option value="">Price : High to low</option>
                     </select>
-                    <FilterBar values={filterData} change={filterChange} />
+                    <FilterBar values={filterData} change={filterChange}
+                    min={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))} 
+                    max={props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))} 
+                    colourList={props.products?.map(e=>e.colour)}
+                    sizeList={props.products?.map(e=>e.size)}
+                    />
                   </article>
                 </div>
-
-
-                <div className={"grid grid-cols-2 md:grid-cols-"+grid+" gap-4 p-2"}>
-                  {props.products?.map((el,key)=>(
-                    <div key={key}>
-                      <SingleProduct id={el._id} name={el.productName} price={el.regularPrice} images={el.productImages}
-                      onclick={()=>{addtoWishlist(el)}} />
-                    </div> 
-                  ))}
-                </div>
-
-                {props.products.length == 0?<div className="p-4">
+                 
+                {products.length == 0?<div className="p-4">
                   <div className="display-6"> No Products Available </div>
                   <div className="text-secondary"> 
                   Go to homepage 
                   <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
                   </div>
-                 
-                </div>:<></>}
+                </div>:<>
+                  <div className={"grid grid-cols-2 md:grid-cols-"+grid+" gap-4 p-2"}>
+                    {products?.map((el,key)=>(
+                      <div key={key}>
+                        <SingleProduct id={el._id} name={el.productName} price={el.sellingPrice} images={el.productImages}
+                        onclick={()=>{addtoWishlist(el)}} />
+                      </div> 
+                    ))}
+                  </div>
+                </>}
+
+
             </div>
           </div>
  

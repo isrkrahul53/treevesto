@@ -46,7 +46,10 @@ export default function Filterbar(props) {
     //   onKeyDown={toggleDrawer(anchor, false)}
     > 
     <div className="py-4">
-      <FilterPage values={props.values} change={props.change} />
+      <FilterPage values={props.values} change={props.change} min={props.min} max={props.max} 
+      colourList={props.colourList}
+      sizeList={props.sizeList}
+       />
 
     </div>
     

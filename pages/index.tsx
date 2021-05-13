@@ -28,6 +28,7 @@ function Cards(props){
 export default function Home(props) {
   
   const [navigation, setNavigation] = React.useState(0); 
+  const [categories,setCategories] = React.useState([]);
 
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
@@ -41,6 +42,7 @@ export default function Home(props) {
   }
   const [banner,setBanner] = React.useState(props.banner) 
 
+  const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
  
@@ -60,6 +62,30 @@ export default function Home(props) {
     {title:"Red lenhnga for bride",price:"3212",image:"/assets/images/products/product3/image1.jpg"},
   ]
  
+
+  useEffect(()=>{
+    fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
+        setCategories(json.result)
+    })
+  })
+
+  const addtoCart = (pro) => { 
+      var data = cart.filter(e=>e.productId==pro._id)
+      var x = [...cart,{
+          productId:pro._id,qty:1,size:pro.size,
+          vendorId:pro.vendorId,
+          image:"https://api.treevesto.com:4000/"+pro.productImages[0],
+          name:pro.productName,
+          price:pro.sellingPrice
+      }]
+      if(data.length == 0){
+          setCart(x)
+          localStorage.setItem('cart',JSON.stringify(x));
+          setSuccess('Item Added to cart')
+      }else{
+          setError('Already added to cart')
+      }
+  }
   return (
     <div>
       <Head>
@@ -76,44 +102,26 @@ export default function Home(props) {
           <div className="display-4">FINAL CLEARANCE</div>
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
           <div className="my-4">
-            <span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span>
+            <Link href="/6099022ddbf23644536cb74d"><span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
           </div>
         </div>
-
+ 
 
         {/* Category Section */}
         <div className="container my-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-
-            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image1.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
-              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
-                <div className="text-xl">Womens</div>
-                <div className="cursor-pointer">Dress New Material</div>
-                <div className="cursor-pointer">Saree</div>
-                <div className="cursor-pointer">Suit</div>
-              </section>
-              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Womens</footer>
-            </div>
-
-            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image2.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
-              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
-                <div className="text-xl">Men's</div>
-                <div className="cursor-pointer">Dress New Material</div>
-                <div className="cursor-pointer">Saree</div>
-                <div className="cursor-pointer">Suit</div>
-              </section>
-              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Men's</footer>
-            </div>
-
-            <div className={style.women} style={{backgroundImage:'url("/assets/images/category/image3.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
-              <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
-                <div className="text-xl">Accessories</div>
-                <div className="cursor-pointer">Dress New Material</div>
-                <div className="cursor-pointer">Saree</div>
-                <div className="cursor-pointer">Suit</div>
-              </section>
-              <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">Accessories</footer>
-            </div>
+             
+            {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
+              <div key={key} className={style.women} style={{backgroundImage:'url("/assets/images/category/image1.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
+                <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
+                  <div className="text-xl">{el.catName.toUpperCase()}</div>
+                  {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+                        <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
+                    ))}
+                </section>
+                <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">{el.catName.toUpperCase()}</footer>
+              </div>
+            ))} 
 
           </div>
         </div>
@@ -160,15 +168,15 @@ export default function Home(props) {
           <div className="my-2"></div>
 
           {navigation === 0?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {product.filter((a,i)=>i>=0 && i<=4).map((e,key)=>(
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
+              {props.products.map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
-                  <img src={e.image} alt="" className="w-full" />
+                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
                   <div className="p-2">
-                    <div>{e.title}</div>
-                    <div>${e.price}</div>
+                    <div>{e.productName}</div>
+                    <div>Rs. {e.sellingPrice}</div>
                     <div className="my-4">
-                      <span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                      <span  onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                         Add To Bag
                       </span>
                     </div>
@@ -179,34 +187,34 @@ export default function Home(props) {
           </>:<></>}
 
           {navigation === 1?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {product.filter((a,i)=>i>=4 && i<=8).map((e,key)=>(
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
+              {props.products.map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
-                  <img src={e.image} alt="" className="w-full" />
+                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
                   <div className="p-2">
-                    <div>{e.title}</div>
-                    <div>${e.price}</div>
+                    <div>{e.productName}</div>
+                    <div>Rs. {e.sellingPrice}</div>
                     <div className="my-4">
-                      <span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                      <span onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                         Add To Bag
                       </span>
                     </div>
                   </div>
                 </div>
               ))}
-            </div> 
+            </div>
           </>:<></>}
 
           {navigation === 2?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {product.filter((a,i)=>i>=8 && i<=12).map((e,key)=>(
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
+              {props.products.map((e,key)=>(
                 <div key={key} className="border-2 shadow-sm">
-                  <img src={e.image} alt="" className="w-full" />
+                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
                   <div className="p-2">
-                    <div>{e.title}</div>
-                    <div>${e.price}</div>
+                    <div>{e.productName}</div>
+                    <div>Rs. {e.sellingPrice}</div>
                     <div className="my-4">
-                      <span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                      <span onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                         Add To Bag
                       </span>
                     </div>
@@ -268,7 +276,9 @@ export const getStaticProps = async (context) => {
   var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
   var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
   var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
+  var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
   
+
   banner = banner.data.result.map((el,key)=>{
       return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
   })
@@ -277,7 +287,7 @@ export const getStaticProps = async (context) => {
       props: {
           banner:banner,
           sections:sections.data.result,
-          cards:cards.data.result,
+          products:products.data.result,
       }
   }; 
 }

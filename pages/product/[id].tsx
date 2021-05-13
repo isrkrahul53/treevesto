@@ -12,6 +12,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import axios from 'axios';
 import https from 'https'
 import Button from '@material-ui/core/Button'
+import MaterialDialog from '../../component/material/materialDialog';
 
 function RatingUI(props){
     
@@ -69,7 +70,7 @@ export default function Product(props) {
             vendorId:props.product?.vendorId,
             image:props.product?.productImages[0].src,
             name:props.product?.productName,
-            price:props.product?.regularPrice
+            price:props.product?.sellingPrice
         }]
         if(data.length == 0){
             setCart(x)
@@ -87,7 +88,7 @@ export default function Product(props) {
             vendorId:props.product?.vendorId,
             image:props.product?.productImages[0].src,
             name:props.product?.productName,
-            price:props.product?.regularPrice
+            price:props.product?.sellingPrice
         }]
         if(data.length == 0){
             setWishlist(x)
@@ -175,9 +176,7 @@ export default function Product(props) {
                         <div className="flex item-center">
                             <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
                             <div className="ml-auto">
-                                <Button variant="text" size="small">
-                                Rate Product
-                                </Button>
+                                <MaterialDialog button="Rate Product" title="Write a Review" id={props.product?._id} />
                             </div>
                         </div>
                         
@@ -197,19 +196,23 @@ export default function Product(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white border shadow-sm rounded p-3">
-                        <div className="flex items-center">
-                            <div className="bg-success text-white p-1 px-2 mr-2 rounded shadow-sm">
-                                5<StarRateIcon />
+                    {props.review.map((e,k)=>(
+                        <div className="bg-white border shadow-sm rounded p-3">
+                            <div className="flex items-center">
+                                <div className={
+                                    e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
+                                }>
+                                    {e.rating}<StarRateIcon />
+                                </div>
+                                <h3 className="text-lg md:text-2xl">{e.title}</h3>
                             </div>
-                            <h3 className="text-lg md:text-2xl">Terrific</h3>
+                            <div className="my-2">{e.desc}</div>
+                            <div className="text-right">
+                                <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> {e.likes}
+                                <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />{e.dislikes}
+                            </div>
                         </div>
-                        <div className="my-2">first of all the product comes with a Samsung tag on it that means user satisfaction and user experience is considered during the manufacturing of the product..the tab is designed lightweight which makes it easy to carry .it has a 2GB ram and 32 GB storage which can be expendable upto 512 GB and has 2 ghz Quad Core processor which allows you to do multitasking..carry out all your important works, play games, watch movies.It comes with the latest Android version 9.0 and </div>
-                        <div className="text-right">
-                            <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> 324
-                            <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />7
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
  
@@ -245,7 +248,7 @@ export const getStaticProps = async (context) => {
         rejectUnauthorized: false
     });
     const res = await axios.get(`https://api.treevesto.com:4000/product/${context.params.id}`,{httpsAgent:agent})
-    
+    const review = await axios.get(`https://api.treevesto.com:4000/review/product/${context.params.id}`,{httpsAgent:agent})
     var data = []
     res.data.result.forEach(element => {
         var images = [];
@@ -257,7 +260,8 @@ export const getStaticProps = async (context) => {
 
     return {
       props: {
-        product:data[0]
+        product:data[0],
+        review:review.data.result
       }
     };
   }

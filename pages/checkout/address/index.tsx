@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
 
+import axios from 'axios';
+import https from 'https'
+
 import { useForm } from "react-hook-form";
 
 
@@ -77,7 +80,7 @@ export default function AddressPage(props) {
     }
 
     return <div>
-        <Checkout>
+        <Checkout coupon={props.coupon}>
             
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb items-center">
@@ -164,3 +167,17 @@ export default function AddressPage(props) {
     </div>
 }
  
+export const getStaticProps = async () => {
+    
+    const agent = new https.Agent({  
+        rejectUnauthorized: false
+    });
+    const res = await axios.get(`https://api.treevesto.com:4000/coupon`,{httpsAgent:agent})
+    
+
+    return {
+      props: {
+        coupon:res.data.result.filter(e=>e.couponActive === "1")
+      }
+    };
+  }

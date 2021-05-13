@@ -21,12 +21,12 @@ import Button from '@material-ui/core/Button'
 
 
 export default function AdminCouponsPage(props){
-  console.log(props.coupon)
+  
   const router = useRouter();
   const {register,handleSubmit,errors} = useForm()
 
   const [navigation, setNavigation] = React.useState('active');
-
+  const [isLoading,setLoading] = React.useState(false)
   const [discountType,setDiscountType] = React.useState("Rs")
 
   const handleNavigationChange = (event, newValue) => {
@@ -34,23 +34,44 @@ export default function AdminCouponsPage(props){
   };
   
   const onSubmit = (data) => {
-    // console.log(data)
+    setLoading(true)
     var formData = new FormData();
-    formData.append("parentCatId",data.parentCatId)
-    formData.append("catName",data.catName)
-    formData.append("desc",data.desc)
-    fetch(`https://api.treevesto.com:4000/category`,{
+    formData.append("discountType",discountType)
+    formData.append("couponActive","1")
+    Object.keys(data).map((key,i)=>{
+      if(data[key] != null && data[key] != ''){
+          formData.append(key,data[key]) 
+      }
+    })
+
+    fetch(`https://api.treevesto.com:4000/coupon`,{
       method:"POST",
       body:formData
     }).then(d=>d.json()).then(json=>{
       router.replace(router.asPath)
-      setNavigation('list')
+      setNavigation('active')
+      setLoading(false)
     })
   }
 
-  const removeCategory = (id) => {
+  
+
+  const updateCoupon = (id,x) => {
+    var formData = new FormData();
+    formData.append("couponActive",x)
+    if(confirm('Are you sure to '+x==="1"?"Activate":"Deactivate"+' it !')){
+      fetch(`https://api.treevesto.com:4000/coupon/`+id,{
+        method:"PATCH",
+        body:formData
+      }).then(d=>d.json()).then(json=>{
+        router.replace(router.asPath)
+      })
+    }
+  }
+
+  const removeCoupon = (id) => {
     if(confirm('Are you sure to remove it !')){
-      fetch(`https://api.treevesto.com:4000/category/`+id,{
+      fetch(`https://api.treevesto.com:4000/coupon/`+id,{
         method:"DELETE",
       }).then(d=>d.json()).then(json=>{
         router.replace(router.asPath)
@@ -82,17 +103,18 @@ export default function AdminCouponsPage(props){
         </tr>
       </thead>
       <tbody>
-        {props.coupon.map((e,key)=>(
+        {props.coupon.filter(e=>e.couponActive === "1").map((e,key)=>(
         <tr key={key}>
           <td> {key+1} </td>
           <td> {e.couponName} </td>
           <td> {e.couponDesc} </td>
-          <td> {e.discountPercent || e.discountPrice} </td>
+          <td>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </td>
           <td>  
               {/* <AirlineSeatIndividualSuiteIcon className="text-danger cursor-pointer" /> */}
-              <Button variant="contained" color="secondary" size="small">
+              <Button variant="contained" color="secondary" size="small" onClick={()=>updateCoupon(e._id,"0")}>
                 Disable
               </Button>
+              {/* <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>delte</div> */}
           </td>
 
         </tr>
@@ -115,7 +137,7 @@ export default function AdminCouponsPage(props){
         </tr>
       </thead>
       <tbody>
-        {props.coupon.map((e,key)=>(
+        {props.coupon.filter(e=>e.couponActive === "0").map((e,key)=>(
         <tr key={key}>
           <td> {key+1} </td>
           <td> {e.couponName} </td>
@@ -123,7 +145,7 @@ export default function AdminCouponsPage(props){
           <td> {e.discountPercent || e.discountPrice} </td>
           <td> 
           {/* <AccessibilityNewIcon className="text-success cursor-pointer" /> */}
-              <Button variant="contained" color="primary" size="small">
+              <Button variant="contained" color="primary" size="small" onClick={()=>updateCoupon(e._id,"1")}>
                 Activate
               </Button>
           </td>
@@ -137,6 +159,8 @@ export default function AdminCouponsPage(props){
   {navigation === "add"?<>
     <form onSubmit={handleSubmit(onSubmit)}>  
       <input type="text" name="couponName" className="form-control my-2" placeholder="Enter Coupon Name"
+      ref={register({required:true})} /> 
+      <input type="text" name="couponCode" className="form-control my-2" placeholder="Enter Coupon Code"
       ref={register({required:true})} />
       {/* {errors.couponName && errors.couponName.type==="required" && (<div className="form-text text-danger text-sm -mt-1 px-2">Coupon Name is required</div>)} */}
       <textarea name="couponDesc" className="form-control my-2" cols={30} rows={5} placeholder="Write a description to this category" 
@@ -148,7 +172,9 @@ export default function AdminCouponsPage(props){
         ref={register({required:true})} /> 
       </div>
       <div className="text-right">
-        <button type="submit" className="btn btn-primary mx-2">Submit</button>
+        <button type="submit" className="btn btn-primary mx-2" disabled={isLoading}>
+          {isLoading ? "Loading ....":"Submit"}
+        </button>
       </div>
     </form>
   </>:<></>}

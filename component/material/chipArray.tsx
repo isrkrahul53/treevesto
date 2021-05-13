@@ -7,18 +7,28 @@ export default function MaterialChipArray(props) {
   const [chipData, setChipData] = React.useState([]);
  
   useEffect(()=>{
-    setChipData(props.data?.category)
+    setChipData(props.data?.size)
   },[props.data])
 
 
   return (
-    <div className="flex">
-      {props.data?.category.map((data,key) =>  (
-          <div key={key}>
+    <div className="flex flex-wrap">
+      {props.data?.size.map((data,key) =>  (
+        <div key={key} className="my-1">
+          <Chip 
+            label={data}
+            color="default"
+            onDelete={e=>props.delSize(key)} 
+            className="mx-1"
+          />
+        </div>
+      ))}
+      {props.data?.colour.map((data,key) =>  (
+          <div key={key} className="my-1">
             <Chip 
               label={data}
               color="default"
-              onDelete={e=>props.delCategory(key)} 
+              onDelete={e=>props.delColour(key)} 
               className="mx-1"
             />
           </div>
