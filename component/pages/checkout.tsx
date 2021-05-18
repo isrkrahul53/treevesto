@@ -91,12 +91,10 @@ export default function Checkout(props) {
 
     const applyCoupon = (coupon) => {
         if(coupon.discountType === "Rs"){
-            setTotalPrice(totalPrice - coupon.discount)
             setDiscount(coupon.discount)
             localStorage.setItem("discount",coupon.discount)
         }else{
             var dis = ((coupon.discount/100)*totalPrice)
-            setTotalPrice(totalPrice - dis)
             setDiscount(dis)
             localStorage.setItem("discount",dis.toString())
         }
@@ -120,7 +118,7 @@ export default function Checkout(props) {
         formData.append('cart',JSON.stringify(cart))
         formData.append('address',selectedAddress)
         formData.append('userId',user.userId)
-        formData.append('totalAmount',totalPrice)
+        formData.append('totalAmount',(+totalPrice-+discount).toString())
         formData.append('couponDiscount',discount.toString())
         formData.append('couponId',couponUsed)
         formData.append('customerPhone',"6209460626")
@@ -214,7 +212,7 @@ export default function Checkout(props) {
 
                             <div className="flex items-center justify-between">
                                 <h4 className="text-md">Total Amount</h4>
-                                <div>Rs. {totalPrice} </div>
+                                <div>Rs. {totalPrice - discount} </div>
                             </div>
                             {active == 1?<Link href="/checkout/address">
                             {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
