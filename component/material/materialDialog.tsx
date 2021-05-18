@@ -24,18 +24,24 @@ export default function MaterialDialog(props) {
   },[props.selected])
 
   const handleClickOpen = () => {
-    var user = JSON.parse(localStorage.getItem('user'))
-    setUserId(user.userId)
-    fetch(`https://api.treevesto.com:4000/orderedproduct/getreview/`+user.userId+`/`+props.id).then(d=>d.json()).then(json=>{
-      if(json.result === 1){
-        setOpen(true);
-        setVerify(true)
-      }else if(user?.userId){
-        setOpen(true);
-      }else{
-        router.replace("/auth/login") 
-      }
-    }).catch(err=>console.log(err))
+    if(localStorage.getItem('user')){
+      var user = JSON.parse(localStorage.getItem('user'))
+      setUserId(user.userId)
+      fetch(`https://api.treevesto.com:4000/orderedproduct/getreview/`+user.userId+`/`+props.id).then(d=>d.json()).then(json=>{
+        if(json.result === 1){
+          setOpen(true);
+          setVerify(true)
+        }else if(user?.userId){
+          setOpen(true);
+        }else{
+          router.replace("/auth/login") 
+        }
+      }).catch(err=>console.log(err))
+
+    }else{
+      router.replace("/auth/login") 
+
+    }
     
   };
   

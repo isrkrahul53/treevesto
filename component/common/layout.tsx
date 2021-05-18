@@ -94,7 +94,7 @@ export default function Layout(props){
             <div className="ml-auto">
                 <ul className="flex ml-auto items-center"> 
                     <li className={"hidden md:block dropdown"}>
-                        <img onClick={e=>router.push("/account/overview")} src="/assets/icons/perm_identity-24px.svg" className="mx-1 cursor-pointer" width="20px" alt="perm_identity-24px"/>
+                        <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-1 cursor-pointer" width="20px" alt="user"/>
                         {/* <section className="" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         </section>
                         <ul className={"dropdown-menu shadow z-40"} aria-labelledby="navbarDropdownProfile">
@@ -126,7 +126,7 @@ export default function Layout(props){
                     <li className="flex items-center justify-end">
                     <Link href="/wishlist">
                         <div className="flex items-center cursor-pointer">
-                            <img src="/assets/icons/favorite_border-24px.svg" className="mx-1" width="20px" alt="favorite_border-24px"/>
+                            <img src="/assets/icons/heart.png" className="mx-1" width="20px" alt="heart"/>
                             {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded"> {wishlist} </sup> */}
                         </div>
                     </Link> 
@@ -134,7 +134,7 @@ export default function Layout(props){
                     <li className="flex items-center justify-end">
                     <Link href="/checkout/cart">
                         <div className="flex items-center cursor-pointer">
-                            <img src="/assets/icons/local_mall-24px.svg" className="mx-1" width="20px" alt="local_mall-24px"/>
+                            <img src="/assets/icons/shopping-bag.png" className="mx-1" width="20px" alt="shopping-bag"/>
                             Bag ({cart})
                             {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup> */}
                         </div>
@@ -186,7 +186,9 @@ export default function Layout(props){
             </ul> 
             <ul className="navbar-nav ml-auto hidden md:flex">
                 {search === null?<>
-                    <div className="text-sm font-medium cursor-pointer" onClick={()=>{setSearch("")}}>Search  <SearchIcon /> </div>
+                    <div className="flex items-center text-sm font-normal cursor-pointer" onClick={()=>{setSearch("")}}>
+                        <div>SEARCH</div>
+                        <img src="/assets/icons/search.png" className="mx-1" width="15px" alt="search"/> </div>
                 </>:<></>}
                 {search !== null?<div className="flex items-center">
                     <input type="text" name="search" id="search" placeholder="Search ...." className="border-2 border-dark w-64 rounded text-sm p-1 m-1"

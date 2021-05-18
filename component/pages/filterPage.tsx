@@ -24,9 +24,10 @@ export default function FilterPage(props) {
             <ul className="p-0 my-1">
                 {colourList.map((e,k)=>(
                     <li key={k}>
-                        <FormControlLabel label={e} className="-my-4" control={
-                        <Checkbox size="small" checked={props.values.colour.find(d=>d===e)?true:false}  
-                        name={e} color="primary" onChange={props.change.handleColourChange} /> } 
+                        {/* <span className="rounded-circle" style={{padding:"6px",margin:"5px",backgroundColor:""+e}}></span> */}
+                        <FormControlLabel label={<div><span className="rounded-circle" style={{padding:"1px 9px",margin:"5px",backgroundColor:""+e}}></span> {e} </div>} className="-my-4" control={
+                            <Checkbox size="small" checked={props.values.colour.find(d=>d===e)?true:false}  
+                            name={e} color="primary" onChange={props.change.handleColourChange} /> } 
                         />
                     </li>
                 ))}

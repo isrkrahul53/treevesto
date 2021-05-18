@@ -11,25 +11,57 @@ import { useRouter } from 'next/router';
 export default function ProductPage(props) {
     
     const router = useRouter();
-    const [size,setSize] = React.useState("M");
+    const [products,setProducts] = React.useState([])
+    const [colourList,setColourList] = React.useState([]);
+    const [sizeList,setSizeList] = React.useState([]);
+    const [colour,setColour] = React.useState(props.data.colour);
+    const [size,setSize] = React.useState(props.data.size);
 
+    useEffect(()=>{
+        fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
+            var product = json.result.filter(e=>e.productCode === props.data.productCode) 
+            setProducts(product)
+            setSizeList(product.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
+            setColourList(product.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
+        })
+        
+    },[])
+    
+    useEffect(()=>{
+        setSizeList(products.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
+        setColourList(products.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
+        var pid = products.filter(e=>e.colour === colour && e.size === size)[0]?._id;
+        pid && router.replace("/product/"+pid)
+    },[size,colour])
+ 
     return  <div> 
 
+        {props.data?.stock > 3 ? <>
+            <span className="p-1 text-sm bg-success text-white">In Stock </span>
+        </>:props.data?.stock > 0 ? <>
+            <span className="p-1 text-sm bg-primary text-white"> Only {props.data?.stock} left </span>
+        </>:<>
+            <span className="p-1 text-sm bg-danger text-white">Out of Stock </span>
+        </>}
+        <h4 className="text-xl text-secondary">{props.data?.productType}</h4>
         <h4 className="display-6">{props.data?.productName}</h4>
-        <h5 className="text-secondary">Women Taupe & White Printed Straight Kurta</h5>
 
-        <h4 className="display-6 mt-3">Rs. {props.data?.regularPrice}</h4>
+        <h4 className="text-3xl mt-3"> 
+            {props.data?.regularPrice != props.data?.sellingPrice && <s className="text-xl pr-2 text-secondary">Rs. {props.data?.regularPrice}</s>}
+          Rs. {props.data?.sellingPrice}</h4>
         <h5 className="text-success">inclusive of all taxes</h5>
 
+        <h4 className="h5 mt-4">Select Colour</h4>
+        <div className="flex flex-wrap items-center">
+            {colourList.map((e,k)=>(
+                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>{e}</div>
+            ))}
+        </div>
         <h4 className="h5 mt-4">Select Sizes</h4>
         <div className="flex flex-wrap items-center">
-            <div onClick={()=>{setSize("XS")}} className={size == "XS"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>XS</div>
-            <div onClick={()=>{setSize("S")}} className={size == "S"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>S</div>
-            <div onClick={()=>{setSize("M")}} className={size == "M"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>M</div>
-            <div onClick={()=>{setSize("M/L")}} className={size == "M/L"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>M/L</div>
-            <div onClick={()=>{setSize("L")}} className={size == "L"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>L</div>
-            <div onClick={()=>{setSize("XL")}} className={size == "XL"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>XL</div>
-            <div onClick={()=>{setSize("XXL")}} className={size == "XXL"?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>XXL</div>
+            {sizeList.map((e,k)=>(
+                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>{e}</div>
+            ))}
         </div>
 
         {/* Mobile */}

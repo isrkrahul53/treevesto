@@ -12,6 +12,7 @@ import style from './index.module.scss'
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import SingleProduct from '../component/product/singleProduct';
  
 function Cards(props){
   return <div>
@@ -46,35 +47,24 @@ export default function Home(props) {
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
  
-
-  var product = [
-    {title:"Light grey kurti",price:"321",image:"/assets/images/products/product1/image1.jpg"},
-    {title:"Red lenhnga for bride",price:"322",image:"/assets/images/products/product2/image1.jpg"},
-    {title:"Orange suit marriage",price:"323",image:"/assets/images/products/product3/image1.jpg"},
-    {title:"Light grey kurti",price:"324",image:"/assets/images/products/product1/image2.jpg"},
-    {title:"Red lenhnga for bride",price:"325",image:"/assets/images/products/product2/image2.jpg"},
-    {title:"Orange suit marriage",price:"326",image:"/assets/images/products/product3/image2.jpg"},
-    {title:"Light grey kurti",price:"327",image:"/assets/images/products/product1/image3.jpg"},
-    {title:"Red lenhnga for bride",price:"328",image:"/assets/images/products/product2/image3.jpg"},
-    {title:"Red lenhnga for bride",price:"329",image:"/assets/images/products/product3/image3.jpg"},
-    {title:"Red lenhnga for bride",price:"3210",image:"/assets/images/products/product1/image1.jpg"},
-    {title:"Red lenhnga for bride",price:"3211",image:"/assets/images/products/product2/image1.jpg"},
-    {title:"Red lenhnga for bride",price:"3212",image:"/assets/images/products/product3/image1.jpg"},
-  ]
  
 
   useEffect(()=>{
+    var cart = JSON.parse(localStorage.getItem('cart'))
+    if(cart){
+        setCart(cart)
+    }
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
-    })
-  })
+    }).catch(err=>setError(err.message))
+  },[])
 
   const addtoCart = (pro) => { 
       var data = cart.filter(e=>e.productId==pro._id)
       var x = [...cart,{
           productId:pro._id,qty:1,size:pro.size,
           vendorId:pro.vendorId,
-          image:"https://api.treevesto.com:4000/"+pro.productImages[0],
+          image:pro.productImages[0].src,
           name:pro.productName,
           price:pro.sellingPrice
       }]
@@ -102,24 +92,27 @@ export default function Home(props) {
           <div className="display-4">FINAL CLEARANCE</div>
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
           <div className="my-4">
-            <Link href="/6099022ddbf23644536cb74d"><span className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
+            <Link href="/6099022ddbf23644536cb74d?color=Brown,Green&size=4XL&from=4233&to=6565"><span className="px-4 py-2 cursor-pointer border border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
           </div>
         </div>
  
 
         {/* Category Section */}
         <div className="container my-10">
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
              
-            {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
-              <div key={key} className={style.women} style={{backgroundImage:'url("/assets/images/category/image1.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
-                <section className="womencat bg-white text-center p-4 m-4 border shadow-sm">
-                  <div className="text-xl">{el.catName.toUpperCase()}</div>
-                  {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
-                        <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
-                    ))}
-                </section>
-                <footer className="womentitle text-center text-3xl bg-white m-4 border shadow-sm">{el.catName.toUpperCase()}</footer>
+            {categories.filter(e=>e.parentCatId === "0").filter((e,k)=>k<3).map((el,key)=>(
+              <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
+                <article style={{backgroundImage:'url("/assets/images/category/image'+(key+1)+'.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
+                  <section className="womencat bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
+                    <div className="text-xl">{el.catName.toUpperCase()}</div>
+                    {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+                          <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
+                      ))}
+                  </section>
+                  <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
+                </article>
               </div>
             ))} 
 
@@ -133,7 +126,7 @@ export default function Home(props) {
           {/* =========================================== */}
           {/* Featured Products */}
           {/* =========================================== */}
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <Paper className="my-2">
               <Tabs
                 value={navigation}
@@ -163,33 +156,43 @@ export default function Home(props) {
                   <Tab label="Featured" />
               </Tabs>
             </Paper>
+          </div> */}
+          <div className="flex items-center justify-center font-light my-4">
+            <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
+              <div className="flex items-center">
+                <span>New</span>
+                <span className="md:block hidden ml-1">Product</span>
+              </div>
+            </div>
+            <div className={navigation === 1?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(1)}>
+              <div className="flex items-center">
+                <span>Special</span>
+                <span className="md:block hidden ml-1">Product</span>
+              </div>
+            </div>
+            <div className={navigation === 2?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(2)}>
+              <div className="flex items-center">
+                <span>Featured</span>
+                <span className="md:block hidden ml-1">Product</span>
+              </div>
+            </div>
           </div>
-
           <div className="my-2"></div>
 
           {navigation === 0?<>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
-              {props.products.map((e,key)=>(
-                <div key={key} className="border-2 shadow-sm">
-                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
-                  <div className="p-2">
-                    <div>{e.productName}</div>
-                    <div>Rs. {e.sellingPrice}</div>
-                    <div className="my-4">
-                      <span  onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                        Add To Bag
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              {props.products.map((el,key)=>(
+                <div key={key}>
+                  <SingleProduct data={el} cart={addtoCart} />
+                </div> 
               ))}
             </div>
           </>:<></>}
 
-          {navigation === 1?<>
+          {/* {navigation === 1?<>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
               {props.products.map((e,key)=>(
-                <div key={key} className="border-2 shadow-sm">
+                <div key={key} className="border-2">
                   <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
                   <div className="p-2">
                     <div>{e.productName}</div>
@@ -208,7 +211,7 @@ export default function Home(props) {
           {navigation === 2?<>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
               {props.products.map((e,key)=>(
-                <div key={key} className="border-2 shadow-sm">
+                <div key={key} className="border-2">
                   <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
                   <div className="p-2">
                     <div>{e.productName}</div>
@@ -222,7 +225,7 @@ export default function Home(props) {
                 </div>
               ))}
             </div>
-          </>:<></>}
+          </>:<></>} */}
  
 
 
@@ -244,7 +247,7 @@ export default function Home(props) {
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
                     {props.cards?.map((e,key)=>{ 
                       return <div key={key} className={el._id==e.sectionId?"":"d-none"}> 
-                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm cursor-pointer" /></Link>
+                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border cursor-pointer" /></Link>
                         </div> 
                     })} 
                 </div>
@@ -255,11 +258,11 @@ export default function Home(props) {
 
         </div>
 
-        {/* ======================================== */}
-        {/* Banners */}
-        {/* ======================================== */}
+          {/* ======================================== */}
+          {/* Banners */}
+          {/* ======================================== */}
 
-        <Banner images={banner} indicator={true} />
+          <Banner images={banner} indicator={true} />
         
         <br/>
 
@@ -273,21 +276,40 @@ export const getStaticProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-  var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
-  var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
-  var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+  try{
+    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
+    var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
+    var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
+    var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+    banner = banner.data.result.map((el,key)=>{
+        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
+    })
+
+    var data = []
+    products.data.result.forEach(element => {
+      var images = [];
+      element.productImages.forEach(e => {
+        images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
+      });
+      data.push({...element,productImages:images})
+    }); 
+    var arr = []
+    var temp = data;
+    temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+      arr.push(temp.filter(e=>e.productCode === el))
+    })
+    
+  }catch(err){
+    console.log(err)
+  }
   
 
-  banner = banner.data.result.map((el,key)=>{
-      return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
-  })
    
   return {
       props: {
-          banner:banner,
-          sections:sections.data.result,
-          products:products.data.result,
+          banner:banner || [],
+          sections:sections?.data.result || [],
+          products:arr,
       }
   }; 
 }

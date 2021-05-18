@@ -10,7 +10,7 @@ class MyDocument extends Document{
                     <link rel="stylesheet" href="/assets/tailwind/tailwind.min.css"/> 
 
                 </Head>
-                <body className="bg-light">
+                <body className="bg-white">
                     <Main />
                     <NextScript />
                 </body> 

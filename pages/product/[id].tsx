@@ -42,6 +42,9 @@ export default function Product(props) {
     const [wishlist,setWishlist] = React.useState([])
     const [navigation,setNavigation] = React.useState(0)
 
+    const [size,setSize] = React.useState([])
+    const [colour,setColour] = React.useState([])
+
     const handleNavigationChange  = (x) => {
         setNavigation(x)
     }
@@ -50,6 +53,10 @@ export default function Product(props) {
         setSelectedImage(props.product?.productImages[0].src)
         fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
+        }).catch(err=>console.log(err.message))
+        fetch(`https://api.treevesto.com:4000/product/`).then(d=>d.json()).then(json=>{
+            setSize(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
+            setColour(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
         }).catch(err=>console.log(err.message))
     },[props.product])
     
@@ -137,7 +144,8 @@ export default function Product(props) {
                             <img src={selectedImage} className="w-full md:w-75" />
                         </div>
                         <div className="col-md-8">
-                            <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} />
+                            <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
+                            size={size} colour={colour} />
                         </div>
                     </div>
                 </div>:<></>}
@@ -156,8 +164,8 @@ export default function Product(props) {
                     </ul>
                     <div className="tab-content" id="myTabContent">
                         <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
-                            <TextField id="pincode" label="Pincode" variant="outlined" size="small" color="primary" fullWidth />
-                            <p className="text-secondary">Please enter PIN code to check delivery time & Pay on Delivery Availability</p>
+                            {/* <TextField id="pincode" label="Pincode" variant="outlined" size="small" color="primary" fullWidth />
+                            <p className="text-secondary">Please enter PIN code to check delivery time & Pay on Delivery Availability</p> */}
                             <div className="my-3">
                                 <p> 100% Original Products</p>
                                 <p> Free Delivery on order above Rs. 799</p>
@@ -177,7 +185,7 @@ export default function Product(props) {
                 </div>
 
                 <div className="my-2">
-                    <div className="bg-white border shadow-sm rounded p-3">
+                    <div className="bg-white rounded p-3">
                         <div className="flex item-center">
                             <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
                             <div className="ml-auto">
@@ -202,7 +210,7 @@ export default function Product(props) {
                         </div>
                     </div>
                     {props.review.map((e,k)=>(
-                        <div key={k} className="bg-white border shadow-sm rounded p-3">
+                        <div key={k} className="bg-white rounded p-3">
                             <div className="flex items-center">
                                 <div className={
                                     e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
@@ -262,10 +270,9 @@ export const getStaticProps = async (context) => {
         });
         data.push({...element,productImages:images})
     });
-
     return {
       props: {
-        product:data[0],
+        product:data[0] || [],
         review:review.data.result
       }
     };
