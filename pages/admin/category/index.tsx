@@ -50,8 +50,7 @@ export default function AdminCategoryPage(props){
   }
 
   return <AdminLayout>
-  <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Category</div>
-  
+    
   <div className="my-2 border shadow-sm rounded overflow-hidden">
     <BottomNavigation value={navigation} onChange={handleNavigationChange}>
         <BottomNavigationAction label="Category List" value="list" icon={<FilterListIcon />} />

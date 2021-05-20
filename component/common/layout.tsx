@@ -93,7 +93,7 @@ export default function Layout(props){
             </div>
             <div className="ml-auto">
                 <ul className="flex ml-auto items-center"> 
-                    <li className={"hidden md:block dropdown"}>
+                    <li className={"dropdown"}>
                         <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-1 cursor-pointer" width="20px" alt="user"/>
                         {/* <section className="" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         </section>
@@ -139,7 +139,13 @@ export default function Layout(props){
                             {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup> */}
                         </div>
                     </Link>
-                    </li>   
+                    </li> 
+                    {user && <li className="flex items-center justify-end" onClick={logout}>
+                        <div className="flex items-center cursor-pointer">
+                            <img src="/assets/icons/logout.jpg" className="mx-2" width="20px" alt="logout"/>
+                        </div>
+                    </li>}
+                    
                     
                 </ul>
             </div>

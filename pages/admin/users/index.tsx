@@ -1,31 +1,42 @@
 import AdminLayout from "../../../component/common/AdminLayout";
 
+// Table
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 import axios from 'axios';
 import https from 'https'
 
 export default function AdminUserPage(props){
     return <AdminLayout>
-    <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Users</div>
-    <table className="table table-hover border p-2 shadow-md my-2 bg-white" style={{borderRadius:"10px",overflow:"hidden"}}>
-        <thead>
-        <tr>
-            <th>S.no</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th> 
-        </tr>
-        </thead>
-        <tbody>
-        {props.users.map((el,key)=>(
-            <tr key={key}>
-            <td>{key+1}</td>
-            <td>{el.name}</td>
-            <td>{el.email}</td>
-            <td>{el.phone}</td> 
-            </tr> 
-        ))}
-        </tbody>
-    </table>
+      
+    <TableContainer component={Paper}>
+      <Table>
+          <TableHead>
+          <TableRow>
+              <TableCell>S.no</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone</TableCell> 
+          </TableRow>
+          </TableHead>
+          <TableBody>
+          {props.users.map((el,key)=>(
+              <TableRow key={key}>
+              <TableCell>{key+1}</TableCell>
+              <TableCell>{el.name}</TableCell>
+              <TableCell>{el.email}</TableCell>
+              <TableCell>{el.phone}</TableCell> 
+              </TableRow> 
+          ))}
+          </TableBody>
+      </Table>
+    </TableContainer>
     
 
 

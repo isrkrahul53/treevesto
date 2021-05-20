@@ -15,6 +15,18 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useForm } from 'react-hook-form';
 
+
+// Table
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+
+
 import axios from 'axios';
 import https from 'https'
 import Button from '@material-ui/core/Button'
@@ -81,85 +93,86 @@ export default function AdminCouponsPage(props){
   }
 
   return <AdminLayout>
-  <div className="p-3 text-xl border shadow-sm bg-white" style={{borderRadius:"10px"}}>Coupouns</div>
-  
-  <div className="my-2 border shadow-sm rounded overflow-hidden">
-    <BottomNavigation value={navigation} onChange={handleNavigationChange}>
-        <BottomNavigationAction label="Active" value="active" icon={<AccessibilityNewIcon />} />
-        <BottomNavigationAction label="Disabled" value="disabled" icon={<AirlineSeatIndividualSuiteIcon />} />
-        <BottomNavigationAction label="Create" value="add" icon={<AddIcon />} />
-    </BottomNavigation>
-  </div>
+     
+  <BottomNavigation value={navigation} onChange={handleNavigationChange}>
+      <BottomNavigationAction label="Active" value="active" icon={<AccessibilityNewIcon />} />
+      <BottomNavigationAction label="Disabled" value="disabled" icon={<AirlineSeatIndividualSuiteIcon />} />
+      <BottomNavigationAction label="Create" value="add" icon={<AddIcon />} />
+  </BottomNavigation> 
 
   {navigation === "active"?<>
 
-    <table className="table table-hover border p-2 shadow-md my-2 bg-white">
-      <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Coupon Name</th>
-          <th>Description</th>
-          <th>Discount</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.coupon.filter(e=>e.couponActive === "1").map((e,key)=>(
-        <tr key={key}>
-          <td> {key+1} </td>
-          <td> {e.couponName} </td>
-          <td> {e.couponDesc} </td>
-          <td>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </td>
-          <td className="flex items-center">  
-              {/* <AirlineSeatIndividualSuiteIcon className="text-danger cursor-pointer" /> */}
-              <Button variant="contained" color="secondary" size="small" onClick={()=>updateCoupon(e._id,"0")}>
-                Disable
-              </Button>
-              <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
-                <DeleteIcon />
-              </div>
-          </td>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>S.No</TableCell>
+            <TableCell>Coupon Name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Discount</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props.coupon.filter(e=>e.couponActive === "1").map((e,key)=>(
+          <TableRow key={key}>
+            <TableCell> {key+1} </TableCell>
+            <TableCell> {e.couponName} </TableCell>
+            <TableCell> {e.couponDesc} </TableCell>
+            <TableCell>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </TableCell>
+            <TableCell className="flex items-center">  
+                {/* <AirlineSeatIndividualSuiteIcon className="text-danger cursor-pointer" /> */}
+                <Button variant="contained" color="secondary" size="small" onClick={()=>updateCoupon(e._id,"0")}>
+                  Disable
+                </Button>
+                <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                  <DeleteIcon />
+                </div>
+            </TableCell>
 
-        </tr>
-        ))}
-      </tbody>
+          </TableRow>
+          ))}
+        </TableBody>
 
-    </table> 
+      </Table> 
+    </TableContainer>
   </>:<></>}
 
   {navigation === "disabled"?<>
 
-    <table className="table table-hover border p-2 shadow-md my-2 bg-white">
-      <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Coupon Name</th>
-          <th>Description</th>
-          <th>Discount</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.coupon.filter(e=>e.couponActive === "0").map((e,key)=>(
-        <tr key={key}>
-          <td> {key+1} </td>
-          <td> {e.couponName} </td>
-          <td> {e.couponDesc} </td>
-          <td>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </td>
-          <td className="flex items-center"> 
-          {/* <AccessibilityNewIcon className="text-success cursor-pointer" /> */}
-              <Button variant="contained" color="primary" size="small" onClick={()=>updateCoupon(e._id,"1")}>
-                Activate
-              </Button>
-              <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
-                <DeleteIcon />
-              </div>
-          </td>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>S.No</TableCell>
+            <TableCell>Coupon Name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Discount</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props.coupon.filter(e=>e.couponActive === "0").map((e,key)=>(
+          <TableRow key={key}>
+            <TableCell> {key+1} </TableCell>
+            <TableCell> {e.couponName} </TableCell>
+            <TableCell> {e.couponDesc} </TableCell>
+            <TableCell>{e.discountType === "Rs" && "Rs."} {e.discount} {e.discountType === "%" && "%"} </TableCell>
+            <TableCell className="flex items-center"> 
+            {/* <AccessibilityNewIcon className="text-success cursor-pointer" /> */}
+                <Button variant="contained" color="primary" size="small" onClick={()=>updateCoupon(e._id,"1")}>
+                  Activate
+                </Button>
+                <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                  <DeleteIcon />
+                </div>
+            </TableCell>
 
-        </tr>
-        ))}
-      </tbody>
-    </table> 
+          </TableRow>
+          ))}
+        </TableBody>
+      </Table> 
+    </TableContainer>
   </>:<></>}
   
   {navigation === "add"?<>

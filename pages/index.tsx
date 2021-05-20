@@ -105,11 +105,13 @@ export default function Home(props) {
             {categories.filter(e=>e.parentCatId === "0").filter((e,k)=>k<3).map((el,key)=>(
               <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
                 <article style={{backgroundImage:'url("/assets/images/category/image'+(key+1)+'.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
-                  <section className="womencat bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
-                    <div className="text-xl">{el.catName.toUpperCase()}</div>
-                    {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+                  <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
+                    <div className="w-full">
+                      <div className="text-xl">{el.catName.toUpperCase()}</div>
+                      {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
                           <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
                       ))}
+                    </div>
                   </section>
                   <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
                 </article>
@@ -309,6 +311,7 @@ export const getStaticProps = async (context) => {
       props: {
           banner:banner || [],
           sections:sections?.data.result || [],
+          cards:cards.data.result || [],
           products:arr,
       }
   }; 
