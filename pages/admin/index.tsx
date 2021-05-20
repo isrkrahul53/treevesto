@@ -3,8 +3,21 @@ import Link from 'next/link';
 import AdminLayout from '../../component/common/AdminLayout'
 import { Card, CardContent, Button } from '@material-ui/core';
 
+// Table
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+
 import axios from 'axios';
-import https from 'https'
+import https from 'https';
+import PieChart from '../../component/charts/pie';
+import LineChart from '../../component/charts/lineChart';
+import PolarAreaChart from '../../component/charts/polarArea';
 
 export default function AdminPage(props){
     const [admin,setAdmin] = React.useState(null);
@@ -85,6 +98,61 @@ export default function AdminPage(props){
 
 
                 </div>
+            </div>
+            <div className="row my-3">
+                <div className="col-md-4">
+
+                    <Card>
+                        <h3 className="text-xl font-medium p-2 px-3 text-secondary">Sale By Gender</h3>
+                        <div className="mb-3">
+                            <PieChart />
+                        </div>
+                    </Card>
+                </div>
+                <div className="col-md-8">
+                    <Card>
+                        <h3 className="text-xl font-medium p-2 px-3 text-secondary">Yearly Sales</h3>
+                        <div className="mx-2 mb-3">
+                            <LineChart />
+                        </div>
+                    </Card> 
+                </div>
+            </div>
+
+
+            <div className="row my-3">
+                <div className="col-md-6">
+                    {/* <Card> */}
+                        <div className="mx-2 mb-3">
+                        <TableContainer component={Paper}>
+                            <h3 className="text-xl font-medium p-2 px-3 text-secondary">Best Vendor</h3>
+                            <Table className={""} aria-label="simple table">
+                                <TableHead>
+                                <TableRow>
+                                    <TableCell>Vendor</TableCell>
+                                    <TableCell>Product</TableCell>
+                                    <TableCell>State</TableCell>
+                                    <TableCell>Total</TableCell>
+                                </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                 
+                                </TableBody>
+                            </Table>
+                            </TableContainer>
+                        </div>
+                    {/* </Card>  */}
+
+                </div>
+                <div className="col-md-6">
+                    <Card>
+                        <h3 className="text-xl font-medium p-2 px-3 text-secondary">Sales Overview</h3>
+                        <div className="mx-2 mb-3">
+                            <PolarAreaChart />
+                        </div>
+                    </Card> 
+                </div>
+
             </div>
         </div>
 
