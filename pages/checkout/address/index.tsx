@@ -19,6 +19,8 @@ export default function AddressPage(props) {
 
     const [selected,setSelected] = React.useState(null);
     const [userAddress,setUserAddress] = React.useState([]);
+    const [totalAmt,setTotalAmt] = React.useState(0)
+
     // Checkout
     const [address,setAddress] = React.useState({
         userId:"", 
@@ -80,7 +82,7 @@ export default function AddressPage(props) {
     }
 
     return <div>
-        <Checkout coupon={props.coupon}>
+        <Checkout coupon={props.coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb items-center">

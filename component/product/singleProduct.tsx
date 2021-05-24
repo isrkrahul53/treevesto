@@ -20,7 +20,7 @@ export default function SingleProduct(props){
       setProductSelected(props.data.find(e=>e.colour === colour[colourSelected] && e.size === size[sizeSelected]))
     },[colourSelected,sizeSelected])
   
-  
+    
     return <div className={"cursor-pointer"} >
     <ProductImageBanner indicator={false} images={productSelected?.productImages} />
     <div className="p-2">

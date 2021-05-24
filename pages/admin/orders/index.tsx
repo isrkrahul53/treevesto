@@ -26,7 +26,7 @@ export default function AdminOrdersPage(props){
   return <AdminLayout>
     
     <TableContainer component={Paper}>
-      <Table>
+      <Table className="">
           <TableHead>
           <TableRow>
               <TableCell>Order Id</TableCell>
@@ -39,10 +39,17 @@ export default function AdminOrdersPage(props){
           <TableBody>
           {props.orders.map((el,key)=>(
               <TableRow key={key}>
-                <TableCell>{el._id}</TableCell> 
+                <TableCell>
+                  <div className="flex items-center">
+                    {JSON.parse(el.cart).map((e,k)=>(
+                      <img key={k} src={e.image} width={35-(k*2)+"px"} className="border-2 border-dark rounded shadow-sm -mr-2" alt="" />
+                    ))}
+                    <div className="ml-3"> {el._id} </div>
+                  </div>
+                </TableCell> 
                 <TableCell>{el.orderType}</TableCell> 
                 <TableCell>Rs. {el.totalAmount}</TableCell> 
-                <TableCell>{el.date.substring(0,19)}</TableCell> 
+                <TableCell>{el.date.substring(0,10)}</TableCell> 
                 <TableCell>
                   <MaterialModal name={"Order Id : "+el._id} label={<VisibilityIcon className="cursor-pointer" />} content={<>
                     {JSON.parse(el.cart).map((e,k)=>(

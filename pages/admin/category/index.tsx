@@ -7,6 +7,7 @@ import CategoryIcon from '@material-ui/icons/Category';
 import AppsIcon from '@material-ui/icons/Apps';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { useForm } from 'react-hook-form';
 
@@ -68,6 +69,7 @@ export default function AdminCategoryPage(props){
           onClick={()=>setSelectedCategory(e._id)}> 
             {e.catName} 
             <div className="ml-auto">
+              <EditIcon onClick={()=>router.push("/admin/category/edit?id="+e._id)} className="text-sm hover:text-blue-500" />
               <DeleteIcon onClick={()=>removeCategory(e._id)} className="text-sm hover:text-red-500" />
             </div>
           </div>

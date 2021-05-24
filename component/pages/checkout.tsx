@@ -75,7 +75,9 @@ export default function Checkout(props) {
         couponUsed && setCouponUsed(couponUsed)
 
     },[])
- 
+
+    props.getAmount(totalPrice)
+    
     useEffect(()=>{
         if(props.cart){
             updatePrice(props.cart)
@@ -84,8 +86,11 @@ export default function Checkout(props) {
  
 
     useEffect(()=>{
-        if(props.pay){
-            checkout();
+        if(props.pay?.mode === "Online"){
+            checkout("Online")
+        }
+        if(props.pay?.mode === "COD"){
+            checkout("COD")
         }
     },[props.pay])
 
@@ -102,6 +107,7 @@ export default function Checkout(props) {
         localStorage.setItem("couponUsed",coupon._id)
     }
 
+
     const updatePrice = (y) => {
         var data = y;
         var x = 0;
@@ -113,7 +119,7 @@ export default function Checkout(props) {
         setTotalPrice(x);
     }
  
-    const checkout = () => {
+    const checkout = (x) => {
         var formData = new FormData();
         formData.append('cart',JSON.stringify(cart))
         formData.append('address',selectedAddress)
@@ -123,7 +129,8 @@ export default function Checkout(props) {
         formData.append('couponId',couponUsed)
         formData.append('customerPhone',"6209460626")
         formData.append('customerState',"Jharkhand")
-        formData.append('orderType',"COD")
+        formData.append('orderType',x)
+        x === "Online" && formData.append('transactionNo',props.pay.transactionNo)
 
         fetch(`https://api.treevesto.com:4000/order`,{
             method:"POST",

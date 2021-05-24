@@ -22,6 +22,37 @@ import PolarAreaChart from '../../component/charts/polarArea';
 export default function AdminPage(props){
     const [admin,setAdmin] = React.useState(null);
 
+    const [income,setIncome] = React.useState(null)
+    const [saleByGender,setSaleGender] = React.useState([0,0])
+    const [totalIncome,setTotalIncome] = React.useState(null)
+
+
+    useEffect(()=>{
+        var income = [];
+        const arr = props.sales.filter(e=>e.date.split("-")[0] === "2021").map(e=>({date:Number(e.date.split("-")[1]),vendor:e.vendorId,price:e.price}))
+        for(var i=1;i<=12;i++){
+            var ar = arr.filter(e=>e.date === i)
+            income.push(ar.length > 0 ?ar.map(e=>e.price) : 0)
+        }
+        income = income.map(e=>typeof(e) === 'object' ? e.reduce((a,b)=>Number(a)+Number(b)) : e)
+        setIncome(income)
+        setTotalIncome(income.reduce((a,b)=>a+b))
+
+        var male = props.sales.filter(e=>e.userId.gender === "Male").map(e=>e.price)
+        male = male.length > 0 ? male.reduce((a,b)=>Number(a)+Number(b)) : 0
+        var female = props.sales.filter(e=>e.userId.gender === "Female").map(e=>e.price)
+        female = female.length > 0 ? female.reduce((a,b)=>Number(a)+Number(b)) : 0
+        
+        setSaleGender([male,female])
+
+        props.vendor.forEach(element => {
+            element.income = arr.map(e=>e.vendor === element._id ? e.price : 0).reduce((a,b)=>(Number(a)+Number(b)))
+        });
+        
+
+
+    },[])
+
     useEffect(()=>{
         var admin = JSON.parse(localStorage.getItem('admin'))
         if(admin){
@@ -80,8 +111,8 @@ export default function AdminPage(props){
                     <Link href="/admin/orders"><Card className="bg-light cursor-pointer">
                         <CardContent>
                             <img src="/assets/icons/admin/order.png" alt="order" width="90px" className="float-right -mt-4" />
-                            <div className="text-lg text-secondary font-medium">Total Orders</div>
-                            <div className="text-4xl font-light">{props.orderLength}</div>
+                            <div className="text-lg text-secondary font-medium">Product Sold</div>
+                            <div className="text-4xl font-light">{props.sales.length}</div>
                         </CardContent>
                     </Card></Link>
 
@@ -105,7 +136,7 @@ export default function AdminPage(props){
                     <Card>
                         <h3 className="text-xl font-medium p-2 px-3 text-secondary">Sale By Gender</h3>
                         <div className="mb-3">
-                            <PieChart />
+                            <PieChart data={saleByGender} />
                         </div>
                     </Card>
                 </div>
@@ -113,7 +144,7 @@ export default function AdminPage(props){
                     <Card>
                         <h3 className="text-xl font-medium p-2 px-3 text-secondary">Yearly Sales</h3>
                         <div className="mx-2 mb-3">
-                            <LineChart />
+                            <LineChart data={income} />
                         </div>
                     </Card> 
                 </div>
@@ -125,18 +156,26 @@ export default function AdminPage(props){
                     {/* <Card> */}
                         <div className="mx-2 mb-3">
                         <TableContainer component={Paper}>
-                            <h3 className="text-xl font-medium p-2 px-3 text-secondary">Best Vendor</h3>
+                            <h3 className="text-xl font-medium p-2 px-3 text-secondary">Best Salesman</h3>
                             <Table className={""} aria-label="simple table">
                                 <TableHead>
                                 <TableRow>
                                     <TableCell>Vendor</TableCell>
-                                    <TableCell>Product</TableCell>
+                                    <TableCell>Phone</TableCell>
                                     <TableCell>State</TableCell>
-                                    <TableCell>Total</TableCell>
+                                    <TableCell>Income</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                 
+                                    {props.vendor.map((e,k)=>(
+                                    <TableRow key={k}>
+                                        <TableCell> {e.name} </TableCell>
+                                        <TableCell> {e.phone} </TableCell>
+                                        <TableCell> {e.state} </TableCell>
+                                        <TableCell> Rs. {e.income} </TableCell>
+                                    </TableRow>
+
+                                    ))}
                                 </TableBody>
                             </Table>
                             </TableContainer>
@@ -148,7 +187,7 @@ export default function AdminPage(props){
                     <Card>
                         <h3 className="text-xl font-medium p-2 px-3 text-secondary">Sales Overview</h3>
                         <div className="mx-2 mb-3">
-                            <PolarAreaChart />
+                            <PolarAreaChart data={[props.productLength,props.userLength,props.vendor.length,props.sales.length]} />
                         </div>
                     </Card> 
                 </div>
@@ -164,17 +203,17 @@ export const getStaticProps = async (context) => {
     rejectUnauthorized: false
   });
   const vendors = await axios.get(`https://api.treevesto.com:4000/vendor`,{httpsAgent:agent})
-  const orders = await axios.get(`https://api.treevesto.com:4000/order`,{httpsAgent:agent})
+  const sales = await axios.get(`https://api.treevesto.com:4000/orderedproduct`,{httpsAgent:agent})
   const products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
   const users = await axios.get(`https://api.treevesto.com:4000/user`,{httpsAgent:agent})
  
 
   return {
     props: {
-      vendorLength:vendors.data.result.length, 
-      orderLength:orders.data.result.length, 
+      vendor:vendors.data.result, 
       productLength:products.data.result.length, 
       userLength:users.data.result.length, 
+      sales:sales.data.result, 
     }
   };
 }

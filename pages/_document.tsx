@@ -16,6 +16,8 @@ class MyDocument extends Document{
                 </body> 
                 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossOrigin="anonymous"></script>
                 <script src="/assets/bootstrap/js/bootstrap.js"></script> 
+                
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
             </Html>
         ) 
     }

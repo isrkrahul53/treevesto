@@ -39,9 +39,10 @@ export default function Product(props) {
     const [selectedImage,setSelectedImage] = React.useState(null)
     const [vendordata,setVendordata] = React.useState(null)
     const [cart,setCart] = React.useState([]);
+    const [isAdded,setAdded] = React.useState(false)
     const [wishlist,setWishlist] = React.useState([])
     const [navigation,setNavigation] = React.useState(0)
-
+    
     const [size,setSize] = React.useState([])
     const [colour,setColour] = React.useState([])
 
@@ -71,8 +72,13 @@ export default function Product(props) {
         if(wishlist){
             setWishlist(wishlist)
         }
-
     },[])
+
+    useEffect(()=>{
+        cart.find(e=>e.productId === router.query.id) && setAdded(true)
+    },[cart])
+
+ 
 
     const addtoCart = (s) => { 
         var data = cart.filter(e=>e.productId==props.product?._id)
@@ -91,7 +97,7 @@ export default function Product(props) {
             setError('Already added to cart')
         }
     }
-     
+    
     const addtoWishlist = () => { 
         var data = wishlist.filter(e=>e.productId==props.product?._id)
         var x = [...wishlist,{
@@ -144,7 +150,7 @@ export default function Product(props) {
                             <img src={selectedImage} className="w-full md:w-75" />
                         </div>
                         <div className="col-md-8">
-                            <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
+                            <ProductPage isAdded={isAdded} addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
                             size={size} colour={colour} />
                         </div>
                     </div>

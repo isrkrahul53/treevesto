@@ -102,19 +102,21 @@ export default function Home(props) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
              
-            {categories.filter(e=>e.parentCatId === "0").filter((e,k)=>k<3).map((el,key)=>(
+            {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
               <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
-                <article style={{backgroundImage:'url("/assets/images/category/image'+(key+1)+'.jpg")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
-                  <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
-                    <div className="w-full">
-                      <div className="text-xl">{el.catName.toUpperCase()}</div>
-                      {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
-                          <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
-                      ))}
-                    </div>
-                  </section>
-                  <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
-                </article>
+                {el.catImage && <>
+                  <article style={{backgroundImage:'url("https://api.treevesto.com:4000/'+el.catImage+'")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
+                    <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
+                      <div className="w-full">
+                        <div className="text-xl">{el.catName.toUpperCase()}</div>
+                        {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+                            <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
+                        ))}
+                      </div>
+                    </section>
+                    <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
+                  </article>
+                </>}
               </div>
             ))} 
 
@@ -123,42 +125,7 @@ export default function Home(props) {
 
 
         <div className="container my-2"> 
-         
-         
-          {/* =========================================== */}
-          {/* Featured Products */}
-          {/* =========================================== */}
-          {/* <div className="hidden md:block">
-            <Paper className="my-2">
-              <Tabs
-                value={navigation}
-                onChange={handleNavigationChange}
-                indicatorColor="primary"
-                textColor="primary"
-                centered
-              >
-                  <Tab label="New Products" />
-                  <Tab label="Special Products" />
-                  <Tab label="Featured Products" />
-              </Tabs>
-            </Paper>
-          </div>
-
-          <div className="md:hidden">
-            <Paper className="my-2">
-              <Tabs
-                value={navigation}
-                onChange={handleNavigationChange}
-                indicatorColor="primary"
-                textColor="primary"
-                centered
-              > 
-                  <Tab label="New" />
-                  <Tab label="Special" />
-                  <Tab label="Featured" />
-              </Tabs>
-            </Paper>
-          </div> */}
+          
           <div className="flex items-center justify-center font-light my-4">
             <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
               <div className="flex items-center">
@@ -190,54 +157,7 @@ export default function Home(props) {
               ))}
             </div>
           </>:<></>}
-
-          {/* {navigation === 1?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
-              {props.products.map((e,key)=>(
-                <div key={key} className="border-2">
-                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
-                  <div className="p-2">
-                    <div>{e.productName}</div>
-                    <div>Rs. {e.sellingPrice}</div>
-                    <div className="my-4">
-                      <span onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                        Add To Bag
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>:<></>}
-
-          {navigation === 2?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
-              {props.products.map((e,key)=>(
-                <div key={key} className="border-2">
-                  <Link href={"/product/"+e._id}><img src={"https://api.treevesto.com:4000/"+e.productImages[0]} alt="" className="w-full cursor-pointer" /></Link>
-                  <div className="p-2">
-                    <div>{e.productName}</div>
-                    <div>Rs. {e.sellingPrice}</div>
-                    <div className="my-4">
-                      <span onClick={()=>{addtoCart(e)}} className="px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                        Add To Bag
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>:<></>} */}
- 
-
-
-          {/* =========================================== */}
-          {/* Product Slider */}
-          {/* =========================================== */}
-
-          {/* <h3 className="display-5 my-8 text-secondary"> Trending Products  </h3>
-          <ProductCarousel product={product} indicator={true} /> */}
-
+  
 
           {/* =========================================== */}
           {/* Sections */}

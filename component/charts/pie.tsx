@@ -1,13 +1,13 @@
 import { Pie } from 'react-chartjs-2';
 
-export default function PieChart(){
+export default function PieChart(props){
     const labels = ['Male', 'Female'];
     const data = {
     labels: labels,
     datasets: [
         {
         label: 'Sales',
-        data: [20,12],
+        data: props.data,
         backgroundColor: ['#a5dfdf','#ffb1c1']
         }
     ]

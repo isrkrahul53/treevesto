@@ -125,9 +125,9 @@ export default function AdminCouponsPage(props){
                 <Button variant="contained" color="secondary" size="small" onClick={()=>updateCoupon(e._id,"0")}>
                   Disable
                 </Button>
-                <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                {/* <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
                   <DeleteIcon />
-                </div>
+                </div> */}
             </TableCell>
 
           </TableRow>
@@ -163,9 +163,9 @@ export default function AdminCouponsPage(props){
                 <Button variant="contained" color="primary" size="small" onClick={()=>updateCoupon(e._id,"1")}>
                   Activate
                 </Button>
-                <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
+                {/* <div className="cursor-pointer" onClick={()=>removeCoupon(e._id)}>
                   <DeleteIcon />
-                </div>
+                </div> */}
             </TableCell>
 
           </TableRow>

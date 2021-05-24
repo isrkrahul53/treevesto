@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Link from 'next/link';
 import Button from '@material-ui/core/Button' 
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
@@ -83,9 +84,15 @@ export default function ProductPage(props) {
 
         {/* Desktop */}
         <div className="md:flex items-center justify-around w-3/5 hidden my-2">
-            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                <LocalMallOutlinedIcon /> Add To Bag
-            </div>
+            {props.isAdded?<>
+                <Link href="/checkout/cart"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
+                    <LocalMallOutlinedIcon /> Go to Bag
+                </div></Link>
+            </>:<>
+                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                    <LocalMallOutlinedIcon /> Add To Bag
+                </div>
+            </>}
             <div className="px-1"></div>
             <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                 <FavoriteBorderOutlinedIcon /> Wishlist

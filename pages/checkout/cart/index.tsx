@@ -25,7 +25,9 @@ export default function CartPage({coupon}) {
 
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([]);
+    const [totalAmt,setTotalAmt] = React.useState(0)
 
+    
     useEffect(()=>{
         var cart = JSON.parse(localStorage.getItem('cart'))
         var wishlist = JSON.parse(localStorage.getItem('wishlist'))
@@ -72,7 +74,7 @@ export default function CartPage({coupon}) {
       const props = {cart,deleteCartItem,movetoWishlist}
 
       return <div>
-        <Checkout cart={cart} coupon={coupon}>
+        <Checkout cart={cart} coupon={coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             <CustomAlert error={error} success={success} />
             
             <nav aria-label="breadcrumb">

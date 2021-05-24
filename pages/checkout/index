@@ -1,0 +1,61 @@
+// import { GetServerSideProps } from "next";
+// import Stripe from 'stripe'
+// import {parseCookies,setCookie} from 'nookies'
+// import {loadStripe} from '@stripe/stripe-js'
+// import { Elements } from "@stripe/react-stripe-js";
+// import CheckoutForm from "../../component/pages/checkoutForm";
+
+// const stripePromise = loadStripe("pk_test_51IuKFFSInn4BNx2HPg8Z2krLteemcrNwEI5s96ArcJPwEqvI9QR8oULMKYR9ygUOmg7akrjzfPUo7BCXZvlOyV2O00xboCy8sY")
+
+
+// export const getServerSideProps = async (context) => {
+//     const stripe = new Stripe("sk_test_51IuKFFSInn4BNx2HRsz7RIoxV9B7D4kG9EYtjTHiqZHtWjWanPGSM36ev3O7OK83rFGpsxGpjwHmTv2w9zfjh8sV00NouIeFpw",{
+//         apiVersion: '2020-08-27',
+//         // stripeAccount:'acct_1IuKFFSInn4BNx2H'
+//       })
+
+//     let paymentIntent
+
+//     const {paymentIntentId} = await parseCookies(context)
+
+//     if(paymentIntentId) {
+        
+//         const params: Stripe.CustomerCreateParams = {
+//             description: 'test customer',
+//         };
+
+//         const customer: Stripe.Customer = await stripe.customers.create(params);
+
+//         paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId,{
+//             expand:['customer']
+//         })
+        
+//         return {
+//             props: {
+//                 paymentIntent
+//             }
+//         }
+//     }
+
+//     paymentIntent = await stripe.paymentIntents.create({
+//         amount:100,
+//         currency:"inr"
+//     })
+
+//     setCookie(context, 'paymentIntentId', paymentIntent.id)
+
+//     return {
+//         props: {
+//             paymentIntent
+//         }
+//     };
+// }
+
+// export default function CheckoutPage({paymentIntent}){
+//     return <>
+//     <Elements stripe={stripePromise}>
+//         <CheckoutForm paymentIntent={paymentIntent} />
+//     </Elements>
+//     </>
+    
+// }
