@@ -5,10 +5,22 @@ import Button from '@material-ui/core/Button'
 
 declare var Razorpay:any;
 export default function PaymentPage() {
+    let rzp1;
 
     const [orderId,setOrderId] = React.useState(null)
     const [totalAmt,setTotalAmt] = React.useState(0)
 
+    var options = {
+        key: "rzp_test_HgpilQ93SsfaNu",amount: totalAmt,currency: "INR",name: "Acme Corp",
+        description: "Test Transaction",image: "https://example.com/your_logo",order_id: orderId, 
+        handler: function (response){
+            setPay({mode:"Online",transactionNo:response.razorpay_payment_id})
+        },
+        prefill: {name: "Gaurav Kumar",email: "gaurav.kumar@example.com",contact: "9999999999"},
+        notes: {address: "Razorpay Corporate Office"},
+        theme: {color: "#3399cc"}
+    };
+    
     useEffect(()=>{
         if(totalAmt > 0){
             var formData = new FormData();
@@ -23,20 +35,13 @@ export default function PaymentPage() {
         }
     },[totalAmt])
     
-    var options = {
-        key: "rzp_test_HgpilQ93SsfaNu",amount: totalAmt,currency: "INR",name: "Acme Corp",
-        description: "Test Transaction",image: "https://example.com/your_logo",order_id: orderId, 
-        handler: function (response){
-            setPay({mode:"Online",transactionNo:response.razorpay_payment_id})
-        },
-        prefill: {name: "Gaurav Kumar",email: "gaurav.kumar@example.com",contact: "9999999999"},
-        notes: {address: "Razorpay Corporate Office"},
-        theme: {color: "#3399cc"}
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response){
-        console.log(response)
-    });
+    useEffect(()=>{
+        if(orderId){
+            rzp1 = new Razorpay(options);
+        }
+    },[orderId])
+
+ 
 
     const [pay,setPay] = React.useState(null);
 
