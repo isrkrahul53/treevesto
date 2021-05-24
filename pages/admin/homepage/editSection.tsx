@@ -3,15 +3,13 @@ import AdminLayout from '../../../component/common/AdminLayout'
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router'
 
+import {useForm} from 'react-hook-form'
 
 export default function EditSection() {
     
     const router = useRouter();
-
-    const [section,setSection] = React.useState({ 
-        title:"", 
-        grid:""
-    })
+    const {register,setValue,handleSubmit,errors} = useForm();
+ 
     
     useEffect(()=>{ 
         var id = router.query.id; 
@@ -20,17 +18,18 @@ export default function EditSection() {
                 var d = json.result;
                 console.log(json)
                 if(json.success == 1){
-                    setSection({title:d.title,grid:d.grid})
+                    setValue("title",d.title)
+                    setValue("grid",d.grid)
                 }
             })
         }
     },[])
 
-    const handleSubmit = () => {
+    const onSubmit = (data) => {
         var id = router.query.id; 
         var formData = new FormData();
-        formData.append('title',section.title)
-        formData.append('grid',section.grid)
+        formData.append('title',data.title)
+        formData.append('grid',data.grid)
         fetch(`https://api.treevesto.com:4000/section/`+id,{
                 method:"PATCH",
                 body:formData
@@ -45,9 +44,10 @@ export default function EditSection() {
 
         <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Edit Section</div>
 
-        <form className="bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
-            <input type="text" name="title" id="title" onChange={e=>setSection({...section,title:e.target.value})} defaultValue={section.title} className="form-control my-2" placeholder="Enter title of the card" />
-            <select name="grid" id="grid" onChange={e=>setSection({...section,grid:e.target.value})} defaultValue={section.grid} className="form-select my-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
+            <input type="text" name="title" id="title" ref={register({required:true})}
+            className="form-control my-2" placeholder="Enter title of the card" />
+            <select name="grid" id="grid"  className="form-select my-2" ref={register({required:true})}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -57,7 +57,7 @@ export default function EditSection() {
             </select>
              
             <div className="text-right">
-                <Button variant="contained" color="secondary" onClick={handleSubmit}>
+                <Button type="submit" variant="contained" color="secondary">
                   Submit
                 </Button>
             </div>

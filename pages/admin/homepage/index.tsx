@@ -11,9 +11,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'; 
 import ViewCarouselIcon from '@material-ui/icons/ViewCarousel';
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
-
-import axios from 'axios';
-import https from 'https'
+ 
 import { Card, CardActions, CardContent, Avatar, CardHeader, IconButton } from '@material-ui/core';
 import { MoreVert as MoreVertIcon } from '@material-ui/icons'
  
@@ -24,8 +22,29 @@ export default function CustomizeHomepage(props) {
         link:''
     })
     
-    const [banner,setBanner] = React.useState(props.banner) 
+    const [banner,setBanner] = React.useState([]) 
+    const [sections,setSections] = React.useState([]) 
+    const [cards,setCards] = React.useState([]) 
     const [navigation, setNavigation] = React.useState('banner');
+
+
+    useEffect(()=>{
+        fetchData();
+    },[])
+    
+    const fetchData = () => {
+        fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
+            setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image})))
+        }).catch(err=>console.log(err.message))
+        fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
+            setSections(json.result)
+        }).catch(err=>console.log(err.message))
+        fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
+            setCards(json.result)
+        }).catch(err=>console.log(err.message))
+        
+        
+    }
 
     const handleNavigationChange = (event, newValue) => {
         setNavigation(newValue);
@@ -37,7 +56,8 @@ export default function CustomizeHomepage(props) {
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
-                    location.reload();
+                    fetchData();
+                    
                 }
             })
         }
@@ -49,7 +69,7 @@ export default function CustomizeHomepage(props) {
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
-                    router.replace(router.asPath)
+                    fetchData();
                 }
             })
         }
@@ -61,7 +81,7 @@ export default function CustomizeHomepage(props) {
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
-                    router.replace(router.asPath)
+                    fetchData();
                 }
             })
         
@@ -81,7 +101,7 @@ export default function CustomizeHomepage(props) {
         }).then(d=>d.json()).then(json=>{
             console.log(json)
             if(json.success == 1){
-                router.replace(router.asPath)
+                fetchData();
             }
         })
     }
@@ -121,12 +141,12 @@ export default function CustomizeHomepage(props) {
         </>}
 
         {navigation === "section" && <>
-            {props.sections?.map((el,key)=>(
+            {sections?.map((el,key)=>(
                 <Card key={key} className="my-2">
                     <CardContent>
                         <h3 className="text-3xl font-light"> {el.title} </h3>
                         <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                            {props.cards?.map((e,key)=>{ 
+                            {cards?.map((e,key)=>{ 
                                 return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
                                     <div className="text-right">
                                         <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
@@ -164,23 +184,4 @@ export default function CustomizeHomepage(props) {
 
     </AdminLayout> 
 }
-
-export const getStaticProps = async (context) => {
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
-    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-    var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
-    var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
-    
-    banner = banner.data.result.map((el,key)=>{
-        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
-    })
-    return {
-        props: {
-            banner:banner,
-            sections:sections.data.result,
-            cards:cards.data.result,
-        }
-    };
-}
+ 

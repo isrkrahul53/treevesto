@@ -126,7 +126,7 @@ export default function Home(props) {
 
         <div className="container my-2"> 
           
-          <div className="flex items-center justify-center font-light my-4">
+          {/* <div className="flex items-center justify-center font-light my-4">
             <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
               <div className="flex items-center">
                 <span>New</span>
@@ -156,7 +156,7 @@ export default function Home(props) {
                 </div> 
               ))}
             </div>
-          </>:<></>}
+          </>:<></>} */}
   
 
           {/* =========================================== */}
