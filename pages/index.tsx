@@ -85,20 +85,28 @@ export default function Home(props) {
       
       <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
  
-        {/* <img src="/assets/images/freeshipping.jpg" alt="freeShipping"/> */}
 
-        <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
+          {/* ======================================== */}
+          {/* Banners */}
+          {/* ======================================== */}
+
+          {/* <Banner images={banner} indicator={true} /> */}
+          
+          <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/>
+          <ProductCarousel images={banner} indicator={true} />
+
+        {/* <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
           <div className="text-secondary">Limited time : Online only !</div>
           <div className="display-4">FINAL CLEARANCE</div>
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
           <div className="my-4">
             <Link href="/6099022ddbf23644536cb74d?color=Brown,Green&size=4XL&from=4233&to=6565"><span className="px-4 py-2 cursor-pointer border border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
           </div>
-        </div>
+        </div> */}
  
 
         {/* Category Section */}
-        <div className="container my-10">
+        {/* <div className="container my-10">
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
              
@@ -121,12 +129,12 @@ export default function Home(props) {
             ))} 
 
           </div>
-        </div>
+        </div> */}
 
 
         <div className="container my-2"> 
           
-          {/* <div className="flex items-center justify-center font-light my-4">
+          <div className="flex items-center justify-center font-light my-4">
             <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
               <div className="flex items-center">
                 <span>New</span>
@@ -156,7 +164,7 @@ export default function Home(props) {
                 </div> 
               ))}
             </div>
-          </>:<></>} */}
+          </>:<></>}
   
 
           {/* =========================================== */}
@@ -180,11 +188,6 @@ export default function Home(props) {
 
         </div>
 
-          {/* ======================================== */}
-          {/* Banners */}
-          {/* ======================================== */}
-
-          <Banner images={banner} indicator={true} />
         
         <br/>
 
