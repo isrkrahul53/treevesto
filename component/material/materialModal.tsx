@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button } from '@material-ui/core';
@@ -47,6 +47,12 @@ export default function MaterialModal(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(()=>{
+    if(props.close){
+      handleClose();
+    }
+  },[props.close])
 
   const body = ( 
     <div className={classes.paper}> 

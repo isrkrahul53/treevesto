@@ -27,6 +27,7 @@ export default function CustomizeHomepage(props) {
     const [banner,setBanner] = React.useState([]) 
     const [sections,setSections] = React.useState([]) 
     const [cards,setCards] = React.useState([]) 
+    const [closeModal,setCloseModal] = React.useState(false)
     const [navigation, setNavigation] = React.useState('banner');
 
 
@@ -121,7 +122,8 @@ export default function CustomizeHomepage(props) {
         }).then(d=>d.json()).then(json=>{
             console.log(json)
             if(json.success == 1){
-                router.reload();
+                fetchData(); 
+                setCloseModal(true)
             }else{
                 alert(json.msg)
             }
@@ -162,53 +164,101 @@ export default function CustomizeHomepage(props) {
             </div>
         </>}
 
-        {navigation === "section" && <>
-            {sections?.map((el,key)=>(
-                <Card key={key} className="my-2">
-                    <CardContent>
-                        <div className="flex items-center">
-                            <h3 className="text-lg md:text-3xl font-light">
-                                {el.title}
-                            </h3>
-                            <div className="text-sm md:text-lg text-blue-600 p-2">
-                                <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
-                            </div>
-                        </div>
-                        <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                            {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
-                                return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
-                                    <div className="text-right">
-                                        <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
+        {navigation === "section" && <div>
+            <div className="row">
+                <div className="col-md-6">
+                    {sections?.filter(e=>e.position === "Top").map((el,key)=>(
+                        <Card key={key} className="my-2">
+                            <CardContent>
+                                <div className="flex items-center">
+                                    <h3 className="text-lg font-light">
+                                        {el.title}
+                                    </h3>
+                                    <div className="text-sm md:text-lg text-blue-600 p-2">
+                                        <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
                                     </div>
-                                    <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
-                                </div> 
-                            })}
-                            <MaterialModal label={"Add Image"} name="Add Image" content={<AddImagetoSectionModal 
-                                image={e=>setImages({...images,image:e.target.files[0]})} 
-                                link={e=>setImages({...images,link:e.target.value})} 
-                                value={images}
-                                submit={()=>handleSubmit(el._id)}
-                                />} 
-                            />
-                        </div>
-                    </CardContent>
-                    <CardActions>
-                        <Button variant="contained" color="primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>
-                        Edit
-                        </Button>
-                        <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
-                        Delete
-                        </Button>
-                    </CardActions>
-                </Card>
-            ))}
+                                </div>
+                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                                        return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
+                                            <div className="text-right">
+                                                <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
+                                            </div>
+                                            <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
+                                        </div> 
+                                    })}
+                                    <MaterialModal label={"Add Image"} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
+                                        image={e=>setImages({...images,image:e.target.files[0]})} 
+                                        link={e=>setImages({...images,link:e.target.value})} 
+                                        value={images}
+                                        submit={()=>handleSubmit(el._id)}
+                                        />} 
+                                    />
+                                </div>
+                            </CardContent>
+                            <CardActions>
+                                <Button variant="contained" color="primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>
+                                Edit
+                                </Button>
+                                <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
+                                Delete
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    ))}
 
+                </div>
+                <div className="col-md-6">
+                    {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
+                        <Card key={key} className="my-2">
+                            <CardContent>
+                                <div className="flex items-center">
+                                    <h3 className="text-lg font-light">
+                                        {el.title}
+                                    </h3>
+                                    <div className="text-sm md:text-lg text-blue-600 p-2">
+                                        <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
+                                    </div>
+                                </div>
+                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                                        return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
+                                            <div className="text-right">
+                                                <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
+                                            </div>
+                                            <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
+                                        </div> 
+                                    })}
+                                    <MaterialModal label={"Add Image"} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
+                                        image={e=>setImages({...images,image:e.target.files[0]})} 
+                                        link={e=>setImages({...images,link:e.target.value})} 
+                                        value={images}
+                                        submit={()=>handleSubmit(el._id)}
+                                        />} 
+                                    />
+                                </div>
+                            </CardContent>
+                            <CardActions>
+                                <Button variant="contained" color="primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>
+                                Edit
+                                </Button>
+                                <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
+                                Delete
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    ))}
+
+                </div>
+    
+
+            </div>
             <div className="text-right m-3">
                 <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
                     Add New Section +
                 </Button></Link>
             </div> 
-        </>}
+        </div>}
 
 
     </AdminLayout> 

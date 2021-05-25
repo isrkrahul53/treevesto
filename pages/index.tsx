@@ -44,6 +44,7 @@ export default function Home(props) {
     setSuccess("") 
   }
   const [banner,setBanner] = React.useState(props.banner) 
+  const [sections,setSections] = React.useState(props.sections.sort((a,b)=>Number(a.priority) - Number(b.priority))) 
 
   const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
@@ -176,7 +177,7 @@ export default function Home(props) {
           {/* Sections */}
           {/* =========================================== */}
 
-          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).filter(e=>e.position === "Top").map((el,key)=>(
+          {sections?.filter(e=>e.position === "Top").map((el,key)=>(
             <div key={key}>
                 <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
@@ -192,7 +193,7 @@ export default function Home(props) {
 
           <ReactMultiCarousel data={props.products} hideDetails={false} />
 
-          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).filter(e=>e.position === "Bottom").map((el,key)=>(
+          {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>
                 <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>

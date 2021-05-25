@@ -9,6 +9,7 @@ export default function Footer(){
                     <Link href="/account/overview"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">My Account</div></Link>
                     <Link href="/checkout/cart"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">View Bag</div></Link>
                     <Link href="/account/orders"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Track Orders</div></Link>
+                    <Link href="/admin"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Admin</div></Link>
                     <Link href="/"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Privacy Policy</div></Link>
                     <Link href="/"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Cookie Policy</div></Link>
                     
