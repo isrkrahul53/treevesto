@@ -32,7 +32,7 @@ export default function ReactMultiCarousel(props){
     responsive={responsive}>
         {props.data.map((e,k)=>(
             <div key={k}>
-                <SingleProduct data={e} hideDetails={true} />
+                <SingleProduct data={e} hideDetails={props.hideDetails} />
             </div>
         ))}
   </Carousel>;

@@ -121,9 +121,11 @@ export default function CustomizeHomepage(props) {
         }).then(d=>d.json()).then(json=>{
             console.log(json)
             if(json.success == 1){
-                fetchData();
+                router.reload();
+            }else{
+                alert(json.msg)
             }
-        })
+        }).catch(err=>alert(err.message))
     }
     
     return <AdminLayout>
@@ -185,8 +187,8 @@ export default function CustomizeHomepage(props) {
                                 image={e=>setImages({...images,image:e.target.files[0]})} 
                                 link={e=>setImages({...images,link:e.target.value})} 
                                 value={images}
-                                />} 
                                 submit={()=>handleSubmit(el._id)}
+                                />} 
                             />
                         </div>
                     </CardContent>

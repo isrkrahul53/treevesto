@@ -8,6 +8,7 @@ import MaterialChipArray from '../../component/material/chipArray';
 import axios from 'axios';
 import https from 'https'
 import SingleProduct from '../../component/product/singleProduct';
+import Filterbar from '../../component/common/filterbar';
 
 
 export default function Product(props){
@@ -168,6 +169,12 @@ export default function Product(props){
                     delColour={e=>setColour(size.filter((d,k)=>k!==e))}
                     />
                   </div>
+                  <Filterbar values={filterData} change={filterChange}
+                  min={min} 
+                  max={max} 
+                  colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                  sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                  />
                   {/* <article className="flex items-center justify-between md:ml-auto my-2 md:my-0">
                     <select className="form-select" name="sort" id="sort">
                       <option value="">Recommended</option>
@@ -176,12 +183,6 @@ export default function Product(props){
                       <option value="">Price : Low to high</option>
                       <option value="">Price : High to low</option>
                     </select>
-                    <FilterBar values={filterData} change={filterChange}
-                    min={min} 
-                    max={max} 
-                    colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                    sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                    />
                   </article> */}
                 </div>
                 {products.length > 0 ?<>

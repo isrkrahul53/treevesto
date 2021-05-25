@@ -6,7 +6,7 @@ export default function Footer(){
             <div className="row">
                 <div className="col-md-3">
                     <h3 className="my-2 text-xl">Order</h3>
-                    <Link href="/account"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">My Account</div></Link>
+                    <Link href="/account/overview"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">My Account</div></Link>
                     <Link href="/checkout/cart"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">View Bag</div></Link>
                     <Link href="/account/orders"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Track Orders</div></Link>
                     <Link href="/"><div className="cursor-pointer text-sm text-gray-800 hover:text-blue-500">Privacy Policy</div></Link>

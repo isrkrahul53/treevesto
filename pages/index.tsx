@@ -94,10 +94,10 @@ export default function Home(props) {
 
           {/* <Banner images={banner} indicator={true} /> */}
           
-          <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/>
           {/* <ProductCarousel images={banner} indicator={true} /> */}
           <ReactCarousel data={banner} />
   
+          {/* <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/> */}
 
         {/* <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
           <div className="text-secondary">Limited time : Online only !</div>
@@ -138,7 +138,6 @@ export default function Home(props) {
 
         <div className="container my-2"> 
         
-          <ReactMultiCarousel data={props.products} />
           
           {/* <div className="flex items-center justify-center font-light my-4">
             <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
@@ -177,7 +176,23 @@ export default function Home(props) {
           {/* Sections */}
           {/* =========================================== */}
 
-          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).map((el,key)=>(
+          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).filter(e=>e.position === "Top").map((el,key)=>(
+            <div key={key}>
+                <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
+                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                    {props.cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                      return <div key={key}> 
+                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
+                        </div> 
+                    })} 
+                </div>
+            
+            </div>
+          ))}
+
+          <ReactMultiCarousel data={props.products} hideDetails={false} />
+
+          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>
                 <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
