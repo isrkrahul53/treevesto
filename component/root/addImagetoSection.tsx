@@ -15,8 +15,8 @@ function Container(props){
 
 function BootstrapInputField(props){
     return <div className="row">            
-        <div className="col-md-2"></div>
-        <div className="col-md-8">
+        {/* <div className="col-md-2"></div> */}
+        <div className="col-md-12">
             <label htmlFor={props.id} className="form-label">{props.label}</label>
             <input type={props.type} onChange={props.change} defaultValue={props.value} className="form-control" id={props.id} required /> 
         </div>
@@ -101,21 +101,21 @@ export default function AddImagetoSectionModal(props){
     
     {/* <BootstrapTextArea id="desc" label="Product Description *" value={props.values.desc} change={props.desc} /> */}
     <div className="row">            
-        <div className="col-md-2"></div>
-        <div className="col-md-8">
+        {/* <div className="col-md-2"></div> */}
+        <div className="col-md-12">
             <select name="subCatId" id="subCatId" className="form-select my-2" onChange={e=>setFilters({...filters,subcat:e.target.value})}>
                 <option value="">Select Category</option>
                 {category.map((e,k)=>(
                     <option key={k} value={e._id}> {e.catName} </option>
                 ))}
             </select>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="my-2">
                     <div className="text-lg font-medium px-1">Colour</div>
                     <div className="flex items-center flex-wrap">
                         {products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k).map((e,k)=>(
                             <div key={k} 
-                            className={filters.color.find(a=>a==e)?"text-sm cursor-pointer mr-1 p-2 border-2 border-dark":"text-sm cursor-pointer mr-1 p-2 border-2"} 
+                            className={filters.color.find(a=>a==e)?"text-sm cursor-pointer my-1 mr-1 p-2 border-2 border-dark":"text-sm cursor-pointer mr-1 p-2 border-2"} 
                             onClick={()=>addColourFilter(e)}> 
                                 {e} 
                             </div>
@@ -127,7 +127,7 @@ export default function AddImagetoSectionModal(props){
                     <div className="flex items-center flex-wrap">
                         {products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k).map((e,k)=>(
                             <div key={k} 
-                            className={filters.size.find(a=>a==e)?"text-sm cursor-pointer mr-1 p-2 border-2 border-dark":"text-sm cursor-pointer mr-1 p-2 border-2"} 
+                            className={filters.size.find(a=>a==e)?"text-sm cursor-pointer my-1 mr-1 p-2 border-2 border-dark":"text-sm cursor-pointer mr-1 p-2 border-2"} 
                             onClick={()=>addSizeFilter(e)}> 
                                 {e} 
                             </div>
@@ -136,11 +136,11 @@ export default function AddImagetoSectionModal(props){
                 </div> 
                 <div className="my-2">
                     <div className="text-lg font-medium px-1">Price Range</div>
-                    <RangeSlider min={min} max={max} change={(e,data)=>setFilters({...filters,from:data[0],to:data[1]})} value={[filters.from,filters.to]} />
                 </div>
             </div>
 
         </div>
+                    <RangeSlider min={min} max={max} change={(e,data)=>setFilters({...filters,from:data[0],to:data[1]})} value={[filters.from,filters.to]} />
         
     </div>
     </Container>

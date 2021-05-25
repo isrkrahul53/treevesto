@@ -51,27 +51,29 @@ export default function PaymentPage() {
     return <div>
         <Checkout pay={pay} getAmount={(amt)=>setTotalAmt(amt*100)}>
              
+            <div className="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb items-center">
+                        <li className="breadcrumb-item"><Link href="/checkout/cart">Bag</Link></li>
+                        <li className="breadcrumb-item"><Link href="/checkout/address">Shipping</Link></li>
+                        <li className="breadcrumb-item active text-2xl" aria-current="page">Payment</li>
+                    </ol>
+                </nav>
+                
+                <div className="text-right">
 
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb items-center">
-                    <li className="breadcrumb-item"><Link href="/checkout/cart">Bag</Link></li>
-                    <li className="breadcrumb-item"><Link href="/checkout/address">Shipping</Link></li>
-                    <li className="breadcrumb-item active text-2xl" aria-current="page">Payment</li>
-                </ol>
-            </nav>
-            
-            <div className="text-right">
+                    <img src="/assets/images/payment.jpeg" alt="" className="w-2/3" />
+                    {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
+                    Cash on Delivery
+                    </Button> */}
+                    <button type="button" onClick={payNow} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                    Pay Now
+                    </button>
+                    <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                    Cash on Delivery
+                    </button>
+                </div>
 
-                <img src="/assets/images/payment.jpeg" alt="" className="w-2/3" />
-                {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
-                  Cash on Delivery
-                </Button> */}
-                <button type="button" onClick={payNow} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
-                Pay Now
-                </button>
-                <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                Cash on Delivery
-                </button>
             </div>
 
         </Checkout>

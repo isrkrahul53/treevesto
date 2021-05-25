@@ -13,11 +13,11 @@ function CheckoutHeader(props){
     <div className="container-fluid">
         <span className="navbar-brand">
             <Link href="/">
-                <img src="/logo.png" className="w-24 md:w-40" alt="logo"/>
+                <img src="/logo.png" className="w-24 lg:w-40" alt="logo"/>
             </Link>
         </span>
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden lg:flex items-center">
             <h5 className={props.active == 1?"text-xl p-2 border-b-4 text-4xl text-green-500 border-green-500":"text-xl p-2"}>Bag</h5>
             <h5 className="text-xl p-2">----</h5>
             <h5 className={props.active == 2?"text-xl p-2 border-b-4 text-4xl text-green-500 border-green-500":"text-xl p-2"}>Address</h5>
@@ -25,7 +25,7 @@ function CheckoutHeader(props){
             <h5 className={props.active == 3?"text-xl p-2 border-b-4 text-4xl text-green-500 border-green-500":"text-xl p-2"}>Payment</h5>
         </div>
 
-        <div className="items-center hidden md:flex">
+        <div className="items-center hidden lg:flex">
             <img src="/assets/images/checkout/security-icon-27.jpg" width="50px" alt="security-icon-27"/>
             <h5 className="text-xl">100% Secure</h5>
         </div>
@@ -175,17 +175,17 @@ export default function Checkout(props) {
         {/* <CheckoutHeader active={active} /> */}
         <Layout error={error} success={success}>
             <div className="">
-                <div className="w-full md:w-2/3 mx-auto flex-row md:flex">
+                <div className="w-full lg:w-2/3 mx-auto flex-row lg:flex">
 
                     {/* First column */}
-                    <div className="w-full md:w-2/3 px-2 md:px-4 py-8">
+                    <div className="w-full lg:w-2/3 px-2 lg:px-4 py-8 container">
 
                         {props.children}
 
 
                     </div>
                     {/* SEcond Column */}
-                    <div className="w-full md:w-1/3 border-l-2 border-gray-200 p-3">
+                    <div className="w-full lg:w-1/3 lg:border-l-2 border-gray-200 py-4 container">
                         {/* {active === 1?<>
                         </>:<></>}  */}
                         {props.coupon?.map((e,k)=>(

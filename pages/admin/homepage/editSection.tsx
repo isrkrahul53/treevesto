@@ -20,6 +20,7 @@ export default function EditSection() {
                 if(json.success == 1){
                     setValue("title",d.title)
                     setValue("grid",d.grid)
+                    setValue("position",d.position)
                 }
             })
         }
@@ -30,6 +31,8 @@ export default function EditSection() {
         var formData = new FormData();
         formData.append('title',data.title)
         formData.append('grid',data.grid)
+        formData.append('position',data.position)
+
         fetch(`https://api.treevesto.com:4000/section/`+id,{
                 method:"PATCH",
                 body:formData
@@ -45,6 +48,10 @@ export default function EditSection() {
         <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Edit Section</div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
+            <select name="position" id="position" className="form-select my-2" ref={register({required:true})} >
+                <option value="Top">Top</option>
+                <option value="Bottom">Bottom</option>
+            </select>
             <input type="text" name="title" id="title" ref={register({required:true})}
             className="form-control my-2" placeholder="Enter title of the card" />
             <select name="grid" id="grid"  className="form-select my-2" ref={register({required:true})}>

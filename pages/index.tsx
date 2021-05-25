@@ -13,6 +13,8 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SingleProduct from '../component/product/singleProduct';
+import ReactMultiCarousel from '../component/react/multiCarousel'
+import ReactCarousel from '../component/react/carousel';
  
 function Cards(props){
   return <div>
@@ -93,14 +95,16 @@ export default function Home(props) {
           {/* <Banner images={banner} indicator={true} /> */}
           
           <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/>
-          <ProductCarousel images={banner} indicator={true} />
+          {/* <ProductCarousel images={banner} indicator={true} /> */}
+          <ReactCarousel data={banner} />
+  
 
         {/* <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
           <div className="text-secondary">Limited time : Online only !</div>
           <div className="display-4">FINAL CLEARANCE</div>
           <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
           <div className="my-4">
-            <Link href="/6099022ddbf23644536cb74d?color=Brown,Green&size=4XL&from=4233&to=6565"><span className="px-4 py-2 cursor-pointer border border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
+          <Link href="/6099022ddbf23644536cb74d?color=Brown,Green&size=4XL&from=4233&to=6565"><span className="px-4 py-2 cursor-pointer border border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
           </div>
         </div> */}
  
@@ -108,33 +112,35 @@ export default function Home(props) {
         {/* Category Section */}
         {/* <div className="container my-10">
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-             
-            {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
-              <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
-                {el.catImage && <>
-                  <article style={{backgroundImage:'url("https://api.treevesto.com:4000/'+el.catImage+'")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
-                    <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
-                      <div className="w-full">
-                        <div className="text-xl">{el.catName.toUpperCase()}</div>
-                        {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
-                            <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
-                        ))}
-                      </div>
-                    </section>
-                    <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
-                  </article>
-                </>}
-              </div>
-            ))} 
+<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
 
-          </div>
-        </div> */}
+{categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
+  <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
+  {el.catImage && <>
+    <article style={{backgroundImage:'url("https://api.treevesto.com:4000/'+el.catImage+'")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
+    <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
+    <div className="w-full">
+    <div className="text-xl">{el.catName.toUpperCase()}</div>
+    {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
+      <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
+      ))}
+      </div>
+      </section>
+      <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
+      </article>
+      </>}
+      </div>
+      ))} 
+      
+      </div>
+    </div> */}
 
 
         <div className="container my-2"> 
+        
+          <ReactMultiCarousel data={props.products} />
           
-          <div className="flex items-center justify-center font-light my-4">
+          {/* <div className="flex items-center justify-center font-light my-4">
             <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
               <div className="flex items-center">
                 <span>New</span>
@@ -164,20 +170,20 @@ export default function Home(props) {
                 </div> 
               ))}
             </div>
-          </>:<></>}
+          </>:<></>} */}
   
 
           {/* =========================================== */}
           {/* Sections */}
           {/* =========================================== */}
 
-          {props.sections?.map((el,key)=>(
+          {props.sections?.sort((a,b)=>Number(a.priority) - Number(b.priority)).map((el,key)=>(
             <div key={key}>
-                <h3 className="display-5 my-8 text-secondary"> {el.title}  </h3>
+                <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                    {props.cards?.map((e,key)=>{ 
-                      return <div key={key} className={el._id==e.sectionId?"":"d-none"}> 
-                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border cursor-pointer" /></Link>
+                    {props.cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                      return <div key={key}> 
+                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
                         </div> 
                     })} 
                 </div>

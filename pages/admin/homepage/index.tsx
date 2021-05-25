@@ -12,6 +12,8 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ViewCarouselIcon from '@material-ui/icons/ViewCarousel';
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
  
+import EasyEdit from 'react-easy-edit';
+
 import { Card, CardActions, CardContent, Avatar, CardHeader, IconButton } from '@material-ui/core';
 import { MoreVert as MoreVertIcon } from '@material-ui/icons'
  
@@ -37,7 +39,8 @@ export default function CustomizeHomepage(props) {
             setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image})))
         }).catch(err=>console.log(err.message))
         fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
-            setSections(json.result)
+            var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
+            setSections(data)
         }).catch(err=>console.log(err.message))
         fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
             setCards(json.result)
@@ -50,6 +53,23 @@ export default function CustomizeHomepage(props) {
         setNavigation(newValue);
       };
        
+    const save = (id,value) => {
+        var formData = new FormData();
+        formData.append('priority',value)
+
+        fetch(`https://api.treevesto.com:4000/section/`+id,{
+            method:"PATCH",
+            body:formData
+        }).then(d=>d.json()).then(json=>{
+            if(json.success == 1){
+                fetchData();
+            }else{
+                alert(json.msg)
+            }
+        }).catch(err=>alert(err.message))
+    }
+
+
     const deleteBanner = (id) => {
         if(confirm('Are you sure to delete this banner')){
             fetch(`https://api.treevesto.com:4000/banner/`+id,{
@@ -144,9 +164,16 @@ export default function CustomizeHomepage(props) {
             {sections?.map((el,key)=>(
                 <Card key={key} className="my-2">
                     <CardContent>
-                        <h3 className="text-3xl font-light"> {el.title} </h3>
+                        <div className="flex items-center">
+                            <h3 className="text-lg md:text-3xl font-light">
+                                {el.title}
+                            </h3>
+                            <div className="text-sm md:text-lg text-blue-600 p-2">
+                                <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
+                            </div>
+                        </div>
                         <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                            {cards?.map((e,key)=>{ 
+                            {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                                 return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
                                     <div className="text-right">
                                         <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>

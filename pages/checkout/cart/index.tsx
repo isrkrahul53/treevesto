@@ -76,29 +76,31 @@ export default function CartPage({coupon}) {
       return <div>
         <Checkout cart={cart} coupon={coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             <CustomAlert error={error} success={success} />
-            
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item active text-2xl" aria-current="page">My Bag ( {cart.length} )</li>
-                </ol>
-            </nav>
+            <div className="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item active text-2xl" aria-current="page">My Bag ( {cart.length} )</li>
+                    </ol>
+                </nav>
 
-            
+                
 
-            <div className="my-4">
-                <div className="flex items-center">
-                    <SettingSVG />
-                    <div className="text-xl px-2">Available Offers</div>        
+                <div className="my-4">
+                    <div className="flex items-center">
+                        <SettingSVG />
+                        <div className="text-xl px-2">Available Offers</div>        
+                    </div>
+                    <span className="text-sm text-secondary">10% Instant Discount with Standard Chartered Credit and Debit Cards on a min spend of Rs 4000. TCA</span>
                 </div>
-                <span className="text-sm text-secondary">10% Instant Discount with Standard Chartered Credit and Debit Cards on a min spend of Rs 4000. TCA</span>
-            </div>
-            
-            <div className="flex items-center my-4">
-                <img src="/assets/images/checkout/free-delivery-truck-icon-2049-thumb.png" width="30px" />
-                <div className="text-lg mx-2">Yah ! No Convenience fee on this order.</div>
-            </div>
+                
+                <div className="flex items-center my-4">
+                    <img src="/assets/images/checkout/free-delivery-truck-icon-2049-thumb.png" width="30px" />
+                    <div className="text-lg mx-2">Yah ! No Convenience fee on this order.</div>
+                </div>
 
-            <CartItem {...props} />
+                <CartItem {...props} />
+
+            </div>
             
         </Checkout>
     </div>

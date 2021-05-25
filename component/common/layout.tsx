@@ -66,21 +66,21 @@ export default function Layout(props){
     
     return <div>
       <CustomAlert error={props.error} success={props.success} />
-        <div className="bg-white border position-sticky top-0 w-full md:static z-50">
-            <div className="container px-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
+        <div className="bg-white border position-sticky top-0 w-full lg:static z-50">
+            <div className="container p-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
-                        <div className="md:hidden"><Sidebar data={categories} /></div>
+                        <div className="lg:hidden"><Sidebar data={categories} /></div>
                         <Link href="/">
-                            <img src="/logo.png" className="w-20 hidden md:block mx-2 cursor-pointer" alt="logo"/>
+                            <img src="/logo.png" className="w-20 hidden lg:block mx-2 cursor-pointer" alt="logo"/>
                         </Link>
                         <Link href="/">
-                            <img src="/logoHead.png" className="w-10 md:hidden mx-2 cursor-pointer" alt="logo"/>
+                            <img src="/logoHead.png" className="w-10 lg:hidden mx-2 cursor-pointer" alt="logo"/>
                         </Link>
 
                     </span>
                 </div>
-                <ul className="navbar-nav hidden md:flex"> 
+                <ul className="navbar-nav hidden lg:flex"> 
                     {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
                         <li key={key} className={"nav-item dropdown"}>
                             <section className="nav-link text-sm font-medium px-3" id="navbarDropdownMen" role="button" data-bs-toggle="dropdown" aria-expanded="false">

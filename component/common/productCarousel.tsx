@@ -61,7 +61,7 @@ export default function ProductCarousel(props){
     ))} */}
     {props.images.map((data,key)=>(
       <div key={key} className={key == 0?"carousel-item active":"carousel-item"}>
-        <Link href={data.href}><img src={data.src} style={{height:"340px"}} className="w-full" alt="Image" /></Link>
+        <Link href={data.href}><img src={data.src} className="w-full" alt="Image" /></Link>
       </div>
     ))} 
   </div>

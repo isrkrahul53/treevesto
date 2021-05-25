@@ -84,13 +84,13 @@ export default function AddressPage(props) {
     return <div>
         <Checkout coupon={props.coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb items-center">
-                    <li className="breadcrumb-item"><a href="/checkout/cart">Bag</a></li>
-                    <li className="breadcrumb-item active text-2xl" aria-current="page">Shipping</li>
-                </ol>
-            </nav>
-            <div className="">
+            <div className="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb items-center">
+                        <li className="breadcrumb-item"><a href="/checkout/cart">Bag</a></li>
+                        <li className="breadcrumb-item active text-2xl" aria-current="page">Shipping</li>
+                    </ol>
+                </nav>
                 <div className={selected?"text-right my-2":"text-right my-2 d-none"}>
                     {/* <Button disabled={!selected} variant="contained" onClick={e=>router.push("/checkout/payment")}>
                     Continue
