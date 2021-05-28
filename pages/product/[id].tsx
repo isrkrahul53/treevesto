@@ -8,11 +8,14 @@ import TextField from '@material-ui/core/TextField'
 import StarRateIcon from '@material-ui/icons/StarRate';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import ReactImageMagnify from 'react-image-magnify';
+
 
 import axios from 'axios';
 import https from 'https'
 import Button from '@material-ui/core/Button'
 import MaterialDialog from '../../component/material/materialDialog';
+import ReactMultiCarousel from '../../component/react/multiCarousel';
 
 function RatingUI(props){
     
@@ -26,7 +29,7 @@ function RatingUI(props){
 }
 
                                                          
-export default function Product(props) { 
+export default function Product(props) {
     const router = useRouter();
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
@@ -34,14 +37,15 @@ export default function Product(props) {
       setError("")
       setSuccess("") 
     }
-
+    const rating = props.review.length > 0 ? (props.review.map(e=>+e.rating).reduce((a,b)=>a+b)/props.review.length).toFixed(2) : 0
     const [grid,setGrid] = React.useState(1);
     const [selectedImage,setSelectedImage] = React.useState(null)
+    const imageProps = {width: 400, height: 250, zoomWidth: 500, img: selectedImage};
     const [vendordata,setVendordata] = React.useState(null)
     const [cart,setCart] = React.useState([]);
     const [isAdded,setAdded] = React.useState(false)
     const [wishlist,setWishlist] = React.useState([])
-    const [navigation,setNavigation] = React.useState(0)
+    const [navigation,setNavigation] = React.useState(1)
     
     const [size,setSize] = React.useState([])
     const [colour,setColour] = React.useState([])
@@ -51,7 +55,7 @@ export default function Product(props) {
     }
 
     useEffect(()=>{
-        setSelectedImage(props.product?.productImages[0].src)
+        setSelectedImage(props.product?.productImages[0]?.src)
         fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
         }).catch(err=>console.log(err.message))
@@ -64,13 +68,10 @@ export default function Product(props) {
 
 
     useEffect(()=>{
-        var cart = JSON.parse(localStorage.getItem('cart'))
-        var wishlist = JSON.parse(localStorage.getItem('wishlist'))
-        if(cart){
-            setCart(cart)
-        }
-        if(wishlist){
-            setWishlist(wishlist)
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            getCart(user.userId)
+            getWishlist(user.userId)
         }
     },[])
 
@@ -80,40 +81,105 @@ export default function Product(props) {
 
  
 
+    const getCart = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setCart(json.result.filter(e=>e.type === "cart"))
+        })
+    }
+    const getWishlist = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setWishlist(json.result.filter(e=>e.type === "wishlist"))
+        })
+    }
     const addtoCart = (s) => { 
-        var data = cart.filter(e=>e.productId==props.product?._id)
-        var x = [...cart,{
-            productId:props.product?._id,qty:1,size:s,
-            vendorId:props.product?.vendorId,
-            image:props.product?.productImages[0].src,
-            name:props.product?.productName,
-            price:props.product?.sellingPrice
-        }]
-        if(data.length == 0){
-            setCart(x)
-            localStorage.setItem('cart',JSON.stringify(x));
-            setSuccess('Item Added to cart')
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+          var formData = new FormData();
+          formData.append("userId",user.userId)
+          formData.append("productId",props.product._id)
+          formData.append("vendorId",props.product.vendorId)
+          formData.append("type","cart")
+          formData.append("image",props.product.productImages[0]?.src)
+          formData.append("name",props.product.productName)
+          formData.append("price",props.product.sellingPrice)
+          formData.append("qty","1")
+          formData.append("stock",props.product.stock) 
+          formData.append("size",s) 
+    
+          fetch(`https://api.treevesto.com:4000/cart/`,{
+            method:"POST",
+            body:formData
+          }).then(d=>d.json()).then(json=>{
+            if(json.success === 1){
+              setSuccess('Item Added to cart')
+            }else{
+              setError(json.msg)
+            }
+          }).catch(err=>console.log(err.message))
         }else{
-            setError('Already added to cart')
+          router.replace("/auth/login")
         }
+        // var data = cart.filter(e=>e.productId==props.product?._id)
+        // var x = [...cart,{
+        //     productId:props.product?._id,qty:1,size:s,
+        //     vendorId:props.product?.vendorId,
+        //     image:props.product?.productImages[0]?.src,
+        //     name:props.product?.productName,
+        //     price:props.product?.sellingPrice
+        // }]
+        // if(data.length == 0){
+        //     setCart(x)
+        //     localStorage.setItem('cart',JSON.stringify(x));
+        //     setSuccess('Item Added to cart')
+        // }else{
+        //     setError('Already added to cart')
+        // }
+        
     }
     
     const addtoWishlist = () => { 
-        var data = wishlist.filter(e=>e.productId==props.product?._id)
-        var x = [...wishlist,{
-            productId:props.product?._id,qty:1,
-            vendorId:props.product?.vendorId,
-            image:props.product?.productImages[0].src,
-            name:props.product?.productName,
-            price:props.product?.sellingPrice
-        }]
-        if(data.length == 0){
-            setWishlist(x)
-            localStorage.setItem('wishlist',JSON.stringify(x));
-            setSuccess('Item Added wishlist')
+        
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+          var formData = new FormData();
+          formData.append("userId",user.userId)
+          formData.append("productId",props.product._id)
+          formData.append("vendorId",props.product.vendorId)
+          formData.append("type","wishlist")
+          formData.append("image",props.product.productImages[0]?.src)
+          formData.append("name",props.product.productName)
+          formData.append("price",props.product.sellingPrice)
+          formData.append("qty","1")
+          formData.append("stock",props.product.stock) 
+    
+          fetch(`https://api.treevesto.com:4000/cart/`,{
+            method:"POST",
+            body:formData
+          }).then(d=>d.json()).then(json=>{
+            if(json.success === 1){
+              setSuccess('Item Added to cart')
+            }else{
+              setError(json.msg)
+            }
+          }).catch(err=>console.log(err.message))
         }else{
-            setError('Already added to wishlist')
-        } 
+          router.replace("/auth/login")
+        }
+        // var data = wishlist.filter(e=>e.productId==props.product?._id)
+        // var x = [...wishlist,{
+        //     productId:props.product?._id,qty:1,
+        //     vendorId:props.product?.vendorId,
+        //     image:props.product?.productImages[0]?.src,
+        //     name:props.product?.productName,
+        //     price:props.product?.sellingPrice
+        // }]
+        // if(data.length == 0){
+        //     setWishlist(x)
+        //     localStorage.setItem('wishlist',JSON.stringify(x));
+        //     setSuccess('Item Added wishlist')
+        // }else{
+        //     setError('Already added to wishlist')
+        // } 
       }
      
     return <div> 
@@ -124,7 +190,7 @@ export default function Product(props) {
                 <meta property="og:title" content={props.product?.productName} />
                 <meta property="og:url" content={"https://admiring-bardeen-fc41ec.netlify.app"+router.asPath} />
                 <meta property="og:description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."} />
-                <meta property="og:image:secure_url" content={props.product?.productImages[0].src}></meta>
+                <meta property="og:image:secure_url" content={props.product?.productImages[0]?.src}></meta>
                 <meta property="og:type" content="article" />
 
             </Head>
@@ -132,22 +198,39 @@ export default function Product(props) {
                 <nav className="breadcrumb" aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
+                        <li className="breadcrumb-item"><Link href={"/"+props.product?.subcatId}>{props.catName}</Link></li> 
                         <li className="breadcrumb-item active">{props.product?.productName}</li> 
                     </ol>
                 </nav>
 
                 {grid==1?<div className="container">
+                    {/* <ReactImageZoom {...imageProps} /> */}
+                    <div className="w-1/2">
+
+                    </div>
                     <div className="row">
                         <div className="col-md-1">
                             <div className={"grid grid-cols-6 md:grid-cols-1 gap-2 my-2"}>
                                 {props.product?.productImages.map((el,key)=>(
                                     <img key={key} src={el.src} onClick={()=>{setSelectedImage(el.src)}}
                                     className={selectedImage==el.src?"w-100 cursor-pointer border-2 border-red-500 rounded":"w-100 cursor-pointer"} />
-                                ))} 
+                                    ))} 
                             </div>
                         </div>
                         <div className="col-md-3">
-                            <img src={selectedImage} className="w-full md:w-75" />
+                            {/* <img src={selectedImage} className="w-full md:w-75 hover:zoom-25" /> */}
+                            <ReactImageMagnify {...{
+                                smallImage: {
+                                    alt: 'Wristwatch by Ted Baker London',
+                                    isFluidWidth: true,
+                                    src: selectedImage
+                                },
+                                largeImage: {
+                                    src: selectedImage,
+                                    width: 1200,
+                                    height: 1800
+                                }
+                            }} />
                         </div>
                         <div className="col-md-8">
                             <ProductPage isAdded={isAdded} addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
@@ -158,20 +241,20 @@ export default function Product(props) {
     
                 <div className="my-2">
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
-                        <li className="nav-item" role="presentation">
+                        {/* <li className="nav-item" role="presentation">
                         <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
-                        </li>
+                        </li> */}
                         <li className="nav-item" role="presentation">
                         <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
                         </li>
-                        <li className="nav-item" role="presentation">
+                        {/* <li className="nav-item" role="presentation">
                         <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Seller DETAILS-tab" data-bs-toggle="tab" data-bs-target="#Seller DETAILS" role="tab" aria-controls="Seller DETAILS" aria-selected="false">Seller DETAILS</span>
-                        </li>
+                        </li> */}
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
-                            {/* <TextField id="pincode" label="Pincode" variant="outlined" size="small" color="primary" fullWidth />
-                            <p className="text-secondary">Please enter PIN code to check delivery time & Pay on Delivery Availability</p> */}
+                        {/* <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
+                            <TextField id="pincode" label="Pincode" variant="outlined" size="small" color="primary" fullWidth />
+                            <p className="text-secondary">Please enter PIN code to check delivery time & Pay on Delivery Availability</p>
                             <div className="my-3">
                                 <p> 100% Original Products</p>
                                 <p> Free Delivery on order above Rs. 799</p>
@@ -179,19 +262,20 @@ export default function Product(props) {
                                 <p>Easy 30 days returns and exchanges</p>
                                 <p>Try & Buy might be available</p> 
                             </div>
-                        </div> 
+                        </div>  */}
                         <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
                             <p>{props.product?.productDesc}</p>
                         </div> 
-                        <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Seller DETAILS" role="tabpanel" aria-labelledby="Seller DETAILS-tab">
+                        {/* <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Seller DETAILS" role="tabpanel" aria-labelledby="Seller DETAILS-tab">
                             <div>Seller: <span className="text-xl px-2"> {vendordata?.store_name} </span> </div>
                             <div className="text-lg text-secondary"> {vendordata?.completeAddress}</div>
-                        </div> 
+                        </div>  */}
                     </div>
                 </div>
 
+
                 <div className="my-2">
-                    <div className="bg-white rounded p-3">
+                    <div className="bg-white p-3 border">
                         <div className="flex item-center">
                             <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
                             <div className="ml-auto">
@@ -202,21 +286,21 @@ export default function Product(props) {
                         <div className="my-2">
                             <div className="flex-row md:flex item-center">
                                 <div className="mr-3">
-                                    <div className="text-4xl">4.2 <StarRateIcon /></div>
+                                    <div className="text-4xl">{rating} <StarRateIcon /></div>
                                     <div className="text-sm text-secondary">7,631 Ratings & 824 Reviews</div>
                                 </div>
                                 <div className="mr-3">
-                                    <RatingUI val={5} width={"80%"} color={"success"} />
-                                    <RatingUI val={4} width={"60%"} color={"success"} />
-                                    <RatingUI val={3} width={"52%"} color={"success"} />
-                                    <RatingUI val={2} width={"30%"} color={"warning"} />
-                                    <RatingUI val={1} width={"5%"} color={"danger"} />
+                                    <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                    <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                    <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                    <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
+                                    <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
                                 </div>
                             </div>
                         </div>
                     </div>
                     {props.review.map((e,k)=>(
-                        <div key={k} className="bg-white rounded p-3">
+                        <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
                             <div className="flex items-center">
                                 <div className={
                                     e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
@@ -233,8 +317,13 @@ export default function Product(props) {
                         </div>
                     ))}
                 </div>
+
+                <h3 className="text-lg md:text-2xl mt-2 px-2">Related Products</h3>
+                <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} />
+
             </div>
  
+
 
             {/* {grid==2?<div className="flex-row md:flex items-start">
                 <div className="w-full md:w-2/3 m-2 md:ml-6">
@@ -272,14 +361,33 @@ export const getStaticProps = async (context) => {
     res.data.result.forEach(element => {
         var images = [];
         element.productImages.forEach(e => {
-        images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
+            images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
         });
         data.push({...element,productImages:images})
     });
+    const category = await axios.get(`https://api.treevesto.com:4000/category/id/${data[0].subcatId}`,{httpsAgent:agent})
+    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/subcat/${data[0].subcatId}`,{httpsAgent:agent})    
+
+    var simData = []
+    similarProduct.data.result.forEach(element => {
+      var images = [];
+      element.productImages.forEach(e => {
+        images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
+      });
+      simData.push({...element,productImages:images})
+    }); 
+    var arr = []
+    var temp = simData;
+    temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+      arr.push(temp.filter(e=>e.productCode === el))
+    })
+    
     return {
       props: {
         product:data[0] || [],
-        review:review.data.result
+        review:review.data.result,
+        catName:category.data.result[0].catName,
+        similarProduct:arr
       }
     };
   }

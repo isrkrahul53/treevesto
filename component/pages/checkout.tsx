@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import Layout from '../common/layout';
+import MaterialModal from '../material/materialModal';
 
 function CouponSVG(){
     return <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="coupons-base-couponIcon"><g fill="none" fillRule="evenodd" transform="rotate(45 6.086 5.293)"><path stroke="#000" d="M17.5 10V1a1 1 0 0 0-1-1H5.495a1 1 0 0 0-.737.323l-4.136 4.5a1 1 0 0 0 0 1.354l4.136 4.5a1 1 0 0 0 .737.323H16.5a1 1 0 0 0 1-1z"></path><circle cx="5.35" cy="5.35" r="1.35" fill="#000" fillRule="nonzero"></circle></g></svg>
@@ -49,6 +50,8 @@ export default function Checkout(props) {
     const [cart,setCart] = React.useState(null)
     const [user,setUser] = React.useState(null)
     const [discount,setDiscount] = React.useState(0)
+    const [searchCoupon,setSearchCoupon] = React.useState("")
+    const [hidden,setHidden] = React.useState(false)
     const [couponUsed,setCouponUsed] = React.useState(null)
     const [totalPrice,setTotalPrice] = React.useState(null)
     const [selectedAddress,setSelectedAddress] = React.useState(null);
@@ -62,12 +65,18 @@ export default function Checkout(props) {
             case '/checkout/payment':setActive(3);break;
             default:setActive(null)
         }
-        var cart = JSON.parse(localStorage.getItem('cart'))
+        // var cart = JSON.parse(localStorage.getItem('cart'))
         var selectedAddress = localStorage.getItem('selectedAddress')
         var user = JSON.parse(localStorage.getItem('user'))
         var discount = localStorage.getItem('discount')
         var couponUsed = localStorage.getItem('couponUsed')
         
+        if(user){
+            getCart(user.userId)
+        }else{
+            router.replace("/auth/login")
+        }
+
         cart && setCart(cart);updatePrice(cart)
         user && setUser(user)
         selectedAddress && setSelectedAddress(selectedAddress)
@@ -76,13 +85,13 @@ export default function Checkout(props) {
 
     },[])
 
-    props.getAmount(totalPrice)
+    props.getAmount(totalPrice - discount)
     
     useEffect(()=>{
-        if(props.cart){
-            updatePrice(props.cart)
+        if(props.cart || cart){
+            updatePrice(props.cart || cart)
         }
-    },[props.cart]) 
+    },[props.cart,cart]) 
  
 
     useEffect(()=>{
@@ -94,17 +103,35 @@ export default function Checkout(props) {
         }
     },[props.pay])
 
+    const getCart = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setCart(json.result.filter(e=>e.type === "cart"))
+        })
+    }
     const applyCoupon = (coupon) => {
-        if(coupon.discountType === "Rs"){
-            setDiscount(coupon.discount)
-            localStorage.setItem("discount",coupon.discount)
-        }else{
-            var dis = ((coupon.discount/100)*totalPrice)
-            setDiscount(dis)
-            localStorage.setItem("discount",dis.toString())
-        }
-        setCouponUsed(coupon._id)
-        localStorage.setItem("couponUsed",coupon._id)
+        fetch(`https://api.treevesto.com:4000/order`).then(d=>d.json()).then(json=>{
+            if(json.result.filter(e=>e.couponId === coupon._id).length === 0){
+                if(localStorage.getItem("couponUsed") && localStorage.getItem("couponUsed") === couponUsed){
+                    localStorage.removeItem("discount")
+                    localStorage.removeItem("couponUsed")
+                    setDiscount(0)
+                    setCouponUsed(null)
+                }else{
+                    if(coupon.discountType === "Rs"){
+                        setDiscount(coupon.discount)
+                        localStorage.setItem("discount",coupon.discount)
+                    }else{
+                        var dis = ((coupon.discount/100)*totalPrice)
+                        setDiscount(dis)
+                        localStorage.setItem("discount",dis.toString())
+                    }
+                    setCouponUsed(coupon._id)
+                    localStorage.setItem("couponUsed",coupon._id)
+                }
+            }else{
+                alert("You cannot use this coupon.")
+            }
+        })
     }
 
 
@@ -115,7 +142,7 @@ export default function Checkout(props) {
             x += Number(element.price);
         });
         
-        setCart(data)
+        // setCart(data)
         setTotalPrice(x);
     }
  
@@ -141,11 +168,12 @@ export default function Checkout(props) {
                 localStorage.removeItem("discount")
                 localStorage.removeItem("couponUsed")
                 cart.forEach(el=>{
+                    
                     var formData = new FormData();
                     formData.append('userId',user.userId)
                     formData.append('address',selectedAddress)
                     formData.append('orderStatus',"1")
-
+                    
                     Object.keys(el).map((key,i)=>{
                         if(el[key] != null && el[key] != ''){
                             formData.append(key,el[key]) 
@@ -156,8 +184,16 @@ export default function Checkout(props) {
                         method:"POST",
                         body:formData
                     }).then(d=>d.json()).then(json=>{ 
-
-                    })
+                        var stock = +el.stock - +el.qty
+                        var formData = new FormData();
+                        formData.append("stock",stock.toString())
+                        fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
+                            method:"PATCH",
+                            body:formData
+                        }).then(d=>d.json()).then(json=>{ 
+                            console.log(json)
+                        }).catch(err=>console.log(err.message))
+                    }).catch(err=>console.log(err.message))
                 })
 
                 router.push({pathname:"/success",query:{
@@ -186,21 +222,42 @@ export default function Checkout(props) {
                     </div>
                     {/* SEcond Column */}
                     <div className="w-full lg:w-1/3 lg:border-l-2 border-gray-200 py-4 container">
-                        {/* {active === 1?<>
-                        </>:<></>}  */}
-                        {props.coupon?.map((e,k)=>(
-                            <div key={k} className={couponUsed != e._id?"border-2 bg-white shadow-sm my-1 py-2 px-2 rounded":"border bg-light shadow-sm my-1 py-2 px-2 rounded"}>
-                                <div className="text-lg font-medium flex items-center"> 
-                                    <CouponSVG /> <span className="px-2">{e.couponName}</span> 
-                                    <div className="ml-auto">
-                                        <Button variant="text" color="primary" disabled={discount != 0} onClick={()=>applyCoupon(e)}>
-                                            {couponUsed != e._id?"Apply":"Applied !"}
-                                        </Button>
-                                    </div>
+                        {active === 1?<>
+
+                            <div className="text-lg font-medium flex items-center"> 
+                                <CouponSVG /> <span className="px-2">Apply Coupons</span> 
+                                <div className="ml-auto">
+                                    <MaterialModal name="Apply Coupons" label={"Apply"} content={<> 
+                                        <div className="input-group my-2">
+                                            <input type="text" name="searchCoupon" id="searchCoupon" onChange={e=>setSearchCoupon(e.target.value)} placeholder="Search coupons ...." className="form-control" />
+                                            <div className="input-group-text">
+                                                <input className="form-check-input" title="Show hidden coupons" name="hidden" type="checkbox" defaultChecked={hidden} onChange={e=>setHidden(e.target.checked)} id="showHidden" />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 my-3">
+                                            {props.coupon.
+                                            filter(e=>e.hidden === hidden.toString() && e.couponName.toLowerCase().search(searchCoupon.toLowerCase()) != -1)
+                                            ?.map((e,k)=>(
+                                                <div key={k} className={couponUsed != e._id?"border-2 bg-white shadow-sm my-1 py-2 px-2 rounded":"border bg-light shadow-sm my-1 py-2 px-2 rounded"}>
+                                                    <div className="text-lg font-medium flex items-center"> 
+                                                        <CouponSVG /> <span className="px-2">{e.couponName}</span> 
+                                                        <div className="ml-auto">
+                                                            <Button variant="text" color="primary" onClick={()=>applyCoupon(e)}>
+                                                                {couponUsed != e._id?"Apply":"Applied !"}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-sm text-secondary"> {e.couponDesc} </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                            
+                                    </>} />
                                 </div>
-                                <div className="text-sm text-secondary"> {e.couponDesc} </div>
                             </div>
-                        ))}
+                        </>:<></>} 
+                        
                         <div className="py-3">
                             <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
                             <div className="flex items-center justify-between">

@@ -33,7 +33,7 @@ import Button from '@material-ui/core/Button'
 
 
 export default function AdminCouponsPage(props){
-  console.log(props.coupon)
+  
   const router = useRouter();
   const {register,handleSubmit,errors} = useForm()
 
@@ -190,6 +190,14 @@ export default function AdminCouponsPage(props){
         <input type="number" name="discount" className="form-control my-2" placeholder="Enter Discount"
         ref={register({required:true})} /> 
       </div>
+      <div className="form-check">
+        <input className="form-check-input" name="hidden" ref={register()} type="checkbox" id="flexCheckDefault" />
+        <label className="form-check-label" htmlFor="flexCheckDefault">
+          Hidden
+        </label>
+      </div>
+
+      
       <div className="text-right">
         <button type="submit" className="btn btn-primary mx-2" disabled={isLoading}>
           {isLoading ? "Loading ....":"Submit"}

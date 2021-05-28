@@ -72,7 +72,7 @@ export default function SearchProducts(props) {
           <div className="cursor-pointer text-4xl" onClick={toggleDrawer('top', false)}>&times;</div>
         </div>
         <div className="flex items-center justify-between">
-          <input type="text" name="search" id="search" onChange={e=>setSearch(e.target.value)}
+          <input type="text" name="search" id="search" autoFocus onChange={e=>setSearch(e.target.value)}
           className="w-full py-3 border-b-2 outline-none text-md md:text-2xl" placeholder="Search Products" />
           <img src="/assets/icons/search.png" className="mx-1" width="20px" alt="search"/>
         </div>
@@ -88,7 +88,7 @@ export default function SearchProducts(props) {
         {products?.length > 0 ?<>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-content-center my-2 gap-4">
             {products?.map((el,key)=>(
-              <Link href={"/product/"+el._id}><div key={key} className="cursor-pointer">
+              <Link key={key} href={"/product/"+el._id}><div className="cursor-pointer">
                 <img src={"https://api.treevesto.com:4000/"+el.productImages[0]}  alt={el.productName} />
                 <div className="p-2">
                   <div>
@@ -122,7 +122,8 @@ export default function SearchProducts(props) {
   return (
     <div>
         <React.Fragment>
-            <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1" width="20px" alt="search"/>
+            {/* <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1" width="20px" alt="search"/> */}
+            <input type="text" className="form-control mr-2" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} />
  
             {/* <Button onClick={toggleDrawer('top', true)}>
             </Button> */}

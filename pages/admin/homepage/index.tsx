@@ -145,7 +145,7 @@ export default function CustomizeHomepage(props) {
 
             <div className="grid grid-cols-3 gap-4 my-2">
                 {banner.map((element,key)=>(
-                    <Card className="p-0">
+                    <Card key={key} className="p-0">
                         <CardActions>
                             <div className="ml-auto">
                                 <CloseIcon  onClick={e=>deleteBanner(element.id)} />

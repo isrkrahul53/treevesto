@@ -49,7 +49,9 @@ export default function ProductPage(props) {
 
         <h4 className="text-3xl mt-3"> 
             {props.data?.regularPrice != props.data?.sellingPrice && <s className="text-xl pr-2 text-secondary">Rs. {props.data?.regularPrice}</s>}
-          Rs. {props.data?.sellingPrice}</h4>
+          Rs. {props.data?.sellingPrice}
+          <small className="text-success px-2">{(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice)*100).toFixed(2)+"% off"}</small>
+        </h4>
         <h5 className="text-success">inclusive of all taxes</h5>
 
         <h4 className="h5 mt-4">Select Colour</h4>
@@ -64,7 +66,9 @@ export default function ProductPage(props) {
                 <div key={k} onClick={()=>{setSize(e)}} className={size == e?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>{e}</div>
             ))}
         </div>
-
+        <p className="my-3">
+            {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
+        </p>
         {/* Mobile */}
         <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 w-full py-1 border-t-2 border-dark bg-white shadow-sm">
             <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">

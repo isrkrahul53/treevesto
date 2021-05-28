@@ -25,8 +25,10 @@ export default function AddSection() {
             console.log(json)
             if(json.success == 1){
                 router.push('/admin/homepage')
+            }else{
+                alert(json.msg)
             }
-        })
+        }).catch(err=>console.log(err.msg))
         
     }
 

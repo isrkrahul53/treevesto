@@ -59,31 +59,31 @@ export default function AdminLayout(props) {
                 </div>
 
                 <List>
-                    <Link href="/admin/"><ListItem button className={expand === "" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/"><ListItem button selected={expand === ""}>
                         <ListItemIcon> <DashboardIcon />  </ListItemIcon>
                         <ListItemText primary={"Dashboard"} />
                     </ListItem></Link>
-                    <Link href="/admin/homepage"><ListItem button className={expand === "homepage" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/homepage"><ListItem button selected={expand === "homepage"}>
                         <ListItemIcon> <DesktopWindowsIcon />  </ListItemIcon>
                         <ListItemText primary={"Homepage"} />
                     </ListItem></Link>
-                    <Link href="/admin/vendors"><ListItem button className={expand === "vendors" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/vendors"><ListItem button selected={expand === "vendors"}>
                         <ListItemIcon> <StorefrontIcon />  </ListItemIcon>
                         <ListItemText primary={"Vendors"} />
                     </ListItem></Link>
-                    <Link href="/admin/users"><ListItem button className={expand === "users" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/users"><ListItem button selected={expand === "users"}>
                         <ListItemIcon> <PeopleIcon />  </ListItemIcon>
                         <ListItemText primary={"Users"} />
                     </ListItem></Link>
-                    <Link href="/admin/orders"><ListItem button className={expand === "orders" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/orders"><ListItem button selected={expand === "orders"}>
                         <ListItemIcon> <AssignmentIcon />  </ListItemIcon>
                         <ListItemText primary={"Orders"} />
                     </ListItem></Link>
-                    <Link href="/admin/category"><ListItem button className={expand === "category" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/category"><ListItem button selected={expand === "category"}>
                         <ListItemIcon> <CategoryIcon />  </ListItemIcon>
                         <ListItemText primary={"Category"} />
                     </ListItem></Link>
-                    <Link href="/admin/coupons"><ListItem button className={expand === "coupons" && "bg-light border-2 border-end border-success"}>
+                    <Link href="/admin/coupons"><ListItem button selected={expand === "coupons"}>
                         <ListItemIcon> <LocalOfferIcon />  </ListItemIcon>
                         <ListItemText primary={"Coupons"} />
                     </ListItem></Link>

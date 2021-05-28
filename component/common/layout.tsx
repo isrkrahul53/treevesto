@@ -29,18 +29,26 @@ export default function Layout(props){
         fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
             setCategories(json.result)
         })
+         
+        // var wishlist = JSON.parse(localStorage.getItem('wishlist'))
+        // if(wishlist){
+        //     setWishlist(wishlist.length)
+        // }
+        // var cart = JSON.parse(localStorage.getItem('cart'))
+        // if(cart){
+        //     setCart(cart.length)
+        // }
+        // var user = JSON.parse(localStorage.getItem('user'))
+        // if(user){
+        //     setUser(user)
+        // }
         
-        var wishlist = JSON.parse(localStorage.getItem('wishlist'))
-        if(wishlist){
-            setWishlist(wishlist.length)
-        }
-        var cart = JSON.parse(localStorage.getItem('cart'))
-        if(cart){
-            setCart(cart.length)
-        }
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
             setUser(user)
+            fetch(`https://api.treevesto.com:4000/cart/user/`+user.userId).then(d=>d.json()).then(json=>{
+                setCart(json.result.length)
+            })
         }
 
     },[])

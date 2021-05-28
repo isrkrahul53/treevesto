@@ -28,6 +28,7 @@ export default function ReactCarousel(props){
     const [autoplay,setAutoplay] = React.useState(false)
     return <Carousel 
     infinite={true}
+    showDots={props.showDots}
     autoPlay={props.autoplayOnhover?autoplay:true}
     autoPlaySpeed={props.autoplayOnhover && 900}
     arrows={props.arrows && true}

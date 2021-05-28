@@ -15,6 +15,7 @@ import Tab from '@material-ui/core/Tab';
 import SingleProduct from '../component/product/singleProduct';
 import ReactMultiCarousel from '../component/react/multiCarousel'
 import ReactCarousel from '../component/react/carousel';
+import { useRouter } from 'next/router';
  
 function Cards(props){
   return <div>
@@ -25,11 +26,12 @@ function Cards(props){
       ))} 
     </div>
 
-  </div>
+  </div>  
 }
 
 export default function Home(props) {
   
+  const router = useRouter();
   const [navigation, setNavigation] = React.useState(0); 
   const [categories,setCategories] = React.useState([]);
 
@@ -44,7 +46,7 @@ export default function Home(props) {
     setSuccess("") 
   }
   const [banner,setBanner] = React.useState(props.banner) 
-  const [sections,setSections] = React.useState(props.sections.sort((a,b)=>Number(a.priority) - Number(b.priority))) 
+  const [sections,setSections] = React.useState([]) 
 
   const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
@@ -53,31 +55,68 @@ export default function Home(props) {
  
 
   useEffect(()=>{
-    var cart = JSON.parse(localStorage.getItem('cart'))
-    if(cart){
-        setCart(cart)
+    var sec = props.sections.sort((a,b)=>Number(a.priority) - Number(b.priority));
+    setSections(sec)
+    var user = JSON.parse(localStorage.getItem('user'))
+    if(user){
+      getCart(user.userId)
     }
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
     }).catch(err=>setError(err.message))
   },[])
 
+  const getCart = (x) => {
+    fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
+        setCart(json.result)
+    })
+    
+  }
+
   const addtoCart = (pro) => { 
-      var data = cart.filter(e=>e.productId==pro._id)
-      var x = [...cart,{
-          productId:pro._id,qty:1,size:pro.size,
-          vendorId:pro.vendorId,
-          image:pro.productImages[0].src,
-          name:pro.productName,
-          price:pro.sellingPrice
-      }]
-      if(data.length == 0){
-          setCart(x)
-          localStorage.setItem('cart',JSON.stringify(x));
-          setSuccess('Item Added to cart')
+      var user = JSON.parse(localStorage.getItem('user'))
+      if(user){
+        var formData = new FormData();
+        formData.append("userId",user.userId)
+        formData.append("productId",pro._id)
+        formData.append("vendorId",pro.vendorId)
+        formData.append("type","cart")
+        formData.append("image",pro.productImages[0].src)
+        formData.append("name",pro.productName)
+        formData.append("price",pro.sellingPrice)
+        formData.append("qty","1")
+        formData.append("stock",pro.stock) 
+        formData.append("size",pro.size) 
+  
+        fetch(`https://api.treevesto.com:4000/cart/`,{
+          method:"POST",
+          body:formData
+        }).then(d=>d.json()).then(json=>{
+          if(json.success === 1){
+            setSuccess('Item Added to cart')
+          }else{
+            setError(json.msg)
+          }
+        }).catch(err=>console.log(err.message))
       }else{
-          setError('Already added to cart')
+        router.replace("/auth/login")
       }
+    
+      // var data = cart.filter(e=>e.productId==pro._id)
+      // var x = [...cart,{
+      //   productId:pro._id,qty:1,size:pro.size,
+      //   vendorId:pro.vendorId,
+      //   image:pro.productImages[0].src,
+      //   name:pro.productName,
+      //   price:pro.sellingPrice
+      // }]
+      // if(data.length == 0){
+      //     setCart(x)
+      //     localStorage.setItem('cart',JSON.stringify(x));
+      //     setSuccess('Item Added to cart')
+      // }else{
+      //     setError('Already added to cart')
+      // }
   }
   return (
     <div>
@@ -96,7 +135,7 @@ export default function Home(props) {
           {/* <Banner images={banner} indicator={true} /> */}
           
           {/* <ProductCarousel images={banner} indicator={true} /> */}
-          <ReactCarousel data={banner} />
+          <ReactCarousel data={banner} arrows={false} showDots={true} />
   
           {/* <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/> */}
 
@@ -190,8 +229,9 @@ export default function Home(props) {
             
             </div>
           ))}
-
-          <ReactMultiCarousel data={props.products} hideDetails={false} />
+          
+          <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> Latest Products  </h3>
+          <ReactMultiCarousel data={props.products} hideDetails={false} cart={addtoCart} />
 
           {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>

@@ -46,7 +46,7 @@ export default function AdminPage(props){
         setSaleGender([male,female])
 
         props.vendor.forEach(element => {
-            element.income = arr.map(e=>e.vendor === element._id ? e.price : 0).reduce((a,b)=>(Number(a)+Number(b)))
+            element.income = arr.length > 0 ? arr.map(e=>e.vendor === element._id ? e.price : 0).reduce((a,b)=>(Number(a)+Number(b))) : 0
         });
         
 

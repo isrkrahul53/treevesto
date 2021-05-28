@@ -29,45 +29,54 @@ export default function CartPage({coupon}) {
 
     
     useEffect(()=>{
-        var cart = JSON.parse(localStorage.getItem('cart'))
-        var wishlist = JSON.parse(localStorage.getItem('wishlist'))
-        if(cart){ 
-            setCart(cart)
-        } 
-        if(wishlist){ 
-            setWishlist(wishlist)
-        } 
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            getCart(user.userId)
+        }
     },[])
+ 
 
-    useEffect(()=>{
-        console.log(cart)
-    },[cart])
+    const getCart = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setCart(json.result.filter(e=>e.type === "cart"))
+        })
+    }
 
     const deleteCartItem = (x) => {
         var data = cart.filter(e=>e.productId!=x)
         setCart(data)
-        localStorage.setItem('cart',JSON.stringify(data))
-        setError('Item Deleted !') 
+        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
+            setError('Item Deleted !')
+            getCart(JSON.parse(localStorage.getItem('user')).userId)
+        })
     }
 
     
-    const movetoWishlist = (pro) => { 
-        var data = wishlist.filter(e=>e.productId==pro.productId)
-        var x = [...wishlist,{
-            productId:pro.productId,qty:1,
-            vendorId:pro.vendorId,
-            image:pro.image,
-            name:pro.name,
-            price:pro.price
-        }]
-        if(data.length == 0){
-            setWishlist(x)
-            localStorage.setItem('wishlist',JSON.stringify(x));
-            deleteCartItem(pro.productId)
-            setSuccess('Item moved wishlist')
-        }else{
-            setError('Already exist to wishlist')
-        }  
+    const movetoWishlist = (x) => { 
+        var formData = new FormData();
+        formData.append("type","wishlist")
+        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
+            setSuccess('Item Moved to Wishlist !')
+            getCart(JSON.parse(localStorage.getItem('user')).userId)
+        })
+        
+
+        // var data = wishlist.filter(e=>e.productId==pro.productId)
+        // var x = [...wishlist,{
+        //     productId:pro.productId,qty:1,
+        //     vendorId:pro.vendorId,
+        //     image:pro.image,
+        //     name:pro.name,
+        //     price:pro.price
+        // }]
+        // if(data.length == 0){
+        //     setWishlist(x)
+        //     localStorage.setItem('wishlist',JSON.stringify(x));
+        //     deleteCartItem(pro.productId)
+        //     setSuccess('Item moved wishlist')
+        // }else{
+        //     setError('Already exist to wishlist')
+        // }  
       }
       
 

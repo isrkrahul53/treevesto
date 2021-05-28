@@ -53,7 +53,7 @@ export default function MaterialDialog(props) {
     var formData = new FormData();
     formData.append("user_id",userId)
     formData.append("product_id",props.id)
-    formData.append("rating",selected)
+    formData.append("rating",selected || "0")
     Object.keys(data).map((key,i)=>{
       if(data[key] != null && data[key] != ''){
           formData.append(key,data[key]) 
@@ -65,6 +65,7 @@ export default function MaterialDialog(props) {
         body:formData
     }).then(d=>d.json()).then(json=>{
       handleClose();
+      setSelected(null)
       router.replace(router.asPath)
     }).catch(err=>console.log(err))
 

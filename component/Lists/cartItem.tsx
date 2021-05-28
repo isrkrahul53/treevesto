@@ -22,13 +22,13 @@ export default function CartItem(props) {
                     {/* <Button className="mx-2" variant="outlined" color="inherit" onClick={()=>props.deleteCartItem(el.productId)}>
                         Delete
                     </Button> */}
-                    <div onClick={()=>props.deleteCartItem(el.productId)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                    <div onClick={()=>props.deleteCartItem(el._id)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                         Delete
                     </div>
                     {/* <Button className="mx-2" variant="outlined" color="secondary" onClick={()=>props.movetoWishlist(el)}>
                         Move to Wishlist
                     </Button> */}
-                    <div onClick={()=>props.movetoWishlist(el)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+                    <div onClick={()=>props.movetoWishlist(el._id)} className="px-4 py-1 mx-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                         Move to Wishlist
                     </div>
                 </div>

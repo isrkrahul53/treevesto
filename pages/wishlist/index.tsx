@@ -35,42 +35,59 @@ export default function Wishlist() {
     const [wishlist,setWishlist] = React.useState([]);
 
     useEffect(()=>{
-        var cart = JSON.parse(localStorage.getItem('cart'))
-        var wishlist = JSON.parse(localStorage.getItem('wishlist'))
-        if(cart){ 
-            setCart(cart)
-        } 
-        if(wishlist){ 
-            setWishlist(wishlist)
-        } 
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            getCart(user.userId)
+            getWishlist(user.userId)
+        }
     },[])
  
+
+    const getCart = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setCart(json.result.filter(e=>e.type === "cart"))
+        })
+    }
+    const getWishlist = (x) => {
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+            setWishlist(json.result.filter(e=>e.type === "wishlist"))
+        })
+    }
 
     const deleteWishlistItem = (x) => {
         var data = wishlist.filter(e=>e.productId!=x)
         setWishlist(data)
-        localStorage.setItem('wishlist',JSON.stringify(data))
-        setError('Item Deleted !') 
+        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
+            setError('Item Deleted !')
+            getWishlist(JSON.parse(localStorage.getItem('user')).userId)
+        })
+        
     }
 
     
-    const movetoCart = (pro) => {  
-        var data = cart.filter(e=>e.id==pro.id)
-        var x = [...cart,{
-            productId:pro.id,qty:1,
-            vendorId:pro.vendorId,
-            image:pro.image,
-            name:pro.name,
-            price:pro.price
-        }]
-        if(data.length == 0){
-            setCart(x)
-            localStorage.setItem('cart',JSON.stringify(x));
-            deleteWishlistItem(pro.productId)
-            setSuccess('Item moved cart')
-        }else{
-            setError('Already exist to cart')
-        }  
+    const movetoCart = (x) => {  
+        var formData = new FormData();
+        formData.append("type","cart")
+        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
+            setSuccess('Item Moved to Cart !')
+            getWishlist(JSON.parse(localStorage.getItem('user')).userId)
+        })
+        // var data = cart.filter(e=>e.id==pro.id)
+        // var x = [...cart,{
+        //     productId:pro.id,qty:1,
+        //     vendorId:pro.vendorId,
+        //     image:pro.image,
+        //     name:pro.name,
+        //     price:pro.price
+        // }]
+        // if(data.length == 0){
+        //     setCart(x)
+        //     localStorage.setItem('cart',JSON.stringify(x));
+        //     deleteWishlistItem(pro.productId)
+        //     setSuccess('Item moved cart')
+        // }else{
+        //     setError('Already exist to cart')
+        // }  
       }
       
 
@@ -87,7 +104,7 @@ export default function Wishlist() {
                         {wishlist?wishlist.map((el,key)=>(
                             <div key={key}>
                                 <Card  name={el.name} price={el.price} image={el.image} 
-                                movetoCart={()=>{movetoCart(el)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
+                                movetoCart={()=>{movetoCart(el._id)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
                             </div>
                         )):<div></div>} 
                         
