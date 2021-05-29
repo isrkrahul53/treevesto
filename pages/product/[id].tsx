@@ -7,8 +7,8 @@ import ProductPage from '../../component/pages/productPage';
 import TextField from '@material-ui/core/TextField'
 import StarRateIcon from '@material-ui/icons/StarRate';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ReactImageMagnify from 'react-image-magnify';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown'; 
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 
 import axios from 'axios';
@@ -27,9 +27,9 @@ function RatingUI(props){
         </div>
     </div>
 }
-
-                                                         
+                                                     
 export default function Product(props) {
+    
     const router = useRouter();
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
@@ -208,6 +208,8 @@ export default function Product(props) {
                     <div className="w-1/2">
 
                     </div>
+                    
+                   
                     <div className="row">
                         <div className="col-md-1">
                             <div className={"grid grid-cols-6 md:grid-cols-1 gap-2 my-2"}>
@@ -219,20 +221,28 @@ export default function Product(props) {
                         </div>
                         <div className="col-md-3">
                             {/* <img src={selectedImage} className="w-full md:w-75 hover:zoom-25" /> */}
-                            <ReactImageMagnify {...{
-                                smallImage: {
-                                    alt: 'Wristwatch by Ted Baker London',
-                                    isFluidWidth: true,
-                                    src: selectedImage
-                                },
-                                largeImage: {
-                                    src: selectedImage,
-                                    width: 1200,
-                                    height: 1800
-                                }
-                            }} />
+                            <TransformWrapper
+                                defaultScale={1}
+                                defaultPositionX={200}
+                                defaultPositionY={100}
+                            >
+                                {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                <React.Fragment>
+                                    <div className="tools text-right">
+                                        {/* <button className="btn m-1 btn-sm btn-primary" onClick={zoomIn}>+</button>
+                                        <button className="btn m-1 btn-sm btn-primary" onClick={zoomOut}>-</button>
+                                        <button className="btn m-1 btn-sm btn-danger" onClick={resetTransform}>x</button> */}
+                                    </div>
+                                    <TransformComponent>
+                                    <img src={selectedImage || "image.jpg"} width="100%" alt="test" />
+                                    </TransformComponent>
+                                </React.Fragment>
+                                )}
+                            </TransformWrapper>
+ 
+
                         </div>
-                        <div className="col-md-8">
+                        <div className="col-md-7">
                             <ProductPage isAdded={isAdded} addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
                             size={size} colour={colour} />
                         </div>
@@ -287,7 +297,7 @@ export default function Product(props) {
                             <div className="flex-row md:flex item-center">
                                 <div className="mr-3">
                                     <div className="text-4xl">{rating} <StarRateIcon /></div>
-                                    <div className="text-sm text-secondary">7,631 Ratings & 824 Reviews</div>
+                                    <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
                                 </div>
                                 <div className="mr-3">
                                     <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />

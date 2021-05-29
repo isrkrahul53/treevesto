@@ -11,6 +11,7 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import PeopleIcon from '@material-ui/icons/People';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import BarChartIcon from '@material-ui/icons/BarChart';
 import CategoryIcon from '@material-ui/icons/Category';
 import AdminSidebar from './adminSidebar';
 
@@ -18,7 +19,7 @@ export default function AdminLayout(props) {
     
     const router = useRouter();
     const path = router.asPath.split("/");
-    const navs = ["dashboard","homepage","vendors","users","orders","category","coupons"] 
+    const navs = ["dashboard","homepage","vendors","users","orders","category","coupons","sizeChart"] 
 
     const [admin,setAdmin] = React.useState(null);
     const [height,setHeight] = React.useState(null)
@@ -86,6 +87,10 @@ export default function AdminLayout(props) {
                     <Link href="/admin/coupons"><ListItem button selected={expand === "coupons"}>
                         <ListItemIcon> <LocalOfferIcon />  </ListItemIcon>
                         <ListItemText primary={"Coupons"} />
+                    </ListItem></Link>
+                    <Link href="/admin/sizeChart"><ListItem button selected={expand === "sizeChart"}>
+                        <ListItemIcon> <BarChartIcon />  </ListItemIcon>
+                        <ListItemText primary={"Size Chart"} />
                     </ListItem></Link>
                 </List>
             </div>

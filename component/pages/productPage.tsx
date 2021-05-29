@@ -44,7 +44,7 @@ export default function ProductPage(props) {
         </>:<>
             <span className="p-1 text-sm bg-danger text-white">Out of Stock </span>
         </>}
-        <h4 className="text-xl text-secondary">{props.data?.productType}</h4>
+        {/* <h4 className="text-xl text-secondary">{props.data?.productType}</h4> */}
         <h4 className="display-6">{props.data?.productName}</h4>
 
         <h4 className="text-3xl mt-3"> 
@@ -57,13 +57,15 @@ export default function ProductPage(props) {
         <h4 className="h5 mt-4">Select Colour</h4>
         <div className="flex flex-wrap items-center">
             {colourList.map((e,k)=>(
-                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>{e}</div>
+                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"p-1 cursor-pointer hover:shadow m-1 border-dark rounded-circle border-2":"p-1 cursor-pointer hover:shadow m-1 rounded-circle border-2"}>
+                    <div className="p-2 rounded-circle" style={{backgroundColor:e}}></div>
+                </div>
             ))}
         </div>
         <h4 className="h5 mt-4">Select Sizes</h4>
         <div className="flex flex-wrap items-center">
             {sizeList.map((e,k)=>(
-                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"p-2 cursor-pointer hover:shadow m-1 border-dark rounded border-2":"p-2 cursor-pointer hover:shadow m-1 rounded border-2"}>{e}</div>
+                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"p-2 px-3 cursor-pointer hover:shadow m-1 border-dark rounded-circle border-2":"p-2 px-3 cursor-pointer hover:shadow m-1 rounded-circle border-2"}>{e}</div>
             ))}
         </div>
         <p className="my-3">
