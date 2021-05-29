@@ -215,7 +215,7 @@ export default function Product(props) {
                             <div className={"grid grid-cols-6 md:grid-cols-1 gap-2 my-2"}>
                                 {props.product?.productImages.map((el,key)=>(
                                     <img key={key} src={el.src} onClick={()=>{setSelectedImage(el.src)}}
-                                    className={selectedImage==el.src?"w-100 cursor-pointer border-2 border-red-500 rounded":"w-100 cursor-pointer"} />
+                                    className={selectedImage==el.src?"w-100 cursor-pointer border-2 border-gray-500 rounded":"w-100 cursor-pointer"} />
                                     ))} 
                             </div>
                         </div>
@@ -242,7 +242,7 @@ export default function Product(props) {
  
 
                         </div>
-                        <div className="col-md-7">
+                        <div className="col-md-8">
                             <ProductPage isAdded={isAdded} addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
                             size={size} colour={colour} />
                         </div>
