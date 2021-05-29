@@ -47,6 +47,7 @@ export default function Home(props) {
   }
   const [banner,setBanner] = React.useState(props.banner) 
   const [sections,setSections] = React.useState([]) 
+  const [cards,setCards] = React.useState([]) 
 
   const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
@@ -55,8 +56,13 @@ export default function Home(props) {
  
 
   useEffect(()=>{
-    var sec = props.sections.sort((a,b)=>Number(a.priority) - Number(b.priority));
-    setSections(sec)
+    fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
+      var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
+      setSections(data)
+    }).catch(err=>console.log(err.message))
+    fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
+        setCards(json.result)
+    }).catch(err=>console.log(err.message))
     var user = JSON.parse(localStorage.getItem('user'))
     if(user){
       getCart(user.userId)
@@ -65,6 +71,8 @@ export default function Home(props) {
         setCategories(json.result)
     }).catch(err=>setError(err.message))
   },[])
+
+  console.log(sections)
 
   const getCart = (x) => {
     fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
@@ -220,7 +228,7 @@ export default function Home(props) {
             <div key={key}>
                 <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                    {props.cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
                         </div> 
@@ -237,7 +245,7 @@ export default function Home(props) {
             <div key={key}>
                 <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
-                    {props.cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
+                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
                         </div> 
@@ -265,8 +273,6 @@ export const getStaticProps = async (context) => {
   });
   try{
     var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-    var sections = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
-    var cards = await axios.get(`https://api.treevesto.com:4000/card`,{httpsAgent:agent})
     var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
     banner = banner.data.result.map((el,key)=>{
         return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
@@ -295,8 +301,6 @@ export const getStaticProps = async (context) => {
   return {
       props: {
           banner:banner || [],
-          sections:sections?.data.result || [],
-          cards:cards.data.result || [],
           products:arr,
       }
   }; 
