@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import Link from "next/link";
 import AdminLayout from "../../../component/common/AdminLayout"; 
 
 import axios from 'axios';
 import https from 'https';
 
 export default function SizeChartAdminPage(props){   
-    // console.log(props.sizeChart)
+    console.log(props.sizeChart)
 
     const [data,setData] = React.useState([
         ["Size","Chest"],
@@ -14,7 +15,11 @@ export default function SizeChartAdminPage(props){
 
     return  <AdminLayout>
         <div className="container"> 
-            <table className="table table-hover border">
+        <div className="text-right my-2">
+            <Link href="/admin/sizeChart/create"><button className="btn btn-primary">Add</button></Link>
+        </div>
+        {props.sizeChart.map((e,k)=>(
+            <table key={k} className="table table-hover border">
                 <thead>
                     {/* <tr>
                         {data[0].map((e,k)=>(
@@ -23,13 +28,15 @@ export default function SizeChartAdminPage(props){
                     </tr> */}
                 </thead>
                 <tbody>
-                    {data?.map((el,key)=>(<tr key={key}> 
+                    {JSON.parse(e.data)?.map((el,key)=>(<tr key={key}> 
                         {el?.map((e,k)=>(
                             <td> {e} </td>
                         ))} 
                     </tr>))}
                 </tbody>
             </table>
+
+        ))}
         </div>
     </AdminLayout>
 }

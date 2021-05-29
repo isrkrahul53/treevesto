@@ -1,17 +1,27 @@
 import React, { useEffect } from 'react';
 import AdminLayout from "../../../component/common/AdminLayout";
 import {useForm} from 'react-hook-form'
+import { useRouter } from 'next/router';
 
 
 export default function CreateSizeChartAdminPage(){
     const {register,handleSubmit,errors} = useForm();
+    const router = useRouter()
     const [data,setData] = React.useState([
         ["Size","Chest"],
         ["M","32"],
     ]) 
 
     const onSubmit = (x) => {
-        console.log(x,data)
+        var formData = new FormData();
+        formData.append("name",x.name)
+        formData.append("data",JSON.stringify(data))
+        fetch(`https://api.treevesto.com:4000/sizechart/`,{
+        method:"POST",
+        body:formData
+        }).then(d=>d.json()).then(json=>{
+            router.push("/admin/sizeChart")
+        })
     }
 
     const addColumn = (e) => {
