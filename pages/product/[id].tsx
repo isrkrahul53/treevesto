@@ -16,6 +16,7 @@ import https from 'https'
 import Button from '@material-ui/core/Button'
 import MaterialDialog from '../../component/material/materialDialog';
 import ReactMultiCarousel from '../../component/react/multiCarousel';
+import ReactCarouselZoom from '../../component/react/carouselZoom';
 
 function RatingUI(props){
     
@@ -221,6 +222,7 @@ export default function Product(props) {
                         </div>
                         <div className="col-md-3 py-2">
                             {/* <img src={selectedImage} className="w-full md:w-75 hover:zoom-25" /> */}
+                            <div className="hidden md:block">
                             <TransformWrapper
                                 defaultScale={1}
                                 defaultPositionX={200}
@@ -239,6 +241,12 @@ export default function Product(props) {
                                 </React.Fragment>
                                 )}
                             </TransformWrapper>
+
+                            </div>
+                            <div className="md:hidden">
+                            <ReactCarouselZoom data={props.product?.productImages} arrows={false} showDots={true} />
+
+                            </div>
  
 
                         </div>
