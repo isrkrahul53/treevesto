@@ -18,7 +18,8 @@ export default function SizeChartAdminPage(props){
         <div className="text-right my-2">
             <Link href="/admin/sizeChart/create"><button className="btn btn-primary">Add</button></Link>
         </div>
-        {props.sizeChart.map((e,k)=>(
+        {props.sizeChart.map((e,k)=>(<>
+            <h3 className="text-lg my-2"> {k+1}. {e.name} </h3>
             <table key={k} className="table table-hover border">
                 <thead>
                     {/* <tr>
@@ -36,7 +37,7 @@ export default function SizeChartAdminPage(props){
                 </tbody>
             </table>
 
-        ))}
+        </>))} 
         </div>
     </AdminLayout>
 }
