@@ -64,7 +64,10 @@ export default function Filterbar(props) {
             {/* <Button onClick={toggleDrawer('bottom', true)}>
               Filter
             </Button> */}
-            <button onClick={toggleDrawer('bottom', true)} className="md:hidden p-2 mx-1 px-4 text-xl rounded shadow-sm bg-gray-800 text-white ml-auto">Filter</button>
+            <div className="md:hidden fixed left-0 bottom-0 m-0 w-full z-50 ">
+            <button onClick={toggleDrawer('bottom', true)} className="w-full p-2 mr-1 px-4 text-xl rounded shadow-sm bg-green-200 ml-auto">Filter</button>
+
+            </div>
             <SwipeableDrawer
                 anchor={'bottom'}
                 open={state['bottom']}

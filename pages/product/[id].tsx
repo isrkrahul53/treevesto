@@ -252,10 +252,10 @@ export default function Product(props) {
                 <div className="my-2">
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                         {/* <li className="nav-item" role="presentation">
-                        <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
+                        <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
                         </li> */}
                         <li className="nav-item" role="presentation">
-                        <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
+                        <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
                         </li>
                         {/* <li className="nav-item" role="presentation">
                         <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Seller DETAILS-tab" data-bs-toggle="tab" data-bs-target="#Seller DETAILS" role="tab" aria-controls="Seller DETAILS" aria-selected="false">Seller DETAILS</span>
@@ -281,8 +281,19 @@ export default function Product(props) {
                             <div className="text-lg text-secondary"> {vendordata?.completeAddress}</div>
                         </div>  */}
                     </div>
-                </div>
-
+                </div> 
+                
+                <table className="table table-hover border">
+                    <thead> 
+                    </thead>
+                    <tbody>
+                        {props.product.sizeChart && JSON.parse(props.product.sizeChart?.data)?.map((el,key)=>(<tr key={key}> 
+                            {el?.map((e,k)=>(
+                                <td> {e} </td>
+                            ))} 
+                        </tr>))}
+                    </tbody>
+                </table> 
 
                 <div className="my-2">
                     <div className="bg-white p-3 border">
@@ -376,7 +387,7 @@ export const getStaticProps = async (context) => {
         data.push({...element,productImages:images})
     });
     const category = await axios.get(`https://api.treevesto.com:4000/category/id/${data[0].subcatId}`,{httpsAgent:agent})
-    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/subcat/${data[0].subcatId}`,{httpsAgent:agent})    
+    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${data[0].subcatId}`,{httpsAgent:agent})    
 
     var simData = []
     similarProduct.data.result.forEach(element => {

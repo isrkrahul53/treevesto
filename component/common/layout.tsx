@@ -47,7 +47,7 @@ export default function Layout(props){
         if(user){
             setUser(user)
             fetch(`https://api.treevesto.com:4000/cart/user/`+user.userId).then(d=>d.json()).then(json=>{
-                setCart(json.result.length)
+                setCart(json.result.filter(e=>e.type == "cart").length)
             })
         }
 

@@ -76,7 +76,7 @@ export default function Home(props) {
 
   const getCart = (x) => {
     fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
-        setCart(json.result)
+        setCart(json.result.filter(e=>e.type==="cart"))
     })
     
   }
@@ -145,10 +145,10 @@ export default function Home(props) {
           {/* <ProductCarousel images={banner} indicator={true} /> */}
             <div className="grid grid-cols-4 gap-0 md:hidden my-2">
                 {props.categories.filter((e,k)=>k <= 3).map((e,k)=>(
-                  <div key={k} className="text-center w-full">
+                  <Link href={"/"+e._id}><div key={k} className="text-center w-full">
                     <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-20 h-20 mx-auto rounded-circle"  />
                     <div className="text-sm p-1">  {e.catName} </div>
-                  </div>
+                  </div></Link>
                 ))}
             </div>
 

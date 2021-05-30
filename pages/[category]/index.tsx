@@ -17,7 +17,7 @@ export default function Product(props){
   
   const [error,setError] = React.useState("");
   const [success,setSuccess] = React.useState(""); 
-  
+  // console.log(props.productsArr)
   const min = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0;
   const max = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0;
   const [showFilter,setShowFilter] = React.useState(false)
@@ -96,7 +96,7 @@ export default function Product(props){
         temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
           arr.push(temp.filter(e=>e.productCode === el))
         })
-        
+        console.log(arr)
         setProducts(arr)
       }
     }).catch(err=>console.log(err))
@@ -226,7 +226,7 @@ export const getStaticProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const res = await axios.get(`https://api.treevesto.com:4000/product/subcat/${context.params.category}`,{httpsAgent:agent})
+  const res = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${context.params.category}`,{httpsAgent:agent})
   const category = await axios.get(`https://api.treevesto.com:4000/category/id/${context.params.category}`,{httpsAgent:agent})
   
   var data = []
@@ -258,7 +258,7 @@ export const getStaticPaths = async () => {
   });
   const res = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
   var data = [];
-  res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
+  // res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
   res.data.result.forEach((el,key)=>{
     data[key] = {params:{category:el._id}}
   })
