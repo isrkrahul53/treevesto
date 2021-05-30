@@ -72,15 +72,14 @@ export default function ProductPage(props) {
             {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
         </p>
         {/* Mobile */}
-        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 w-full py-1 border-t-2 border-dark bg-white shadow-sm">
-            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 w-full py-1">
+            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
                 <LocalMallOutlinedIcon /> Add Bag
             </div>
-            <div className="px-1"></div>
-            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
-                <FavoriteBorderOutlinedIcon /> Wishlist
+            <div onClick={()=>{props.addtoWishlist()}} className="p-2 mr-1 cursor-pointer border-2 border-green-800 bg-green-50 text-green-800">
+                <FavoriteBorderOutlinedIcon /> 
             </div>
-            <div className="p-2 border-2 border-dark mx-1">
+            <div className="p-2 border-2 border-dark mr-1">
                 <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
                     <WhatsAppIcon />
                 </a>
@@ -95,12 +94,12 @@ export default function ProductPage(props) {
                     <LocalMallOutlinedIcon /> Go to Bag
                 </div></Link>
             </>:<>
-                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
                     <LocalMallOutlinedIcon /> Add To Bag
                 </div>
             </>}
             <div className="px-1"></div>
-            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
+            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-green-800 bg-green-50 text-green-800">
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
         </div> 

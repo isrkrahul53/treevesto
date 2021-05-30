@@ -143,6 +143,16 @@ export default function Home(props) {
           {/* <Banner images={banner} indicator={true} /> */}
           
           {/* <ProductCarousel images={banner} indicator={true} /> */}
+            <div className="grid grid-cols-4 gap-0 md:hidden my-2">
+                {props.categories.filter((e,k)=>k <= 3).map((e,k)=>(
+                  <div key={k} className="text-center w-full">
+                    <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-20 h-20 mx-auto rounded-circle"  />
+                    <div className="text-sm p-1">  {e.catName} </div>
+                  </div>
+                ))}
+            </div>
+
+
           <ReactCarousel data={banner} arrows={false} showDots={true} />
   
           {/* <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/> */}
@@ -226,8 +236,8 @@ export default function Home(props) {
 
           {sections?.filter(e=>e.position === "Top").map((el,key)=>(
             <div key={key}>
-                <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
-                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                <h3 className="text-lg md:text-4xl mb-2 mt-4 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                <div className={"grid grid-cols-"+(el.grid < 2 ? 1 : 2)+" md:grid-cols-"+el.grid+" gap-4"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
@@ -238,12 +248,12 @@ export default function Home(props) {
             </div>
           ))}
           
-          <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> Latest Products  </h3>
+          <h3 className="text-lg md:text-4xl mt-4 px-2 text-secondary"> Latest Products  </h3>
           <ReactMultiCarousel data={props.products} hideDetails={false} cart={addtoCart} />
 
           {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>
-                <h3 className="text-lg md:text-4xl my-6 md:mb-8 text-secondary"> {el.title}  </h3>
+                <h3 className="text-lg md:text-4xl mb-2 mt-4 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
@@ -274,6 +284,7 @@ export const getStaticProps = async (context) => {
   try{
     var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
     var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+    var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
     banner = banner.data.result.map((el,key)=>{
         return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
     })
@@ -302,6 +313,7 @@ export const getStaticProps = async (context) => {
       props: {
           banner:banner || [],
           products:arr,
+          categories:categories.data.result
       }
   }; 
 }

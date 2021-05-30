@@ -122,8 +122,8 @@ export default function SearchProducts(props) {
   return (
     <div>
         <React.Fragment>
-            {/* <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1" width="20px" alt="search"/> */}
-            <input type="text" className="form-control mr-2" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} />
+            <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1 md:hidden" width="20px" alt="search"/>
+            <input type="text" className="form-control mr-2 hidden md:block" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} />
  
             {/* <Button onClick={toggleDrawer('top', true)}>
             </Button> */}

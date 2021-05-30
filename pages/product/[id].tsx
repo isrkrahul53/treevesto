@@ -195,7 +195,7 @@ export default function Product(props) {
 
             </Head>
             <div className="container">
-                <nav className="breadcrumb" aria-label="breadcrumb">
+                <nav className="breadcrumb hidden md:block" aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
                         <li className="breadcrumb-item"><Link href={"/"+props.product?.subcatId}>{props.catName}</Link></li> 
@@ -211,7 +211,7 @@ export default function Product(props) {
                     
                    
                     <div className="row">
-                        <div className="col-md-1">
+                        <div className="col-md-1 hidden md:block">
                             <div className={"grid grid-cols-6 md:grid-cols-1 gap-2 my-2"}>
                                 {props.product?.productImages.map((el,key)=>(
                                     <img key={key} src={el.src} onClick={()=>{setSelectedImage(el.src)}}
@@ -219,7 +219,7 @@ export default function Product(props) {
                                     ))} 
                             </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-md-3 py-2">
                             {/* <img src={selectedImage} className="w-full md:w-75 hover:zoom-25" /> */}
                             <TransformWrapper
                                 defaultScale={1}

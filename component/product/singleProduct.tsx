@@ -47,7 +47,7 @@ export default function SingleProduct(props){
         </div>
         <div className="flex items-center my-1">
           {size.map((e,k)=>(
-            <span key={k} onClick={()=>setSizeSelected(k)} className={k === sizeSelected?"p-1 px-2 border mr-1 border-2 border-dark":"p-1 px-2 border mr-1"}>{e}</span>
+            <span key={k} onClick={()=>setSizeSelected(k)} className={k === sizeSelected?"p-2 rounded-circle px-3 border mr-1 border-2 border-dark":"p-1 px-2 border mr-1"}>{e}</span>
           ))}
         </div>
         <div className="my-2 flex items-center">
