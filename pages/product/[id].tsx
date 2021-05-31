@@ -195,7 +195,7 @@ export default function Product(props) {
                 <meta property="og:type" content="article" />
 
             </Head>
-            <div className="container">
+            <div className="container mb-20">
                 <nav className="breadcrumb hidden md:block" aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
@@ -349,6 +349,7 @@ export default function Product(props) {
 
                 <h3 className="text-lg md:text-2xl mt-2 px-2">Related Products</h3>
                 <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} />
+
 
             </div>
  

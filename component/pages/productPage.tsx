@@ -65,18 +65,18 @@ export default function ProductPage(props) {
         <h4 className="h5 mt-4">Select Sizes</h4>
         <div className="flex flex-wrap items-center">
             {sizeList.map((e,k)=>(
-                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"p-2 px-3 cursor-pointer hover:shadow m-1 border-dark rounded-circle border-2":"p-2 px-3 cursor-pointer hover:shadow m-1 rounded-circle border-2"}>{e}</div>
+                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded-circle border-2 m-1":"cursor-pointer hover:shadow rounded-circle border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
             ))}
         </div>
         <p className="my-3">
             {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
         </p>
         {/* Mobile */}
-        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 w-full py-1">
-            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1500}} >
+            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                 <LocalMallOutlinedIcon /> Add Bag
             </div>
-            <div onClick={()=>{props.addtoWishlist()}} className="p-2 mr-1 cursor-pointer border-2 border-green-800 bg-green-50 text-green-800">
+            <div onClick={()=>{props.addtoWishlist()}} className="p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
                 <FavoriteBorderOutlinedIcon /> 
             </div>
             <div className="p-2 border-2 border-dark mr-1">
@@ -94,12 +94,12 @@ export default function ProductPage(props) {
                     <LocalMallOutlinedIcon /> Go to Bag
                 </div></Link>
             </>:<>
-                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                     <LocalMallOutlinedIcon /> Add To Bag
                 </div>
             </>}
             <div className="px-1"></div>
-            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-green-800 bg-green-50 text-green-800">
+            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
                 <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
         </div> 
