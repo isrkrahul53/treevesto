@@ -143,16 +143,15 @@ export default function Home(props) {
           {/* <Banner images={banner} indicator={true} /> */}
           
           {/* <ProductCarousel images={banner} indicator={true} /> */}
-            <div className="grid grid-cols-4 gap-0 md:hidden my-2">
-                {props.categories.filter((e,k)=>k <= 3).map((e,k)=>(
-                  <Link href={"/"+e._id}><div key={k} className="text-center w-full">
-                    <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-20 h-20 mx-auto rounded-circle"  />
-                    <div className="text-sm p-1">  {e.catName} </div>
-                  </div></Link>
-                ))}
-            </div>
-
-
+          <div className="md:hidden">
+            <ReactMultiCarousel mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
+                <Link href={"/"+e._id}><div key={k} className="text-center w-full">
+                  <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
+                  <div className="text-sm p-1">  {e.catName} </div>
+                </div></Link>
+              ))} />
+          <br />
+          </div>
           <ReactCarousel data={banner} arrows={false} showDots={true} />
   
           {/* <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/> */}
@@ -236,7 +235,7 @@ export default function Home(props) {
 
           {sections?.filter(e=>e.position === "Top").map((el,key)=>(
             <div key={key}>
-                <h3 className="text-lg md:text-4xl mb-2 mt-4 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                 <div className={"grid grid-cols-"+(el.grid < 2 ? 1 : 2)+" md:grid-cols-"+el.grid+" gap-4"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
@@ -248,12 +247,16 @@ export default function Home(props) {
             </div>
           ))}
           
-          <h3 className="text-lg md:text-4xl mt-4 px-2 text-secondary"> Latest Products  </h3>
-          <ReactMultiCarousel data={props.products} hideDetails={false} cart={addtoCart} />
+          <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>
+          <ReactMultiCarousel arrows={true} content={props.products.map((e,k)=>(
+                <div key={k} className="p-1">
+                    <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+                </div>
+            ))} />
 
           {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>
-                <h3 className="text-lg md:text-4xl mb-2 mt-4 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                 <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 

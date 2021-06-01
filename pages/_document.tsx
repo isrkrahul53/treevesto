@@ -18,6 +18,9 @@ class MyDocument extends Document{
                 <script src="/assets/bootstrap/js/bootstrap.js"></script> 
                 
                 <script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
+
+
+
             </Html>
         ) 
     }

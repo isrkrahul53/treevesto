@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button'
 import MaterialDialog from '../../component/material/materialDialog';
 import ReactMultiCarousel from '../../component/react/multiCarousel';
 import ReactCarouselZoom from '../../component/react/carouselZoom';
+import SingleProduct from '../../component/product/singleProduct';
 
 function RatingUI(props){
     
@@ -30,7 +31,7 @@ function RatingUI(props){
 }
                                                      
 export default function Product(props) {
-    
+    console.log(props.product)
     const router = useRouter();
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
@@ -195,6 +196,9 @@ export default function Product(props) {
                 <meta property="og:type" content="article" />
 
             </Head>
+            <div className="md:hidden">
+                <ReactCarouselZoom data={props.product?.productImages} arrows={false} showDots={true} /> 
+            </div>
             <div className="container mb-20">
                 <nav className="breadcrumb hidden md:block" aria-label="breadcrumb">
                     <ol className="breadcrumb">
@@ -205,10 +209,7 @@ export default function Product(props) {
                 </nav>
 
                 {grid==1?<div className="container">
-                    {/* <ReactImageZoom {...imageProps} /> */}
-                    <div className="w-1/2">
-
-                    </div>
+                    {/* <ReactImageZoom {...imageProps} /> */} 
                     
                    
                     <div className="row">
@@ -241,10 +242,6 @@ export default function Product(props) {
                                 </React.Fragment>
                                 )}
                             </TransformWrapper>
-
-                            </div>
-                            <div className="md:hidden">
-                            <ReactCarouselZoom data={props.product?.productImages} arrows={false} showDots={true} />
 
                             </div>
  
@@ -348,8 +345,13 @@ export default function Product(props) {
                 </div>
 
                 <h3 className="text-lg md:text-2xl mt-2 px-2">Related Products</h3>
-                <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} />
+                {/* <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} /> */}
 
+                <ReactMultiCarousel arrows={true} content={props.similarProduct.map((e,k)=>(
+                <div key={k} className="p-1">
+                    <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+                </div>
+            ))} />
 
             </div>
  

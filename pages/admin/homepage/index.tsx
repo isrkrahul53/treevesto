@@ -54,9 +54,26 @@ export default function CustomizeHomepage(props) {
         setNavigation(newValue);
       };
        
-    const save = (id,value) => {
+      const save = (id,value) => {
+          var formData = new FormData();
+          formData.append('priority',value)
+  
+          fetch(`https://api.treevesto.com:4000/section/`+id,{
+              method:"PATCH",
+              body:formData
+          }).then(d=>d.json()).then(json=>{
+              if(json.success == 1){
+                  fetchData();
+              }else{
+                  alert(json.msg)
+              }
+          }).catch(err=>alert(err.message))
+      }
+
+       
+      const hideTitle = (e,id) => {
         var formData = new FormData();
-        formData.append('priority',value)
+        formData.append('hiddenTitle',e.target.checked)
 
         fetch(`https://api.treevesto.com:4000/section/`+id,{
             method:"PATCH",
@@ -69,7 +86,7 @@ export default function CustomizeHomepage(props) {
             }
         }).catch(err=>alert(err.message))
     }
-
+  
 
     const deleteBanner = (id) => {
         if(confirm('Are you sure to delete this banner')){
@@ -171,8 +188,10 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="my-2">
                             <CardContent>
                                 <div className="flex items-center">
+                                    <input className="form-check-input mr-2" name="hiddenTitle" onChange={e=>hideTitle(e,el._id)} type="checkbox" />
+
                                     <h3 className="text-lg font-light">
-                                        {el.title}
+                                        {el.hiddenTitle === "true"? <s>{el.title}</s> : el.title}
                                     </h3>
                                     <div className="text-sm md:text-lg text-blue-600 p-2">
                                         <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
@@ -213,8 +232,11 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="my-2">
                             <CardContent>
                                 <div className="flex items-center">
+                                <input className="form-check-input mr-2" name="hiddenTitle" onChange={e=>hideTitle(e,el._id)} type="checkbox" />
+
                                     <h3 className="text-lg font-light">
-                                        {el.title}
+                                    {el.hiddenTitle === "true"? <s>{el.title}</s> : el.title}
+                                        
                                     </h3>
                                     <div className="text-sm md:text-lg text-blue-600 p-2">
                                         <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />

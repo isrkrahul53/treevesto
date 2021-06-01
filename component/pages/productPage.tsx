@@ -45,7 +45,7 @@ export default function ProductPage(props) {
             <span className="p-1 text-sm bg-danger text-white">Out of Stock </span>
         </>}
         {/* <h4 className="text-xl text-secondary">{props.data?.productType}</h4> */}
-        <h4 className="display-6">{props.data?.productName}</h4>
+        <h4 className="text-2xl">{props.data?.productName}</h4>
 
         <h4 className="text-3xl mt-3"> 
             {props.data?.regularPrice != props.data?.sellingPrice && <s className="text-xl pr-2 text-secondary">Rs. {props.data?.regularPrice}</s>}
@@ -76,8 +76,8 @@ export default function ProductPage(props) {
             <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                 <LocalMallOutlinedIcon /> Add Bag
             </div>
-            <div onClick={()=>{props.addtoWishlist()}} className="p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
-                <FavoriteBorderOutlinedIcon /> 
+            <div onClick={()=>{props.addtoWishlist()}} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                <FavoriteBorderOutlinedIcon /> Wishlist
             </div>
             <div className="p-2 border-2 border-dark mr-1">
                 <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>

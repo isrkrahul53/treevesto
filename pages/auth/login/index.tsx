@@ -62,7 +62,7 @@ export default function LoginPage(){
 
                     <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
  
-                        <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
+                        <img src="/assets/images/login.jpg" className="w-100" />
 
                         <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
                             <div className="my-3">

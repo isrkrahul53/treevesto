@@ -41,13 +41,15 @@ export default function Footer(){
                         </div>
                     </div>
                 </div>
-            </>:<></>}
+            </>:<>
+                <div className="text-right my-3 p-2">
+                    <Button variant="text" color="default" onClick={e=>setShowMore(true)} >
+                    Show More
+                    </Button>
+                </div>
             
-            <div className="text-right my-3 p-2">
-                <Button variant="text" color="primary" onClick={e=>setShowMore(!showMore)} >
-                Show {showMore ? "LESS":"MORE"}
-                </Button>
-            </div>
+            </>}
+            
         </div>
 
     }
