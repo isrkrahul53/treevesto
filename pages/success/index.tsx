@@ -53,22 +53,23 @@ export default function SuccessPage(){
 
     return <div className="p-8">
         
-        <div className="" id="emailContent">
+        <div className="text-center" id="emailContent">
+            <img src="/assets/icons/congratulations.png" width="120px" className="mx-auto" alt="congratulations" />
             <div className="display-5">
-                <span className="text-pink-400">Congratulations ! </span> 
-                <span className="">Order Placed</span> 
+                {/* <span className="text-pinck-400">Congratulations ! </span>  */}
+                <span className="text-success font-medium">Order Confirmed</span> 
             </div>
-            <div className="text-xl text-secondary my-1">Order ID : {oid}</div>
-            <div className="text-secondary">Your order is currently being processed. As the products in your 
-            orders are shipped you will be notified and receive an email. You can track, cancel or return your 
-            orders from Treevesto.</div>
-            <Button className="my-2" variant="contained" color="secondary">
+            <div className="text-secondary">Your Order is confirmed. You will receive an order confirmation email/SMS shortly with expected delivery date for your items.</div>
+            <Button variant="outlined" color="secondary" onClick={()=>router.replace('/')}>
+                Continue Shopping
+            </Button>
+            <Button className="m-2" variant="contained" color="secondary">
               My Orders
             </Button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                    <div className="text-2xl my-3 py-2 border-b-2">Orders</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 w-full md:w-3/5 mx-auto">
+                <div className="text-left">
+                    <div className="text-2xl my-3 py-2 border-b-2">Items in Order</div>
                     {cart?.map((el,key)=>(
                         <div key={key} className="flex items-center">
                             <img src={el.image} alt="" width="40px" className="shadow-sm rounded mr-2 my-2" />
@@ -80,7 +81,7 @@ export default function SuccessPage(){
                         </div>
                     ))}
                 </div>
-                <div> 
+                <div className="text-right"> 
                     <div className="text-2xl my-3 py-2 border-b-2">Delivery Details</div>
                     <div>
                         <div className="text-lg"> {address?.name} {address?.phone} </div>
@@ -91,9 +92,6 @@ export default function SuccessPage(){
             </div>
 
             <div className="text-right">
-                <Button variant="contained" color="secondary" onClick={()=>router.replace('/')}>
-                  Go to homepage
-                </Button>
             </div>
 
 

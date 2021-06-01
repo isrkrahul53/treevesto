@@ -11,12 +11,14 @@ export default function AddSection() {
     const {register,setValue,handleSubmit,errors} = useForm();
  
     const onSubmit = (data) => {
+        // console.log(data)
  
         var formData = new FormData();
         formData.append('title',data.title)
         formData.append('grid',data.grid)
         formData.append('priority',data.priority)
         formData.append('position',data.position)
+        formData.append('hiddenTitle',data.hiddenTitle)
 
         fetch(`https://api.treevesto.com:4000/section`,{
             method:"POST",
@@ -43,8 +45,14 @@ export default function AddSection() {
                 <option value="Top">Top</option>
                 <option value="Bottom">Bottom</option>
             </select>
-            <input type="text" name="title" id="title" ref={register({required:true})}
-            className="form-control my-2" placeholder="Enter title of the card" />
+            <div className="input-group">
+                <input type="text" name="title" id="title" ref={register({required:true})}
+                className="form-control my-2" placeholder="Enter title of the card" />
+                <div className="input-group-text">
+                    <input className="form-check-input mr-2" name="hiddenTitle" type="checkbox" ref={register()} />
+                </div>
+            </div>
+
             <select name="grid" id="grid" className="form-select my-2" ref={register({required:true})} >
                 <option value="1">1</option>
                 <option value="2">2</option>

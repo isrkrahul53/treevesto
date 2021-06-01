@@ -188,7 +188,7 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="my-2">
                             <CardContent>
                                 <div className="flex items-center">
-                                    <input className="form-check-input mr-2" name="hiddenTitle" onChange={e=>hideTitle(e,el._id)} type="checkbox" />
+                                    <input className="form-check-input mr-2" name="hiddenTitle" defaultChecked={el.hiddenTitle === "true"} onChange={e=>hideTitle(e,el._id)} type="checkbox" />
 
                                     <h3 className="text-lg font-light">
                                         {el.hiddenTitle === "true"? <s>{el.title}</s> : el.title}
@@ -232,7 +232,7 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="my-2">
                             <CardContent>
                                 <div className="flex items-center">
-                                <input className="form-check-input mr-2" name="hiddenTitle" onChange={e=>hideTitle(e,el._id)} type="checkbox" />
+                                <input className="form-check-input mr-2" name="hiddenTitle" defaultChecked={el.hiddenTitle === "true"} onChange={e=>hideTitle(e,el._id)} type="checkbox" />
 
                                     <h3 className="text-lg font-light">
                                     {el.hiddenTitle === "true"? <s>{el.title}</s> : el.title}
