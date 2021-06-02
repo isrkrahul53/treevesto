@@ -9,6 +9,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import PeopleIcon from '@material-ui/icons/People';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -19,7 +21,7 @@ export default function AdminLayout(props) {
     
     const router = useRouter();
     const path = router.asPath.split("/");
-    const navs = ["dashboard","homepage","vendors","users","orders","category","coupons","sizeChart"] 
+    const navs = ["dashboard","homepage","vendors","users","orders","category","coupons","sizeChart","gst"] 
 
     const [admin,setAdmin] = React.useState(null);
     const [height,setHeight] = React.useState(null)
@@ -91,6 +93,10 @@ export default function AdminLayout(props) {
                     <Link href="/admin/sizeChart"><ListItem button selected={expand === "sizeChart"}>
                         <ListItemIcon> <BarChartIcon />  </ListItemIcon>
                         <ListItemText primary={"Size Chart"} />
+                    </ListItem></Link>
+                    <Link href="/admin/gst"><ListItem button selected={expand === "gst"}>
+                        <ListItemIcon> <AttachMoneyIcon />  </ListItemIcon>
+                        <ListItemText primary={"GST"} />
                     </ListItem></Link>
                 </List>
             </div>

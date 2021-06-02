@@ -8,9 +8,10 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import BarChartIcon from '@material-ui/icons/BarChart';
 import MenuIcon from '@material-ui/icons/Menu';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -52,7 +53,7 @@ export default function AdminSidebar(props) {
 
   const router = useRouter();
   const path = router.asPath.split("/");
-  const navs = ["dashboard","homepage","vendors","users","orders","category","coupons"] 
+  const navs = ["dashboard","homepage","vendors","users","orders","category","coupons","sizeChart","gst"] 
 
   const [admin,setAdmin] = React.useState(null);
   const [height,setHeight] = React.useState(null)
@@ -129,6 +130,14 @@ export default function AdminSidebar(props) {
           <Link href="/admin/coupons"><ListItem button selected={expand === "coupons"}>
               <ListItemIcon> <StorefrontIcon />  </ListItemIcon>
               <ListItemText primary={"Coupons"} />
+          </ListItem></Link>
+          <Link href="/admin/sizeChart"><ListItem button selected={expand === "sizeChart"}>
+              <ListItemIcon> <BarChartIcon />  </ListItemIcon>
+              <ListItemText primary={"Size Chart"} />
+          </ListItem></Link>
+          <Link href="/admin/gst"><ListItem button selected={expand === "gst"}>
+              <ListItemIcon> <AttachMoneyIcon />  </ListItemIcon>
+              <ListItemText primary={"GST"} />
           </ListItem></Link>
       </List> 
 

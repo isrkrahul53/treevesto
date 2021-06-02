@@ -31,7 +31,7 @@ function RatingUI(props){
 }
                                                      
 export default function Product(props) {
-    console.log(props.product)
+    
     const router = useRouter();
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");
@@ -51,6 +51,7 @@ export default function Product(props) {
     
     const [size,setSize] = React.useState([])
     const [colour,setColour] = React.useState([])
+    const [specsArr,setSpecsArr] = React.useState([])
 
     const handleNavigationChange  = (x) => {
         setNavigation(x)
@@ -61,6 +62,10 @@ export default function Product(props) {
         fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
         }).catch(err=>console.log(err.message))
+        
+        fetch(`https://api.treevesto.com:4000/specificationTable`).then(d=>d.json()).then(json=>{
+            setSpecsArr(json.result.filter(e=>e.catId === props.product.catId)[0].field) 
+        })
         fetch(`https://api.treevesto.com:4000/product/`).then(d=>d.json()).then(json=>{
             setSize(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
             setColour(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
@@ -262,9 +267,9 @@ export default function Product(props) {
                         <li className="nav-item" role="presentation">
                         <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
                         </li>
-                        {/* <li className="nav-item" role="presentation">
-                        <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Seller DETAILS-tab" data-bs-toggle="tab" data-bs-target="#Seller DETAILS" role="tab" aria-controls="Seller DETAILS" aria-selected="false">Seller DETAILS</span>
-                        </li> */}
+                        <li className="nav-item" role="presentation">
+                        <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Specification table-tab" data-bs-toggle="tab" data-bs-target="#Specification table" role="tab" aria-controls="Specification table" aria-selected="false">Specification table</span>
+                        </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
                         {/* <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
@@ -281,10 +286,20 @@ export default function Product(props) {
                         <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
                             <p>{props.product?.productDesc}</p>
                         </div> 
-                        {/* <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Seller DETAILS" role="tabpanel" aria-labelledby="Seller DETAILS-tab">
-                            <div>Seller: <span className="text-xl px-2"> {vendordata?.store_name} </span> </div>
-                            <div className="text-lg text-secondary"> {vendordata?.completeAddress}</div>
-                        </div>  */}
+                        <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
+                            <div className="container">
+
+                                {specsArr.filter(e=>props.product[e]).map((e,k)=>(
+                                    <div className="row" key={k}>
+                                        <div className="col-md-3"> {e.replace("_"," ")} </div>
+                                        <div className="col-md-9"> {props.product[e]} </div>
+                                    </div>
+                                    
+                                ))}
+
+                            </div>
+                            
+                        </div> 
                     </div>
                 </div> 
                 

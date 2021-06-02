@@ -14,6 +14,7 @@ export default function CreateSizeChartAdminPage(){
 
     const onSubmit = (x) => {
         var formData = new FormData();
+        formData.append("image",x.image[0])
         formData.append("name",x.name)
         formData.append("data",JSON.stringify(data))
         fetch(`https://api.treevesto.com:4000/sizechart/`,{
@@ -68,6 +69,7 @@ export default function CreateSizeChartAdminPage(){
                 <div className="text-right">
                     <button type="submit" className="btn btn-primary">Save</button>
                 </div>
+                <input type="file" name="image" id="image" ref={register()} className="form-control my-2" />
                 <input type="text" name="name" id="name" ref={register({required:true})} className="form-control my-2" placeholder="Enter chart name" />
 
             </form>

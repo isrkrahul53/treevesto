@@ -11,7 +11,8 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'; 
 import ViewCarouselIcon from '@material-ui/icons/ViewCarousel';
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
- 
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+
 import EasyEdit from 'react-easy-edit';
 
 import { Card, CardActions, CardContent, Avatar, CardHeader, IconButton } from '@material-ui/core';
@@ -197,7 +198,7 @@ export default function CustomizeHomepage(props) {
                                         <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
                                     </div>
                                 </div>
-                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-2"}>
                                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                                         return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
                                             <div className="text-right">
@@ -206,13 +207,7 @@ export default function CustomizeHomepage(props) {
                                             <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
                                         </div> 
                                     })}
-                                    <MaterialModal label={"Add Image"} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
-                                        image={e=>setImages({...images,image:e.target.files[0]})} 
-                                        link={e=>setImages({...images,link:e.target.value})} 
-                                        value={images}
-                                        submit={()=>handleSubmit(el._id)}
-                                        />} 
-                                    />
+                                    
                                 </div>
                             </CardContent>
                             <CardActions>
@@ -222,6 +217,13 @@ export default function CustomizeHomepage(props) {
                                 <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
                                 Delete
                                 </Button>
+                                <MaterialModal label={<AddPhotoAlternateIcon className="text-blue-800 ml-auto cursor-pointer" />} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
+                                    image={e=>setImages({...images,image:e.target.files[0]})} 
+                                    link={e=>setImages({...images,link:e.target.value})} 
+                                    value={images}
+                                    submit={()=>handleSubmit(el._id)}
+                                    />} 
+                                /> 
                             </CardActions>
                         </Card>
                     ))}
@@ -242,7 +244,7 @@ export default function CustomizeHomepage(props) {
                                         <EasyEdit type="number" onSave={(val)=>save(el._id,val)} value={el.priority} />
                                     </div>
                                 </div>
-                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-2"}>
                                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                                         return <div key={key} className={el._id==e.sectionId?"":"d-none"}>
                                             <div className="text-right">
@@ -251,13 +253,6 @@ export default function CustomizeHomepage(props) {
                                             <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
                                         </div> 
                                     })}
-                                    <MaterialModal label={"Add Image"} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
-                                        image={e=>setImages({...images,image:e.target.files[0]})} 
-                                        link={e=>setImages({...images,link:e.target.value})} 
-                                        value={images}
-                                        submit={()=>handleSubmit(el._id)}
-                                        />} 
-                                    />
                                 </div>
                             </CardContent>
                             <CardActions>
@@ -267,6 +262,13 @@ export default function CustomizeHomepage(props) {
                                 <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
                                 Delete
                                 </Button>
+                                <MaterialModal label={<AddPhotoAlternateIcon className="text-blue-800 ml-auto cursor-pointer" />} name="Add Image" close={closeModal} content={<AddImagetoSectionModal 
+                                    image={e=>setImages({...images,image:e.target.files[0]})} 
+                                    link={e=>setImages({...images,link:e.target.value})} 
+                                    value={images}
+                                    submit={()=>handleSubmit(el._id)}
+                                    />} 
+                                /> 
                             </CardActions>
                         </Card>
                     ))}

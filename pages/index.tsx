@@ -236,7 +236,7 @@ export default function Home(props) {
           {sections?.filter(e=>e.position === "Top").map((el,key)=>(
             <div key={key}>
                 <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
-                <div className={"grid grid-cols-"+(el.grid < 2 ? 1 : 2)+" md:grid-cols-"+el.grid+" gap-4"}>
+                <div className={"grid grid-cols-"+(el.grid < 2 ? 1 : 2)+" md:grid-cols-"+el.grid+" gap-2"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
@@ -257,7 +257,7 @@ export default function Home(props) {
           {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
             <div key={key}>
                 <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
-                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-4"}>
+                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-2"}>
                     {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
                       return <div key={key}> 
                             <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>

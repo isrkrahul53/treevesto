@@ -77,9 +77,11 @@ export default function MaterialModal(props) {
 
   return (
     <div> 
-      <Button variant="text" color="primary" onClick={handleOpen}>
+      <div onClick={handleOpen}>
           {props.label}
-      </Button>
+      </div>
+      {/* <Button variant="text" color="primary">
+      </Button> */}
       <Modal
         open={open}
         onClose={handleClose}

@@ -9,7 +9,9 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CloseIcon from '@material-ui/icons/Close';
-
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import MaterialModal from "../../../component/material/materialModal";
 
 // Table
 import Table from '@material-ui/core/Table';
@@ -26,8 +28,14 @@ import https from 'https'
 import Button from '@material-ui/core/Button'
 import { Card } from '@material-ui/core';
 
+
+import {useForm} from 'react-hook-form'
+
+
 export default function VendorPage(props) {
   console.log(props.vendors)
+  const {register,setValue,handleSubmit,errors} = useForm();
+
   const router = useRouter();
   const [navigation, setNavigation] = React.useState('products');
   const [selectedVendor, setSelectedVendor] = React.useState("");
@@ -51,6 +59,38 @@ export default function VendorPage(props) {
 
   },[selectedVendor])
 
+
+
+  const updateVendor = (x,val) => {
+    // console.log(!x)
+    var formData = new FormData();
+    formData.append("assured",JSON.stringify(!val))
+    fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+      method:"PATCH",
+      body:formData
+    }).then(d=>d.json()).then(json=>{
+      router.replace(router.asPath)
+    })
+
+  }
+  const updateProduct = (data) => {
+    // console.log(data)
+    var formData = new FormData();
+    
+    Object.keys(data).map((key,i)=>{
+      if(data[key] != null && data[key] != '' && data[key] != 'id'){
+          formData.append(key,data[key]) 
+      }
+    })
+
+    fetch(`https://api.treevesto.com:4000/product/`+data.id,{
+      method:"PATCH",
+      body:formData
+    }).then(d=>d.json()).then(json=>{
+      router.replace(router.asPath)
+    })
+
+  }
 
 
   const deleteVendor = (x) => {
@@ -121,7 +161,10 @@ export default function VendorPage(props) {
                     <TableRow key={key}>
                       
                       <TableCell>{key+1}</TableCell>
-                      <TableCell>{el.name}</TableCell>
+                      <TableCell> 
+                        <VerifiedUserIcon onClick={e=>updateVendor(el._id,el.assured)} className={el.assured ? "text-green-800 cursor-pointer":"text-gray-400 cursor-pointer"} />
+                         {el.name}
+                      </TableCell>
                       <TableCell>{el.email}</TableCell>
                       <TableCell>{el.phone}</TableCell>
                       {el.verified !== 0 ? <TableCell className="text-success">Verified</TableCell>:<TableCell className="text-danger">Pending</TableCell>}
@@ -207,13 +250,31 @@ export default function VendorPage(props) {
             </>:<>
               <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
                 {products.map((el,key)=>(
-                  <div key={key} className="bg-white border shadow-sm">
+                  <div key={key} className="bg-white border shadow-sm relative">
                     <img src={"https://api.treevesto.com:4000/"+el.productImages[0]} alt=""/>
                     <div className="p-1">
                       <div>
                         <span className="text-sm"> {el.productName.lengTableCell>16?el.productName.substr(0,16):el.productName} </span>
                         <span className="text-sm"> {el.productName.lengTableCell>16?"...":""} </span>
-                        <div> Rs. {el.sellingPrice} </div>
+                        <div> Rs. {el.sellingPrice}  </div>
+                        <MaterialModal name="Add Tags" label={<LocalOfferIcon className="cursor-pointer absolute top-0 right-0 m-1 text-blue-800" />} 
+                        content={<> 
+                          <form onSubmit={handleSubmit(updateProduct)} > 
+                            <input type="hidden" name="id" defaultValue={el._id} ref={register()} className="form-control m-2" />
+                            <input type="text" name="Meta_Keywords" defaultValue={el.Meta_Keywords} ref={register()} className="form-control m-2" placeholder="Meta_Keywords" />
+                            <input type="text" name="Meta_Data" defaultValue={el.Meta_Data} ref={register()} className="form-control m-2" placeholder="Meta_Data" />
+                            <textarea name="Meta_Description" defaultValue={el.Meta_Description} ref={register()} className="form-control m-2" placeholder="Meta_Description" cols={30} rows={4}></textarea>
+                            <input type="text" name="Meta_image_URL" defaultValue={el.Meta_image_URL} ref={register()} className="form-control m-2" placeholder="Meta_image_URL" />
+
+                            <div className="text-right">
+                                <Button type="submit" variant="contained" color="secondary">
+                                  Submit
+                                </Button>
+                            </div>
+                          </form>
+
+                        </>} />
+                        
                         {/* <div className="p-1 px-3 text-center text-sm cursor-pointer border-2 border-dark rounded bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Set Attribute</div> */}
                       </div>
 
