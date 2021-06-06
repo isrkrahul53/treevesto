@@ -1,6 +1,8 @@
-import Layout from "../../component/common/layout";
 import Button from '@material-ui/core/Button'
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
+
+const Layout = lazy(()=>import('../../component/common/layout'))
+
 
 function Card(props){
     return <div className="border bg-white shadow-sm">
@@ -33,8 +35,14 @@ export default function Wishlist() {
 
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([]);
+    const [isFront, setIsFront] = React.useState(false);
 
     useEffect(()=>{
+        process.nextTick(() => {
+            if (globalThis.window ?? false) {
+                setIsFront(true);
+            }
+        });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
             getCart(user.userId)
@@ -90,31 +98,37 @@ export default function Wishlist() {
         // }  
       }
       
+      if (!isFront) return null;
 
     return <div>
-        <Layout error={error} success={success} close={closeAlert} cart={cart.length} wishlist={wishlist.length}>
+        
+        <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+            <Layout error={error} success={success} close={closeAlert} cart={cart.length} wishlist={wishlist.length}>
 
 
-            <div className="">
-                <div className="w-4/5 mx-auto my-4">
+                <div className="">
+                    <div className="w-4/5 mx-auto my-4">
 
-                    <h3 className="text-xl font-md my-4">My Wishlist ( {wishlist.length} items )</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <h3 className="text-xl font-md my-4">My Wishlist ( {wishlist.length} items )</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
 
-                        {wishlist?wishlist.map((el,key)=>(
-                            <div key={key}>
-                                <Card  name={el.name} price={el.price} image={el.image} 
-                                movetoCart={()=>{movetoCart(el._id)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
-                            </div>
-                        )):<div></div>} 
-                        
+                            {wishlist?wishlist.map((el,key)=>(
+                                <div key={key}>
+                                    <Card  name={el.name} price={el.price} image={el.image} 
+                                    movetoCart={()=>{movetoCart(el._id)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
+                                </div>
+                            )):<div></div>} 
+                            
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
-
-        </Layout>
+            </Layout>
+        </Suspense>
     </div>
 }

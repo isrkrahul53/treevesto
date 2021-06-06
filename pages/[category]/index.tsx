@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
-import Layout from '../../component/common/layout';
-import FilterPage from '../../component/pages/filterPage';
-import MaterialChipArray from '../../component/material/chipArray';
 import axios from 'axios';
 import https from 'https'
-import SingleProduct from '../../component/product/singleProduct';
-import Filterbar from '../../component/common/filterbar';
+import MaterialChipArray from '../../component/material/chipArray';
+import Skeleton from '@material-ui/lab/Skeleton';
 
+
+const Layout = lazy(()=>import('../../component/common/layout'))
+const FilterPage = lazy(()=>import('../../component/pages/filterPage'))
+const SingleProduct = lazy(()=>import('../../component/product/singleProduct'))
+const Filterbar = lazy(()=>import('../../component/common/filterbar'))
 
 export default function Product(props){
   
@@ -27,8 +29,14 @@ export default function Product(props){
   const [wishlist,setWishlist] = React.useState([])
   const [selectedFilters,setSelectedFilters] = React.useState(null)
   
+  const [isFront, setIsFront] = React.useState(false);
   
   useEffect(()=>{
+    process.nextTick(() => {
+      if (globalThis.window ?? false) {
+          setIsFront(true);
+      }
+    });
     var cart = JSON.parse(localStorage.getItem('cart'))
     if(cart){
       setCart(cart)
@@ -123,101 +131,128 @@ export default function Product(props){
   };
   
   const filterChange={handleSizeChange,handleColourChange,handleRangeChange}
+  if (!isFront) return null;
 
   return <div>
     <Head>
       <title>Products</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    
-    <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
-      
+    <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+      <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
+        
 
-      <div className="container my-4">
-          <nav className="breadcrumb" aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
-                  <li className="breadcrumb-item active"> {props.catName} </li> 
-              </ol>
-          </nav>
-        <div className="row">
-            {props.products.length != 0?<>
-              <div className="col-md-3 hidden md:block">
-                  <FilterPage values={filterData} change={filterChange} 
-                  min={min} 
-                  max={max} 
-                  colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                  sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                  />
-              </div>
-            </>:<></>}
+        <div className="container my-4">
+            <nav className="breadcrumb" aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
+                    <li className="breadcrumb-item active"> {props.catName} </li> 
+                </ol>
+            </nav>
+            <div className="row">
+                {props.products.length != 0?<>
+                  <div className="col-md-3 hidden md:block">
+                    <Suspense fallback={<div>
+                      <Skeleton className="w-full" />
+                        <div className="container">
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                          <Skeleton className="w-full" />
+                        </div>
+                      </div>}>
 
-          <div className="col-md-9 p-2 px-3">
+                        <FilterPage values={filterData} change={filterChange} 
+                        min={min} 
+                        max={max} 
+                        colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                        sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                        />
 
-              {props.products.length == 0?<div className="p-4">
-                <div className="display-6"> No Products Available </div>
-                <div className="text-secondary"> 
-                Go to homepage 
-                <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
-                </div>
-              </div>:<>
-                <div className="text-2xl p-2 font-normal"> {props.catName} </div>
-                <div className="flex-row md:flex items-center">
-                  <div className="hidden md:block">
-                    <MaterialChipArray data={filterData} 
-                    delSize={e=>setSize(size.filter((d,k)=>k!==e))}
-                    delColour={e=>setColour(size.filter((d,k)=>k!==e))}
-                    />
+                      
+                    </Suspense>
                   </div>
-                  <Filterbar values={filterData} change={filterChange}
-                  min={min} 
-                  max={max} 
-                  colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                  sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                  />
-                  {/* <article className="flex items-center justify-between md:ml-auto my-2 md:my-0">
-                    <select className="form-select" name="sort" id="sort">
-                      <option value="">Recommended</option>
-                      <option value="">Better Discount</option>
-                      <option value="">Popularity</option>
-                      <option value="">Price : Low to high</option>
-                      <option value="">Price : High to low</option>
-                    </select>
-                  </article> */}
-                </div>
-                {products.length > 0 ?<>
-                  <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-2"}>
-                    {products?.map((el,key)=>(
-                      <div key={key}>
-                        <SingleProduct data={el} cart={addtoCart} />
-                      </div> 
-                    ))}
-                  </div>
-                </>:<>
-                  <div className="p-4">
+                </>:<></>}
+
+              <div className="col-md-9 p-2 px-3">
+
+                  {props.products.length == 0?<div className="p-4">
                     <div className="display-6"> No Products Available </div>
                     <div className="text-secondary"> 
                     Go to homepage 
                     <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
                     </div>
-                  </div>
-                </>}
-              </>}
+                  </div>:<>
+                    <div className="text-2xl p-2 font-normal"> {props.catName} </div>
+                    <div className="flex-row md:flex items-center">
+                      <div className="hidden md:block">
+                        <MaterialChipArray data={filterData} 
+                        delSize={e=>setSize(size.filter((d,k)=>k!==e))}
+                        delColour={e=>setColour(size.filter((d,k)=>k!==e))}
+                        />
+                      </div>
+                      
+                      <Suspense fallback={<div>
+                        <Skeleton className="w-full" />
+                        </div>}>
+                          <Filterbar values={filterData} change={filterChange}
+                          min={min} 
+                          max={max} 
+                          colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                          sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                          /> 
+                      </Suspense>
+                    </div>
+                    {products.length > 0 ?<>
+                          <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-2"}>
+                            {products?.map((el,key)=>(
+                              <div key={key}>
+                                <Suspense fallback={<div>
+                                  <Skeleton className="w-full" height={240} />
+                                  </div>}>
+                                    <SingleProduct data={el} cart={addtoCart} />
+                                </Suspense>
+
+                              </div> 
+                            ))}
+                          </div>
+                    </>:<>
+                      <div className="p-4">
+                        <div className="display-6"> No Products Available </div>
+                        <div className="text-secondary"> 
+                        Go to homepage 
+                        <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
+                        </div>
+                      </div>
+                    </>}
+                  </>}
 
 
+              </div>
+            </div>
+
+        </div>
+
+        
+          {/* <div className={"bg-white w-full border shadow-sm rounded p-4 "+styles.filter}>
+            <FilterPage />
           </div>
-        </div>
+        {showFilter?<>
+        </>:<></>} */}
 
-      </div>
-
-      
-        {/* <div className={"bg-white w-full border shadow-sm rounded p-4 "+styles.filter}>
-          <FilterPage />
-        </div>
-      {showFilter?<>
-      </>:<></>} */}
-
-    </Layout>
+      </Layout>
+    </Suspense>
 
   </div>
 }

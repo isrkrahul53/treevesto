@@ -1,39 +1,47 @@
-import React, { useEffect } from 'react'
-import AdminLayout from '../../../component/common/AdminLayout' 
+import React, { useEffect, lazy, Suspense } from 'react'
 import { useRouter } from 'next/router'; 
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'; 
-import StoreIcon from '@material-ui/icons/Store';
-import AppsIcon from '@material-ui/icons/Apps';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CloseIcon from '@material-ui/icons/Close';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import MaterialModal from "../../../component/material/materialModal";
+import Button from '@material-ui/core/Button'
+import { Card } from '@material-ui/core';
+
+
+const BottomNavigation = lazy(()=>import('@material-ui/core/BottomNavigation'));
+const BottomNavigationAction = lazy(()=>import('@material-ui/core/BottomNavigationAction'));
+const StoreIcon = lazy(()=>import('@material-ui/icons/Store'));
+const AppsIcon = lazy(()=>import('@material-ui/icons/Apps'));
+const AssignmentTurnedInIcon = lazy(()=>import('@material-ui/icons/AssignmentTurnedIn'));
+const VisibilityIcon = lazy(()=>import('@material-ui/icons/Visibility'));
+const CheckBoxIcon = lazy(()=>import('@material-ui/icons/CheckBox'));
+const CloseIcon = lazy(()=>import('@material-ui/icons/Close'));
+const CategoryIcon = lazy(()=>import('@material-ui/icons/Category'));
+const VerifiedUserIcon = lazy(()=>import('@material-ui/icons/VerifiedUser'));
+const LocalOfferIcon = lazy(()=>import('@material-ui/icons/LocalOffer'));
+const MaterialModal = lazy(()=>import("../../../component/material/materialModal"));
+const AdminLayout = lazy(()=>import('../../../component/common/AdminLayout'));
+
+
+
+
 
 // Table
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+const Table = lazy(()=>import('@material-ui/core/Table'));
+const TableBody = lazy(()=>import('@material-ui/core/TableBody'));
+const TableCell = lazy(()=>import('@material-ui/core/TableCell'));
+const TableHead = lazy(()=>import('@material-ui/core/TableHead'));
+const TableRow = lazy(()=>import('@material-ui/core/TableRow'));
+const Paper = lazy(()=>import('@material-ui/core/Paper'));
+
 
 
 import axios from 'axios';
 import https from 'https'
-import Button from '@material-ui/core/Button'
-import { Card } from '@material-ui/core';
 
 
 import {useForm} from 'react-hook-form'
 
 
 export default function VendorPage(props) {
-  console.log(props.vendors)
+  
   const {register,setValue,handleSubmit,errors} = useForm();
 
   const router = useRouter();
@@ -41,11 +49,22 @@ export default function VendorPage(props) {
   const [selectedVendor, setSelectedVendor] = React.useState("");
   var isLoading = false;
   const [products,setProducts] = React.useState([])
+  const [isFront, setIsFront] = React.useState(false);
   
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
   };
    
+  useEffect(()=>{
+    process.nextTick(() => {
+        if (globalThis.window ?? false) {
+            setIsFront(true);
+        }
+    });
+    
+  },[])
+
+
   useEffect(()=>{
     isLoading = true;
     if(selectedVendor != ""){
@@ -64,8 +83,8 @@ export default function VendorPage(props) {
   const updateVendor = (x,val) => {
     // console.log(!x)
     var formData = new FormData();
-    formData.append("assured",JSON.stringify(!val))
-    fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+    formData.append("assured",val)
+    fetch(`https://api.treevesto.com:4000/vendor/email/`+x,{
       method:"PATCH",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -132,17 +151,23 @@ export default function VendorPage(props) {
     }
   }
 
-    return <AdminLayout>
-      
-      
+
+  if (!isFront) return null;
+
+  return <Suspense fallback={<div className="text-center py-10">
+      <div className="spinner-border text-primary"></div>
+    </div>}>
+      <AdminLayout>
+        
+        
         <BottomNavigation value={navigation} onChange={handleNavigationChange}>
             <BottomNavigationAction label="Vendors" value="vendors" icon={<StoreIcon />} />
             <BottomNavigationAction label="Products" value="products" icon={<AppsIcon />} />
             <BottomNavigationAction label="Verification" value="verification" icon={<AssignmentTurnedInIcon />} />
         </BottomNavigation>
-      
-
         
+
+          
         {navigation == 'vendors'?<div>
             <TableContainer component={Paper}>
               <Table className={""} aria-label="simple table">
@@ -162,20 +187,25 @@ export default function VendorPage(props) {
                       
                       <TableCell>{key+1}</TableCell>
                       <TableCell> 
-                        <VerifiedUserIcon onClick={e=>updateVendor(el._id,el.assured)} className={el.assured ? "text-green-800 cursor-pointer":"text-gray-400 cursor-pointer"} />
-                         {el.name}
+                        <VerifiedUserIcon onClick={e=>updateVendor(el.email,el.assured === "1"?"0":"1")} className={el.assured === "1" ? "text-green-800 cursor-pointer":"text-gray-400 cursor-pointer"} />
+                          {el.name}
                       </TableCell>
                       <TableCell>{el.email}</TableCell>
                       <TableCell>{el.phone}</TableCell>
                       {el.verified !== 0 ? <TableCell className="text-success">Verified</TableCell>:<TableCell className="text-danger">Pending</TableCell>}
-                      <TableCell className="text-primary cursor-pointer" onClick={e=>deleteVendor(el._id)}><CloseIcon /></TableCell>
+                      <TableCell>
+                        {/* {el.assured === "0"? <>
+                          <CategoryIcon  className="cursor-pointer text-primary" />
+                        </>:<></>} */}
+                        <CloseIcon  onClick={e=>deleteVendor(el._id)} className="cursor-pointer text-danger" />
+                      </TableCell>
                         
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-             
+              
         </div>:<></>}
 
         {navigation === 'verification'?<>
@@ -295,7 +325,8 @@ export default function VendorPage(props) {
         </div>:<div></div>}
 
 
-    </AdminLayout> 
+      </AdminLayout>
+    </Suspense>
 }
 
 

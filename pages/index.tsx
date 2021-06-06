@@ -1,22 +1,16 @@
 import Link from 'next/link';
-import React, { useEffect } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import Head from 'next/head'
-import Banner from '../component/common/banner'
-import Layout from '../component/common/layout'
-import MaterialModal from '../component/material/modal'
 import axios from 'axios';
 import https from 'https'
-import ProductCarousel from '../component/common/productCarousel';
-import style from './index.module.scss'
-
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import SingleProduct from '../component/product/singleProduct';
-import ReactMultiCarousel from '../component/react/multiCarousel'
-import ReactCarousel from '../component/react/carousel';
 import { useRouter } from 'next/router';
- 
+import Skeleton from '@material-ui/lab/Skeleton';
+
+const Layout = lazy(()=>import('../component/common/layout'))
+const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
+const ReactMultiCarousel = lazy(()=>import('../component/react/multiCarousel'))
+const ReactCarousel = lazy(()=>import('../component/react/carousel'))
+
 function Cards(props){
   return <div>
     <h3 className="display-5 my-8 text-secondary"> {props.title} </h3>
@@ -53,9 +47,15 @@ export default function Home(props) {
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
  
- 
+  const [isFront, setIsFront] = React.useState(false);
+
 
   useEffect(()=>{
+    process.nextTick(() => {
+      if (globalThis.window ?? false) {
+          setIsFront(true);
+      }
+    });
     fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
@@ -126,6 +126,8 @@ export default function Home(props) {
       //     setError('Already added to cart')
       // }
   }
+  if (!isFront) return null;
+
   return (
     <div>
       <Head>
@@ -133,148 +135,112 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
- 
-
+      <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+        <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
+  
           {/* ======================================== */}
           {/* Banners */}
           {/* ======================================== */}
-
-          {/* <Banner images={banner} indicator={true} /> */}
           
-          {/* <ProductCarousel images={banner} indicator={true} /> */}
           <div className="md:hidden">
-            <ReactMultiCarousel mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
-                <Link href={"/"+e._id}><div key={k} className="text-center w-full">
-                  <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
-                  <div className="text-sm p-1">  {e.catName} </div>
-                </div></Link>
-              ))} />
+            <Suspense fallback={<Skeleton className="w-full" height={240} />}>
+              <ReactMultiCarousel mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
+                  <Link href={"/"+e._id} key={k}><div className="text-center w-full">
+                    <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
+                    <div className="text-sm p-1">  {e.catName} </div>
+                  </div></Link>
+                ))} />
+            </Suspense>
           <br />
           </div>
-          <ReactCarousel data={banner} arrows={false} showDots={true} />
-  
-          {/* <img src="/assets/images/freeshipping.jpg" className="my-2" alt="freeShipping"/> */}
 
-        {/* <div className="text-center p-8 md:p-32" style={{background:'url("/assets/images/banner/banner8.jpg") no-repeat',backgroundSize:"cover",backgroundPositionX:"center"}}>
-          <div className="text-secondary">Limited time : Online only !</div>
-          <div className="display-4">FINAL CLEARANCE</div>
-          <div className="display-6">Take 20% Off 'Sale Must-Haves'</div>
-          <div className="my-4">
-          <Link href="/6099022ddbf23644536cb74d?color=Brown,Green&size=4XL&from=4233&to=6565"><span className="px-4 py-2 cursor-pointer border border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">Shop Now</span></Link>
-          </div>
-        </div> */}
- 
-
-        {/* Category Section */}
-        {/* <div className="container my-10">
-
-<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-
-{categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
-  <div key={key} className={"relative overflow-hidden font-thin "+style.women}>
-  {el.catImage && <>
-    <article style={{backgroundImage:'url("https://api.treevesto.com:4000/'+el.catImage+'")',backgroundRepeat:"no-repeat",backgroundSize:"cover",height:"280px"}}>
-    <section className="womencat flex items-center bg-white text-center p-4 m-4 border-2 border-dark" style={{height:"250px"}}>
-    <div className="w-full">
-    <div className="text-xl">{el.catName.toUpperCase()}</div>
-    {categories.filter(e=>e.parentCatId === el._id).map((e,k)=>(
-      <div key={k} className="cursor-pointer"><Link href={"/"+e._id}>{e.catName}</Link></div>
-      ))}
-      </div>
-      </section>
-      <footer className="womentitle text-center text-lg bg-white p-2 border">{el.catName.toUpperCase()}</footer>
-      </article>
-      </>}
-      </div>
-      ))} 
+          
+          <Suspense fallback={<Skeleton className="w-full" height={380} />}>
+            <ReactCarousel data={banner} arrows={false} showDots={true} />
+          </Suspense>
       
-      </div>
-    </div> */}
 
-
-        <div className="container my-2"> 
-        
+          <div className="container my-2"> 
           
-          {/* <div className="flex items-center justify-center font-light my-4">
-            <div className={navigation === 0?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(0)}>
-              <div className="flex items-center">
-                <span>New</span>
-                <span className="md:block hidden ml-1">Product</span>
-              </div>
-            </div>
-            <div className={navigation === 1?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(1)}>
-              <div className="flex items-center">
-                <span>Special</span>
-                <span className="md:block hidden ml-1">Product</span>
-              </div>
-            </div>
-            <div className={navigation === 2?"text-xl p-2 font-medium":"text-xl p-2 cursor-pointer"} onClick={()=>setNavigation(2)}>
-              <div className="flex items-center">
-                <span>Featured</span>
-                <span className="md:block hidden ml-1">Product</span>
-              </div>
-            </div>
-          </div>
-          <div className="my-2"></div>
-
-          {navigation === 0?<>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-content-center gap-4">
-              {props.products.map((el,key)=>(
-                <div key={key}>
-                  <SingleProduct data={el} cart={addtoCart} />
-                </div> 
-              ))}
-            </div>
-          </>:<></>} */}
+            
   
- 
-          {/* =========================================== */}
-          {/* Sections */}
-          {/* =========================================== */}
+            {/* =========================================== */}
+            {/* Sections */}
+            {/* =========================================== */}
 
-          {sections?.filter(e=>e.position === "Top").map((el,key)=>(
-            <div key={key}>
-                <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
-                <div className={"grid grid-cols-"+(el.grid < 2 ? 1 : 2)+" md:grid-cols-"+el.grid+" gap-2"}>
-                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
-                      return <div key={key}> 
-                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
-                        </div> 
-                    })} 
-                </div>
-            
-            </div>
-          ))}
           
-          <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>
-          <ReactMultiCarousel arrows={true} content={props.products.map((e,k)=>(
-                <div key={k} className="p-1">
-                    <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+            <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-2"> 
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+              </div>}>
+              {sections?.filter(e=>e.position === "Top").map((el,key)=>(
+                <div key={key}>
+                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
+                    <div className={"row"}>
+                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                          return <div key={k} className={"col-"+(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6)+" col-md-"+(12/el.grid)+" p-2"}> 
+                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""} width="100%" className="border cursor-pointer" /></Link>
+                            </div> 
+                        })} 
+                    </div>
+                
                 </div>
-            ))} />
-
-          {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
-            <div key={key}>
-                <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
-                <div className={"grid grid-cols-2 md:grid-cols-"+el.grid+" gap-2"}>
-                    {cards.filter(e=>el._id === e.sectionId)?.map((e,key)=>{ 
-                      return <div key={key}> 
-                            <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} width="100%" className="border cursor-pointer" /></Link>
-                        </div> 
-                    })} 
-                </div>
+              ))}
+            </Suspense>
             
-            </div>
-          ))}
- 
+            <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>
 
-        </div>
+            
+          
+            <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2"> 
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+              </div>}>
+              <ReactMultiCarousel arrows={true} content={props.products.map((e,k)=>(
+                    <div key={k} className="p-1">
+                        <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+                    </div>
+                ))} />
+            </Suspense>
 
-        
-        <br/>
+          
+            <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-2"> 
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" height={240} />
+              </div>}>
+              {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
+                <div key={key}>
+                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
+                    <div className={"row"}>
+                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                          return <div key={k} className={"col-"+(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6)+" col-md-"+(12/el.grid)+" p-2"}> 
+                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""} width="100%" className="border cursor-pointer" /></Link>
+                            </div> 
+                        })} 
+                    </div>
+                
+                </div>
+              ))}
+            </Suspense>
+  
 
-      </Layout>
+          </div>
+
+          
+          <br/>
+
+        </Layout>
+      </Suspense>
 
     </div>
   )

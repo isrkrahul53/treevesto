@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, lazy, Suspense } from 'react'
 import Link from 'next/link';
-import Layout from "../../../component/common/layout";
-import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
+
+const Layout = lazy(()=>import("../../../component/common/layout"))
 
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
@@ -41,8 +41,14 @@ export default function RegisterPage(){
 
     var recaptchaVerifier = null;
     const router = useRouter();
+    const [isFront, setIsFront] = React.useState(false);
     
     useEffect(()=>{
+        process.nextTick(() => {
+            if (globalThis.window ?? false) {
+                setIsFront(true);
+            }
+        });
         if(localStorage.getItem('user')){
             router.replace("/")
         }
@@ -134,154 +140,162 @@ export default function RegisterPage(){
             setError(error.message)
         });
     }
+    if (!isFront) return null;
+
+
     return <div>
-        <Layout error={error} success={success}>
         
+        <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+            <Layout error={error} success={success}>
+            
 
-            <div className="container my-4">
-                <div className="row">
-                    <div className="col-12 col-md-4"></div>
+                <div className="container my-4">
+                    <div className="row">
+                        <div className="col-12 col-md-4"></div>
 
-                    <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
+                        <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
 
-                    {values.step == 1?<div>
-                            <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
+                        {values.step == 1?<div>
+                                <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
 
-                            <form className="p-4" onSubmit={handleSubmit(RegisterWithPhoneNumber)}>
-                                <div className="my-3">
-                                    <span className="mx-1 text-2xl">Register</span> 
-                                </div>
-                                
-                                <div className={values.userId?"flex border border-dark my-3 d-none":"flex border border-dark my-3"}>
-                                    <div className="p-2 bg-light">+91</div>
-                                    <input type="number" name="phone" id="phone" placeholder="Mobile Number *"
-                                    className="w-100 p-2 border-0 outline-none" 
-                                    ref={register({required:true,minLength:10,maxLength:10})} />
-                                </div>
-                                {errors.phone && errors.phone.type==="required" && (
-                                <small className="text-danger -mt-10">Phone number cannot be empty</small>
-                                )}
-                                {errors.phone && errors.phone.type==="minLength" && (
-                                <small className="text-danger -mt-10">Enter valid phone Number</small>
-                                )}
-                                {errors.phone && errors.phone.type==="maxLength" && (
-                                <small className="text-danger -mt-10">Enter valid phone Number</small>
-                                )}
-                                
-     
-                                <div id="recaptcha-container"></div>
-                                
+                                <form className="p-4" onSubmit={handleSubmit(RegisterWithPhoneNumber)}>
+                                    <div className="my-3">
+                                        <span className="mx-1 text-2xl">Register</span> 
+                                    </div>
+                                    
+                                    <div className={values.userId?"flex border border-dark my-3 d-none":"flex border border-dark my-3"}>
+                                        <div className="p-2 bg-light">+91</div>
+                                        <input type="number" name="phone" id="phone" placeholder="Mobile Number *"
+                                        className="w-100 p-2 border-0 outline-none" 
+                                        ref={register({required:true,minLength:10,maxLength:10})} />
+                                    </div>
+                                    {errors.phone && errors.phone.type==="required" && (
+                                    <small className="text-danger -mt-10">Phone number cannot be empty</small>
+                                    )}
+                                    {errors.phone && errors.phone.type==="minLength" && (
+                                    <small className="text-danger -mt-10">Enter valid phone Number</small>
+                                    )}
+                                    {errors.phone && errors.phone.type==="maxLength" && (
+                                    <small className="text-danger -mt-10">Enter valid phone Number</small>
+                                    )}
+                                    
+        
+                                    <div id="recaptcha-container"></div>
+                                    
 
-                                <p className="py-3">By continuing, I agree to the  <span className="text-danger">Terms of Use</span> & <span className="text-danger">Privacy Policy</span> </p>
+                                    <p className="py-3">By continuing, I agree to the  <span className="text-danger">Terms of Use</span> & <span className="text-danger">Privacy Policy</span> </p>
 
-                                <Button type="submit" variant="contained" color="secondary">
-                                Continue
-                                </Button>
-                                <p className="py-3">Already Registered ?  <span className="text-danger cursor-pointer"><Link href="/auth/login">Login</Link></span> </p>
-
-
-                            </form>
-
-                        </div>:<div></div>}
-                        
-                        {values.step == 2?<div>
-                            <form className="p-4" onSubmit={handleSubmit(verifyCode)}>
-                                <img src="/assets/images/otp.jpg" className="w-32 rounded-circle" />
-                                <h4 className="text-2xl">Verify With OTP</h4>
-                                <h5 className="text-sm text-secondary">Sent to : 6209460626</h5>
- 
-                                
-                                {cResult?<div className="flex border border-dark my-3"> 
-                                    <input type="number" name="otp" id="otp" 
-                                    className="w-100 p-2 border-0 outline-none" placeholder="Enter OTP"
-                                    ref={register({required:true,minLength:4})} />
-                                </div>:<></>}
-                                {errors.otp && errors.otp.type==="required" && (
-                                <small className="text-danger -mt-10">Enter OTP</small>
-                                )}
-                                {errors.otp && errors.otp.type==="minLength" && (
-                                <small className="text-danger -mt-10">Enter valid OTP</small>
-                                )}
-
-                                <h5 className="text-lg text-secondary my-2">Log in using <span  className="text-danger"><Link href="/auth/login/password">Password</Link> </span> </h5>
-                                <h5 className="text-lg text-secondary my-2">Having trouble logging in ? <span  className="text-danger">Get help</span> </h5>
-                                
-                                <Button type="submit" variant="contained" color="secondary">
-                                 Verify
-                                </Button>
-
-                                
-                            </form>
-                        </div>:<div></div>}
-
-                        {values.step == 3?<div>
-                            <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
-
-                            <form className="p-4" onSubmit={handleSubmit(onRegister)}>
-                                <div className="my-3"> 
-                                    <span className="mx-1 text-2xl">
-                                        Register <small className="text-secondary text-sm"> with {values.phone} </small> 
-                                    </span>
-                                </div>
-                                 
-                                <div className="flex border border-dark mt-3">
-                                    <input type="text" name="email" id="email" defaultValue={values.email} 
-                                    onChange={e=>setValues({...values,email:e.target.value})} className="w-full p-2 outline-none" 
-                                    placeholder="Enter your email Address ( optional ) " 
-                                    ref={register({required:false,pattern:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i})} />
-                                </div>
-                                {/* {errors.email?.type === "required" && <small className="text-danger">Email Id is required</small>} */}
-                                {errors.email?.type === "pattern" && <small className="text-danger">Enter valid email address</small>}
+                                    <Button type="submit" variant="contained" color="secondary">
+                                    Continue
+                                    </Button>
+                                    <p className="py-3">Already Registered ?  <span className="text-danger cursor-pointer"><Link href="/auth/login">Login</Link></span> </p>
 
 
-                                <div className="flex border border-dark mt-3">
-                                    <input type="text" name="name" id="name" defaultValue={values.name} 
-                                    onChange={e=>setValues({...values,name:e.target.value})} className="w-full p-2 outline-none" 
-                                    placeholder="Enter your fullname" 
-                                    ref={register({required:true})} />
-                                </div>
-                                {errors.name?.type === "required" && <small className="text-danger">Name is required</small>}
+                                </form>
 
-                                <div className="flex border border-dark mt-3">
-                                    <input type="text" name="password" id="password" defaultValue={values.password} 
-                                    onChange={e=>setValues({...values,password:e.target.value})} className="w-full p-2 outline-none" 
-                                    placeholder="Enter password" 
-                                    ref={register({required:true})} />
-                                </div>
-                                {errors.password?.type === "required" && <small className="text-danger">Password is required</small>}
+                            </div>:<div></div>}
+                            
+                            {values.step == 2?<div>
+                                <form className="p-4" onSubmit={handleSubmit(verifyCode)}>
+                                    <img src="/assets/images/otp.jpg" className="w-32 rounded-circle" />
+                                    <h4 className="text-2xl">Verify With OTP</h4>
+                                    <h5 className="text-sm text-secondary">Sent to : 6209460626</h5>
+    
+                                    
+                                    {cResult?<div className="flex border border-dark my-3"> 
+                                        <input type="number" name="otp" id="otp" 
+                                        className="w-100 p-2 border-0 outline-none" placeholder="Enter OTP"
+                                        ref={register({required:true,minLength:4})} />
+                                    </div>:<></>}
+                                    {errors.otp && errors.otp.type==="required" && (
+                                    <small className="text-danger -mt-10">Enter OTP</small>
+                                    )}
+                                    {errors.otp && errors.otp.type==="minLength" && (
+                                    <small className="text-danger -mt-10">Enter valid OTP</small>
+                                    )}
 
-                                <div className="flex border border-dark mt-3">
-                                    <input type="text" name="cpassword" id="cpassword" defaultValue={values.cpassword} 
-                                    onChange={e=>setValues({...values,cpassword:e.target.value})} className="w-full p-2 outline-none" 
-                                    placeholder="Confirm password" 
-                                    ref={register({
-                                        validate:value=>value === password.current || "The Password do not match"
-                                    })} />
-                                </div>
-                                {errors.cpassword && <small className="text-danger">{errors.cpassword.message}</small>}
+                                    <h5 className="text-lg text-secondary my-2">Log in using <span  className="text-danger"><Link href="/auth/login/password">Password</Link> </span> </h5>
+                                    <h5 className="text-lg text-secondary my-2">Having trouble logging in ? <span  className="text-danger">Get help</span> </h5>
+                                    
+                                    <Button type="submit" variant="contained" color="secondary">
+                                    Verify
+                                    </Button>
 
-                                <div className="py-2"></div>
-                                
-                                <Button type="submit" variant="contained" color="secondary">
-                                 Register
-                                </Button>
-                                <p className="py-3">Already Registered ?  <span className="text-danger cursor-pointer"><Link href="/auth/login">Login</Link></span> </p>
+                                    
+                                </form>
+                            </div>:<div></div>}
+
+                            {values.step == 3?<div>
+                                <img src="/assets/images/banner_login_landing_300.jpg" className="w-100" />
+
+                                <form className="p-4" onSubmit={handleSubmit(onRegister)}>
+                                    <div className="my-3"> 
+                                        <span className="mx-1 text-2xl">
+                                            Register <small className="text-secondary text-sm"> with {values.phone} </small> 
+                                        </span>
+                                    </div>
+                                    
+                                    <div className="flex border border-dark mt-3">
+                                        <input type="text" name="email" id="email" defaultValue={values.email} 
+                                        onChange={e=>setValues({...values,email:e.target.value})} className="w-full p-2 outline-none" 
+                                        placeholder="Enter your email Address ( optional ) " 
+                                        ref={register({required:false,pattern:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i})} />
+                                    </div>
+                                    {/* {errors.email?.type === "required" && <small className="text-danger">Email Id is required</small>} */}
+                                    {errors.email?.type === "pattern" && <small className="text-danger">Enter valid email address</small>}
 
 
-                            </form>
+                                    <div className="flex border border-dark mt-3">
+                                        <input type="text" name="name" id="name" defaultValue={values.name} 
+                                        onChange={e=>setValues({...values,name:e.target.value})} className="w-full p-2 outline-none" 
+                                        placeholder="Enter your fullname" 
+                                        ref={register({required:true})} />
+                                    </div>
+                                    {errors.name?.type === "required" && <small className="text-danger">Name is required</small>}
 
-                            <form>
-                                
+                                    <div className="flex border border-dark mt-3">
+                                        <input type="text" name="password" id="password" defaultValue={values.password} 
+                                        onChange={e=>setValues({...values,password:e.target.value})} className="w-full p-2 outline-none" 
+                                        placeholder="Enter password" 
+                                        ref={register({required:true})} />
+                                    </div>
+                                    {errors.password?.type === "required" && <small className="text-danger">Password is required</small>}
 
-                            </form>
+                                    <div className="flex border border-dark mt-3">
+                                        <input type="text" name="cpassword" id="cpassword" defaultValue={values.cpassword} 
+                                        onChange={e=>setValues({...values,cpassword:e.target.value})} className="w-full p-2 outline-none" 
+                                        placeholder="Confirm password" 
+                                        ref={register({
+                                            validate:value=>value === password.current || "The Password do not match"
+                                        })} />
+                                    </div>
+                                    {errors.cpassword && <small className="text-danger">{errors.cpassword.message}</small>}
 
-                        </div>:<div></div>}
+                                    <div className="py-2"></div>
+                                    
+                                    <Button type="submit" variant="contained" color="secondary">
+                                    Register
+                                    </Button>
+                                    <p className="py-3">Already Registered ?  <span className="text-danger cursor-pointer"><Link href="/auth/login">Login</Link></span> </p>
 
-                        
+
+                                </form>
+
+                                <form>
+                                    
+
+                                </form>
+
+                            </div>:<div></div>}
+
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </Layout>
+            </Layout>
+        </Suspense>
     </div>
 }

@@ -1,18 +1,19 @@
-import React from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { useRouter } from 'next/router';
-import AdminLayout from "../../../component/common/AdminLayout";
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';  
-import CategoryIcon from '@material-ui/icons/Category';
-import AppsIcon from '@material-ui/icons/Apps';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-
 import { useForm } from 'react-hook-form';
 
+const AdminLayout = lazy(()=>import("../../../component/common/AdminLayout"));
+const BottomNavigation = lazy(()=>import('@material-ui/core/BottomNavigation'));
+const BottomNavigationAction = lazy(()=>import('@material-ui/core/BottomNavigationAction'));
+const CategoryIcon = lazy(()=>import('@material-ui/icons/Category'));
+const AppsIcon = lazy(()=>import('@material-ui/icons/Apps'));
+const FilterListIcon = lazy(()=>import('@material-ui/icons/FilterList'));
+const DeleteIcon = lazy(()=>import('@material-ui/icons/Delete'));
+const EditIcon = lazy(()=>import('@material-ui/icons/Edit'));
+const VerifiedUserIcon = lazy(()=>import('@material-ui/icons/VerifiedUser'));
+
 import axios from 'axios';
-import https from 'https'
+import https from 'https' 
 
 export default function AdminCategoryPage(props){
   const router = useRouter();
@@ -20,10 +21,19 @@ export default function AdminCategoryPage(props){
 
   const [selectedCategory,setSelectedCategory] = React.useState(null); 
   const [navigation, setNavigation] = React.useState('category');
+  const [isFront, setIsFront] = React.useState(false);
 
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
   };
+  useEffect(()=>{
+    process.nextTick(() => {
+        if (globalThis.window ?? false) {
+            setIsFront(true);
+        }
+    });
+    
+  },[])
   
   const onSubmit = (data) => {
     // console.log(data)
@@ -40,6 +50,19 @@ export default function AdminCategoryPage(props){
     })
   }
 
+  const updateCategory = (x,val) => {
+    // console.log(x,val)
+    var formData = new FormData();
+    formData.append("assured",val)
+    fetch(`https://api.treevesto.com:4000/category/`+x,{
+      method:"PATCH",
+      body:formData
+    }).then(d=>d.json()).then(json=>{
+      router.replace(router.asPath)
+    })
+
+  } 
+  
   const removeCategory = (id) => {
     if(confirm('Are you sure to remove it !')){
       fetch(`https://api.treevesto.com:4000/category/`+id,{
@@ -49,80 +72,86 @@ export default function AdminCategoryPage(props){
       })
     }
   }
+  if (!isFront) return null;
 
-  return <AdminLayout>
+  return <Suspense fallback={<div className="text-center py-10">
+      <div className="spinner-border text-primary"></div>
+    </div>}>
+      <AdminLayout>
+        
+      <div className="my-2 border shadow-sm rounded overflow-hidden">
+        <BottomNavigation value={navigation} onChange={handleNavigationChange}>
+            <BottomNavigationAction label="Category List" value="list" icon={<FilterListIcon />} />
+            <BottomNavigationAction label="Categories" value="category" icon={<CategoryIcon />} />
+            <BottomNavigationAction label="Subcategories" value="subcategory" icon={<AppsIcon />} />
+        </BottomNavigation>
+      </div>
+
+      {navigation === "list"?<>
+
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="bg-white rounded border shadow-sm">
+            {props.category.map((e,key)=>(
+              <div key={key} className="flex items-center justify-between p-2 px-3 text-lg hover:bg-gray-200 cursor-pointer" onClick={()=>setSelectedCategory(e._id)}> 
+                <VerifiedUserIcon onClick={()=>updateCategory(e._id,e.assured === "1"?"0":"1")} className={e.assured === "1" ? "text-green-800 cursor-pointer":"text-gray-400 cursor-pointer"} />
+                <span> {e.catName}  </span>
+                <div className="ml-auto flex items-center"> 
+                  <EditIcon onClick={()=>router.push("/admin/category/edit?id="+e._id)} className="text-sm hover:text-blue-500" />
+                  <DeleteIcon onClick={()=>removeCategory(e._id)} className="text-sm hover:text-red-500" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white rounded border shadow-sm">
+            {props.categories.filter(e=>e.parentCatId === selectedCategory).map((e,key)=>(
+              <div key={key} className="flex items-center justify-between p-2 px-3 text-lg hover:bg-gray-200 cursor-pointer">
+                <VerifiedUserIcon onClick={()=>updateCategory(e._id,e.assured === "1"?"0":"1")} className={e.assured === "1" ? "text-green-800 cursor-pointer":"text-gray-400 cursor-pointer"} />
+                <span>{e.catName} </span>
+                <div className="ml-auto">
+                  <DeleteIcon onClick={()=>removeCategory(e._id)} className="text-sm hover:text-red-500" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </>:<></>}
+
+      {navigation === "category"?<>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input type="hidden" name="parentCatId" ref={register({required:true})} defaultValue={"0"} />
+          <input type="text" name="catName" className="form-control my-2" placeholder="Enter Category Name"
+          ref={register({required:true})} />
+          <textarea name="desc" className="form-control my-2" cols={30} rows={5} placeholder="Write a description to this category" 
+          ref={register()} />
+          <div className="text-right">
+            <button type="submit" className="btn btn-primary mx-2">Submit</button>
+          </div>
+        </form>
+      </>:<></>}
+      
+      {navigation === "subcategory"?<>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <select name="parentCatId" className="form-select my-2" ref={register({required:true})}>
+            <option value="">Select Category</option>
+            {props.category.map((e,key)=>(
+              <option key={key} value={e._id}> {e.catName} </option>
+            ))} 
+          </select>
+          <input type="text" name="catName" className="form-control my-2" placeholder="Enter Subcategory Name"
+          ref={register({required:true})} />
+          <textarea name="desc" className="form-control my-2" cols={30} rows={5} placeholder="Write a description to this category" 
+          ref={register()} />
+          <div className="text-right">
+            <button type="submit" className="btn btn-primary mx-2">Submit</button>
+          </div>
+        </form>
+      </>:<></>}
+
     
-  <div className="my-2 border shadow-sm rounded overflow-hidden">
-    <BottomNavigation value={navigation} onChange={handleNavigationChange}>
-        <BottomNavigationAction label="Category List" value="list" icon={<FilterListIcon />} />
-        <BottomNavigationAction label="Categories" value="category" icon={<CategoryIcon />} />
-        <BottomNavigationAction label="Subcategories" value="subcategory" icon={<AppsIcon />} />
-    </BottomNavigation>
-  </div>
-
-  {navigation === "list"?<>
-
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-      <div className="bg-white rounded border shadow-sm">
-        {props.category.map((e,key)=>(
-          <div key={key} className="flex items-center justify-between p-2 px-3 text-lg hover:bg-gray-200 cursor-pointer" 
-          onClick={()=>setSelectedCategory(e._id)}> 
-            {e.catName} 
-            <div className="ml-auto">
-              <EditIcon onClick={()=>router.push("/admin/category/edit?id="+e._id)} className="text-sm hover:text-blue-500" />
-              <DeleteIcon onClick={()=>removeCategory(e._id)} className="text-sm hover:text-red-500" />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="bg-white rounded border shadow-sm">
-        {props.categories.filter(e=>e.parentCatId === selectedCategory).map((e,key)=>(
-          <div key={key} className="flex items-center justify-between p-2 px-3 text-lg hover:bg-gray-200 cursor-pointer">
-            {e.catName} 
-            <div className="ml-auto">
-              <DeleteIcon onClick={()=>removeCategory(e._id)} className="text-sm hover:text-red-500" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-  </>:<></>}
-
-  {navigation === "category"?<>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="hidden" name="parentCatId" ref={register({required:true})} defaultValue={"0"} />
-      <input type="text" name="catName" className="form-control my-2" placeholder="Enter Category Name"
-      ref={register({required:true})} />
-      <textarea name="desc" className="form-control my-2" cols={30} rows={5} placeholder="Write a description to this category" 
-      ref={register()} />
-      <div className="text-right">
-        <button type="submit" className="btn btn-primary mx-2">Submit</button>
-      </div>
-    </form>
-  </>:<></>}
-  
-  {navigation === "subcategory"?<>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <select name="parentCatId" className="form-select my-2" ref={register({required:true})}>
-        <option value="">Select Category</option>
-        {props.category.map((e,key)=>(
-          <option key={key} value={e._id}> {e.catName} </option>
-        ))} 
-      </select>
-      <input type="text" name="catName" className="form-control my-2" placeholder="Enter Subcategory Name"
-      ref={register({required:true})} />
-      <textarea name="desc" className="form-control my-2" cols={30} rows={5} placeholder="Write a description to this category" 
-      ref={register()} />
-      <div className="text-right">
-        <button type="submit" className="btn btn-primary mx-2">Submit</button>
-      </div>
-    </form>
-  </>:<></>}
-
- 
-     
-</AdminLayout> 
+        
+    </AdminLayout>
+  </Suspense>
 }
 
 export const getStaticProps = async (context) => {

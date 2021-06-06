@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
-import Link from 'next/link';
-import Layout from "../../../component/common/layout";
 import Button from '@material-ui/core/Button'
+import {useForm} from 'react-hook-form'
 import { useRouter } from 'next/router';
 import TextField from '@material-ui/core/TextField'
 
-import {useForm} from 'react-hook-form'
 
 export default function AdminLoginPage() {
 

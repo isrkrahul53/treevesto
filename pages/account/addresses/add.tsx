@@ -1,17 +1,24 @@
 import { TextField } from '@material-ui/core';
-import React from 'react';
-import { useEffect } from "react";
-import AccountPage from "../../../component/pages/account";
+import React, { useEffect, lazy, Suspense } from 'react'
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router';
+
+const AccountPage = lazy(()=>import("../../../component/pages/account"))
+
 
 export default function AddAddresses(){
     const router = useRouter();
     const { register, handleSubmit, errors } = useForm();
     const [userId,setUserId] = React.useState(null)
     const [addresses,setAddress] = React.useState(null)
+    const [isFront, setIsFront] = React.useState(false);
     
     useEffect(()=>{
+        process.nextTick(() => {
+            if (globalThis.window ?? false) {
+                setIsFront(true);
+            }
+        });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
             fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
@@ -42,10 +49,15 @@ export default function AddAddresses(){
             router.replace("/account/addresses")
         })
     }
+    if (!isFront) return null;
     
     return <div>
-        <AccountPage>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        
+        <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+            <AccountPage>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField error={errors.name} className="my-2" name="name" label="Name *" variant="outlined"
                     size="small" fullWidth inputRef={register({required:true})}
                     helperText={errors.name && (<span className="text-danger">Name is required</span>)}
@@ -55,7 +67,7 @@ export default function AddAddresses(){
                     size="small" fullWidth inputRef={register({required:true,minLength:10,maxLength:10})}
                     helperText={errors.phone && (<span className="text-danger">Enter valid 10 digit mobile number</span>)} 
                     />
- 
+
                     <h3 className="text-lg font-medium my-2">Address</h3>
                     <TextField error={errors.pincode} className="my-2" type="number" name="pincode" label="Pin Code *" variant="outlined" 
                     size="small" fullWidth  inputRef={register({required:true})}
@@ -70,7 +82,7 @@ export default function AddAddresses(){
                     />
                     <div className="flex items-center">
                         <TextField error={errors.state} className="my-2 px-1" name="state" label="State *" variant="outlined" size="small" 
-                     fullWidth inputRef={register({required:true})}
+                        fullWidth inputRef={register({required:true})}
                         helperText={errors.state && (<span className="text-danger">State is required</span>)}
                         />
                         <TextField error={errors.country} className="my-2 px-1" name="country" label="Country *" variant="outlined" 
@@ -89,6 +101,7 @@ export default function AddAddresses(){
 
                 </form>
 
-        </AccountPage>
+            </AccountPage>
+        </Suspense>
     </div>
 }

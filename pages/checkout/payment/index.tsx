@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react' 
+import React, { useEffect, lazy, Suspense } from 'react' 
 import Link from 'next/link';
-import Checkout from '../../../component/pages/checkout'
 import Button from '@material-ui/core/Button'
+const Checkout = lazy(()=>import('../../../component/pages/checkout'))
 
 declare var Razorpay:any;
 export default function PaymentPage() {
@@ -9,6 +9,7 @@ export default function PaymentPage() {
 
     const [orderId,setOrderId] = React.useState(null)
     const [totalAmt,setTotalAmt] = React.useState(0)
+    const [isFront, setIsFront] = React.useState(false);
 
     var options = {
         key: "rzp_test_HgpilQ93SsfaNu",amount: totalAmt,currency: "INR",name: "Acme Corp",
@@ -20,7 +21,16 @@ export default function PaymentPage() {
         notes: {address: "Razorpay Corporate Office"},
         theme: {color: "#3399cc"}
     };
-    
+
+    useEffect(()=>{
+        process.nextTick(() => {
+            if (globalThis.window ?? false) {
+                setIsFront(true);
+            }
+        });
+    },[])
+
+
     useEffect(()=>{
         if(totalAmt > 0){
             var formData = new FormData();
@@ -48,34 +58,42 @@ export default function PaymentPage() {
     const payNow = () => {
         rzp1.open();
     }
-    return <div>
-        <Checkout pay={pay} getAmount={(amt)=>setTotalAmt(amt*100)}>
-             
-            <div className="container-fluid">
-                <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb items-center">
-                        <li className="breadcrumb-item"><Link href="/checkout/cart">Bag</Link></li>
-                        <li className="breadcrumb-item"><Link href="/checkout/address">Shipping</Link></li>
-                        <li className="breadcrumb-item active text-2xl" aria-current="page">Payment</li>
-                    </ol>
-                </nav>
-                
-                <div className="text-right">
 
-                    <img src="/assets/images/payment.jpeg" alt="" className="w-2/3" />
-                    {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
-                    Cash on Delivery
-                    </Button> */}
-                    <button type="button" onClick={payNow} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
-                    Pay Now
-                    </button>
-                    <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                    Cash on Delivery
-                    </button>
+    if (!isFront) return null;
+
+    return <div>
+        
+        <Suspense fallback={<div className="text-center py-10">
+            <div className="spinner-border text-primary"></div>
+        </div>}>
+            <Checkout pay={pay} getAmount={(amt)=>setTotalAmt(amt*100)}>
+                
+                <div className="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb items-center">
+                            <li className="breadcrumb-item"><Link href="/checkout/cart">Bag</Link></li>
+                            <li className="breadcrumb-item"><Link href="/checkout/address">Shipping</Link></li>
+                            <li className="breadcrumb-item active text-2xl" aria-current="page">Payment</li>
+                        </ol>
+                    </nav>
+                    
+                    <div className="text-right">
+
+                        <img src="/assets/images/payment.jpeg" alt="" className="w-2/3" />
+                        {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
+                        Cash on Delivery
+                        </Button> */}
+                        <button type="button" onClick={payNow} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                        Pay Now
+                        </button>
+                        <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                        Cash on Delivery
+                        </button>
+                    </div>
+
                 </div>
 
-            </div>
-
-        </Checkout>
+            </Checkout>
+        </Suspense>
     </div>
 }

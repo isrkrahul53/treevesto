@@ -96,9 +96,14 @@ export default function AddImagetoSectionModal(props){
     ]} />
      */}
     <BootstrapInputField id="image" label="Image *" type="file" change={props.image} />
+    <input type="text" name="Meta_Keywords" defaultValue={props.Meta_Keywords} onChange={props.Meta_Keywords} className="form-control my-2" placeholder="Meta_Keywords" />
+    <input type="text" name="Meta_Data" defaultValue={props.Meta_Data} onChange={props.Meta_Data} className="form-control my-2" placeholder="Meta_Data" />
+    <textarea name="Meta_Description" defaultValue={props.Meta_Description} onChange={props.Meta_Description} className="form-control my-2" placeholder="Meta_Description" cols={30} rows={4}></textarea>
+    <input type="text" name="Meta_image_URL" defaultValue={props.Meta_image_URL} onChange={props.Meta_image_URL} className="form-control my-2" placeholder="Meta_image_URL" />
 
     <BootstrapInputField id="link" label="Image Link *" type="text" value={link} change={props.link} />
     
+
     {/* <BootstrapTextArea id="desc" label="Product Description *" value={props.values.desc} change={props.desc} /> */}
     <div className="row">            
         {/* <div className="col-md-2"></div> */}
@@ -142,7 +147,7 @@ export default function AddImagetoSectionModal(props){
         </div>
         <RangeSlider min={min} max={max} change={(e,data)=>setFilters({...filters,from:data[0],to:data[1]})} value={[filters.from,filters.to]} />
         
-        <div className="p-2" style={{position:"absolute",bottom:0,left:0,width:"100%"}}>
+        <div className="p-2">
             <div className="d-flex justify-content-end">
                 <div className="btn-group float-right"> 
                     <button className="btn btn-primary" onClick={()=>{props.submit();}}>Save</button>

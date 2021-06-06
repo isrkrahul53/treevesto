@@ -1,17 +1,8 @@
-import AdminLayout from "../../../component/common/AdminLayout";
-import PersonIcon from '@material-ui/icons/Person';
-// Table
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React, { useEffect, lazy, Suspense } from 'react'
+const AdminLayout = lazy(()=>import('../../../component/common/AdminLayout'));
 
 import axios from 'axios';
 import https from 'https'
-import FlexLayoutGrid from "../../../component/Lists/dataGrid";
 import {DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
 
 export default function AdminUserPage(props){
@@ -24,46 +15,39 @@ export default function AdminUserPage(props){
     { field: 'gender', headerName: 'Gender', width: 150 },
     { field: 'phone', headerName: 'Phone', width: 150 },
   ];
+  const [isFront, setIsFront] = React.useState(false);
 
-    return <AdminLayout>
-      
-    {/* <TableContainer component={Paper}>
-      <Table className="">
-          <TableHead>
-          <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Gender</TableCell> 
-              <TableCell>Phone</TableCell> 
-          </TableRow>
-          </TableHead>
-          <TableBody>
-          {props.users.map((el,key)=>(
-              <TableRow key={key}>
-              <TableCell> <PersonIcon /> {el.name}</TableCell>
-              <TableCell>{el.email}</TableCell>
-              <TableCell> {el.gender} </TableCell>
-              <TableCell>{el.phone || 'N/A'}</TableCell> 
-              </TableRow> 
-          ))}
-          </TableBody>
-      </Table>
-    </TableContainer> */}
+  useEffect(()=>{
+    process.nextTick(() => {
+      if (globalThis.window ?? false) {
+          setIsFront(true);
+      }
+    });
+  },[])
+
+  if (!isFront) return null;
+
+  return <Suspense fallback={<div className="text-center py-10">
+      <div className="spinner-border text-primary"></div>
+    </div>}>
+    <AdminLayout>
+        
     
-    
-    <div style={{ height: 400, width: '100%' }}>
-      <div style={{ display: 'flex', height: '100%' }}>
-        <div style={{ flexGrow: 1 }}>
-          <DataGrid  rows={rows} columns={columns} />
+      <div style={{ height: 400, width: '100%' }}>
+        <div style={{ display: 'flex', height: '100%' }}>
+          <div style={{ flexGrow: 1 }}>
+            <DataGrid  rows={rows} columns={columns} />
+          </div>
         </div>
       </div>
-    </div>
 
 
-</AdminLayout> 
+    </AdminLayout> 
+  </Suspense>
+  
 }
 export const getStaticProps = async (context) => {
-
+  
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });

@@ -9,9 +9,9 @@ export default function Footer(){
     const [showMore,setShowMore] = React.useState(false)
     
     if(router.pathname === "/"){
-        return <div className="">
+        return <div className="container-fluid bg-light border-t-2">
             {showMore ? <>
-                <div className="container bg-light text-dark border-t-2 p-4">
+                <div className="container text-dark p-4">
                     <div className="row">
                         <div className="col-md-3">
                             <h3 className="my-2 text-xl">Order</h3>
