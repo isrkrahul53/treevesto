@@ -27,7 +27,6 @@ export default function SuccessPage(){
                     setAddress(json.result)
                 } 
             })
-
         }else{
             router.replace('/')
         }

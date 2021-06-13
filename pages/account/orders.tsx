@@ -25,10 +25,8 @@ export default function OrdersPage() {
         }
     },[])
     if (!isFront) return null;
-
     
-    return <div>
-        
+    return <div>        
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>

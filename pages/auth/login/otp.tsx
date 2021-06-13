@@ -19,14 +19,11 @@ export default function OTPLoginPage(){
             <div className="container my-4">
                 <div className="row">
                     <div className="col-12 col-md-4"></div>
-
                     <div className="col-12 col-md-4 p-0 bg-white shadow-sm">
-
                         <form className="p-4">
                             <img src="/assets/images/otp.jpg" className="w-32 rounded-circle" />
                             <h4 className="text-2xl">Verify With OTP</h4>
                             <h5 className="text-sm text-secondary">Sent to : 6209460626</h5>
-
                             <div className="flex border border-dark my-3"> 
                                 <input type="number" name="otp" id="otp" placeholder="Enter OTP"
                                 className="w-100 p-2 border-0 outline-none" />

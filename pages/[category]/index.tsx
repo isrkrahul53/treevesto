@@ -7,7 +7,6 @@ import https from 'https'
 import MaterialChipArray from '../../component/material/chipArray';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-
 const Layout = lazy(()=>import('../../component/common/layout'))
 const FilterPage = lazy(()=>import('../../component/pages/filterPage'))
 const SingleProduct = lazy(()=>import('../../component/product/singleProduct'))
@@ -16,7 +15,6 @@ const Filterbar = lazy(()=>import('../../component/common/filterbar'))
 export default function Product(props){
   
   const router = useRouter();
-  
   const [error,setError] = React.useState("");
   const [success,setSuccess] = React.useState(""); 
   // console.log(props.productsArr)
