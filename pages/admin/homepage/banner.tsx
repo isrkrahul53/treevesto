@@ -104,7 +104,7 @@ export default function HomepageBanner(props) {
                         <option key={k} value={e._id}> {e.catName} </option>
                     ))}
                 </select>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid md:grid-cols-3 gap-2">
                     <div className="my-2">
                         <div className="text-lg font-medium px-1">Colour</div>
                         <div className="flex items-center flex-wrap">

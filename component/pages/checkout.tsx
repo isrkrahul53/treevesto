@@ -169,27 +169,27 @@ export default function Checkout(props) {
                 localStorage.removeItem("couponUsed")
                 cart.forEach(el=>{
                     
-                    var formData = new FormData();
-                    formData.append('userId',user.userId)
-                    formData.append('address',selectedAddress)
-                    formData.append('orderStatus',"1")
+                    var formData1 = new FormData();
+                    formData1.append('userId',user.userId)
+                    formData1.append('address',selectedAddress)
+                    formData1.append('orderStatus',"1")
                     
                     Object.keys(el).map((key,i)=>{
                         if(el[key] != null && el[key] != ''){
-                            formData.append(key,el[key]) 
+                            formData1.append(key,el[key]) 
                         }
                     })
                     
                     fetch(`https://api.treevesto.com:4000/orderedproduct`,{
                         method:"POST",
-                        body:formData
+                        body:formData1
                     }).then(d=>d.json()).then(json=>{ 
                         var stock = +el.stock - +el.qty
-                        var formData = new FormData();
-                        formData.append("stock",stock.toString())
+                        var formData2 = new FormData();
+                        formData2.append("stock",stock.toString())
                         fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
                             method:"PATCH",
-                            body:formData
+                            body:formData2
                         }).then(d=>d.json()).then(json=>{ 
                             console.log(json)
                         }).catch(err=>console.log(err.message))

@@ -23,10 +23,11 @@ export default function ReactMultiCarousel(props){
       items: props.mobileItem || 2
     }
   };
+  
   return <Carousel 
     swipeable={true}
-    showDots={true}
-    infinite={true}
+    showDots={props.showDots}
+    infinite={props.infinite}
     arrows={props.arrows}
     containerClass=""
     itemClass="my-1"

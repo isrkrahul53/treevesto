@@ -146,7 +146,7 @@ export default function Home(props) {
           
           <div className="md:hidden">
             <Suspense fallback={<Skeleton className="w-full" height={240} />}>
-              <ReactMultiCarousel mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
+              <ReactMultiCarousel showDots={false} mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
                   <Link href={"/"+e._id} key={k}><div className="text-center w-full">
                     <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
                     <div className="text-sm p-1">  {e.catName} </div>
@@ -204,7 +204,7 @@ export default function Home(props) {
                 <Skeleton className="w-full" height={240} />
                 <Skeleton className="w-full" height={240} />
               </div>}>
-              <ReactMultiCarousel arrows={true} content={props.products.map((e,k)=>(
+              <ReactMultiCarousel showDots={true} arrows={true} content={props.products.map((e,k)=>(
                     <div key={k} className="p-1">
                         <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
                     </div>
