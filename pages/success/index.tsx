@@ -2,6 +2,7 @@ import React from 'react'
 import { useRouter } from "next/router"
 import { useEffect } from "react";
 import Button from '@material-ui/core/Button'
+import Link from 'next/link';
 
 declare var $:any;
 export default function SuccessPage(){
@@ -21,18 +22,18 @@ export default function SuccessPage(){
             setUser(JSON.parse(data.user.toString()))
             setOID(order._id)
             console.log(order.address)
-            fetch(`https://api.treevesto.com:4000/address/id/`+order.address).then(d=>d.json()).then(json=>{ 
+            fetch(`https://api.treevesto.com:4000/address/`+order.address).then(d=>d.json()).then(json=>{ 
                 console.log(json)
                 if(json.success == 1){
                     setAddress(json.result)
                 } 
             })
         }else{
-            router.replace('/')
+            // router.replace('/')
         }
 
         
-    },[])
+    },[router.query])
 
     useEffect(()=>{
         if(address){
@@ -90,7 +91,8 @@ export default function SuccessPage(){
                 </div>
             </div>
 
-            <div className="text-right">
+            <div className="text-right absolute bottom-0 right-0 m-2">
+                <Link href={{pathname:"/success/invoice",query:{result:router.query.result,address:JSON.stringify(address)}}}>generate invoice</Link>
             </div>
 
 

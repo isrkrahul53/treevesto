@@ -48,6 +48,7 @@ export default function CustomizeHomepage(props) {
     
     const fetchData = () => {
         fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
+            console.log(json.result)
             setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image})))
         }).catch(err=>console.log(err.message))
         fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{

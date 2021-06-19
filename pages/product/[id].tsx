@@ -35,6 +35,7 @@ function RatingUI(props){
                                                      
 export default function Product(props) {
     
+    console.log(props.product)
     const router = useRouter();
     const [error,setError] = React.useState("");
     const [success,setSuccess] = React.useState("");

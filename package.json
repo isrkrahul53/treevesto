@@ -28,6 +28,7 @@
     "react-hook-form": "^6.15.5",
     "react-multi-carousel": "^2.6.3",
     "react-responsive": "^8.2.0",
+    "react-to-pdf": "0.0.14",
     "react-zoom-pan-pinch": "^1.6.1",
     "stripe": "^8.149.0"
   },

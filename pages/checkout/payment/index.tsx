@@ -173,14 +173,16 @@ export default function PaymentPage() {
                                     Continue
                                     </button>
                                 </div>}
-                                {selectedMethods === 'cod' && <></>}
+                                {selectedMethods === 'cod' && <>
+                                    <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                                    Cash on Delivery
+                                    </button>
+                                
+                                </>}
 
                             </div>
                         </div>
 
-                        {/* <button type="submit" onClick={()=>setPay({mode:"COD"})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                        Cash on Delivery
-                        </button> */}
                     </div>
 
                 </div>

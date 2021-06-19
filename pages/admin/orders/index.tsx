@@ -1,6 +1,8 @@
 import React, { useEffect, lazy, Suspense } from 'react'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Button from '@material-ui/core/Button'
+import Link from 'next/link';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import axios from 'axios';
 import https from 'https'
@@ -63,22 +65,25 @@ export default function AdminOrdersPage(props){
                     <TableCell>Rs. {el.totalAmount}</TableCell> 
                     <TableCell>{el.date.substring(0,10)}</TableCell> 
                     <TableCell>
-                      <MaterialModal name={"Order Id : "+el._id} label={<VisibilityIcon className="cursor-pointer" />} content={<>
-                        {JSON.parse(el.cart).map((e,k)=>(
-                          <div key={k} className="d-flex align-items-center my-2">
-                            <img src={e.image} className="rounded" width="50px" alt=""  />
-                            <div className="p-2">
-                              <div> {e.name} </div>
-                              <div> Rs. <span className="text-xl">{e.price}</span> Qty : {e.qty} </div>
+                      <div className="flex items-center">
+                        <Link href={{pathname:"/admin/orders/invoice",query:{result:JSON.stringify(el),address:JSON.stringify(el.address)}}}><AssignmentIcon className="cursor-pointer mx-2" /></Link>
+                        <MaterialModal name={"Order Id : "+el._id} label={<VisibilityIcon className="cursor-pointer" />} content={<>
+                          {JSON.parse(el.cart).map((e,k)=>(
+                            <div key={k} className="d-flex align-items-center my-2">
+                              <img src={e.image} className="rounded" width="50px" alt=""  />
+                              <div className="p-2">
+                                <div> {e.name} </div>
+                                <div> Rs. <span className="text-xl">{e.price}</span> Qty : {e.qty} </div>
+                              </div>
                             </div>
+                          ))}
+                          <hr className="my-3" />
+                          <div className="text-right">
+                            <div>Total Amount : Rs. <span className="text-xl">{el.totalAmount}</span> </div>
                           </div>
-                        ))}
-                        <hr className="my-3" />
-                        <div className="text-right">
-                          <div>Total Amount : Rs. <span className="text-xl">{el.totalAmount}</span> </div>
-                        </div>
 
-                      </>} />
+                        </>} />
+                      </div>
                       
                     </TableCell> 
                   </TableRow> 

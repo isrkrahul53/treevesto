@@ -170,7 +170,7 @@ export default function Checkout(props) {
                 cart.forEach(el=>{
                     
                     var formData1 = new FormData();
-                    formData1.append('userId',user.userId)
+                    // formData1.append('userId',user.userId)
                     formData1.append('address',selectedAddress)
                     formData1.append('orderStatus',"1")
                     
@@ -184,15 +184,21 @@ export default function Checkout(props) {
                         method:"POST",
                         body:formData1
                     }).then(d=>d.json()).then(json=>{ 
-                        var stock = +el.stock - +el.qty
-                        var formData2 = new FormData();
-                        formData2.append("stock",stock.toString())
-                        fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
-                            method:"PATCH",
-                            body:formData2
-                        }).then(d=>d.json()).then(json=>{ 
-                            console.log(json)
-                        }).catch(err=>console.log(err.message))
+                        if(json.success === 1){
+                            var stock = +el.stock - +el.qty
+                            var formData2 = new FormData();
+                            formData2.append("stock",stock.toString())
+                            fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
+                                method:"PATCH",
+                                body:formData2
+                            }).then(d=>d.json()).then(json=>{ 
+                                // console.log(json)
+                            }).catch(err=>console.log(err.message))
+                            
+                            fetch(`https://api.treevesto.com:4000/cart/`,{method:"DELETE"}).then(d=>d.json()).then(json=>{
+                                
+                            }).catch(err=>console.log(err.message))
+                        }
                     }).catch(err=>console.log(err.message))
                 })
 
@@ -200,6 +206,7 @@ export default function Checkout(props) {
                     result:JSON.stringify(json.result),
                     user:JSON.stringify(user),
                 }})
+                // console.log(json.result)
             }
         })
         // console.log(cart)
