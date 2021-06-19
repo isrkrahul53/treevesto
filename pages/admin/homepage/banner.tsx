@@ -55,10 +55,11 @@ export default function HomepageBanner(props) {
     }
 
     const onSubmit = (data) => {
-        
+        console.log(data)
         var formData = new FormData();
         formData.append('image',data.image[0])
         formData.append('link',data.imagelink)
+        formData.append('mobileImage',data.mobileImage[0])
         formData.append('Meta_Keywords',data.Meta_Keywords)
         formData.append('Meta_Data',data.Meta_Data)
         formData.append('Meta_Description',data.Meta_Description)
@@ -83,10 +84,12 @@ export default function HomepageBanner(props) {
             <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Banners</div>
             
             <form onSubmit={handleSubmit(onSubmit)} className="my-2 bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
-
-                <input type="file" name="image" id="image" ref={register({required:true})} className="form-control my-2"  />
-                
-                
+                <div className="row">
+                <label className="col-md-6 mr-auto">Mobile Banner
+                <input type="file" name="mobileImage" id="mobileImage" ref={register({required:true})}  className="form-control my-2"  /></label>
+                <label className="col-md-6 mr-auto">Desktop banner 
+                <input type="file" name="image" id="image" ref={register({required:true})} className="form-control my-2"  /></label>
+                </div>
                 <input type="text" name="Meta_Keywords" ref={register()} className="form-control my-2" placeholder="Meta_Keywords" />
                 <input type="text" name="Meta_Data" ref={register()} className="form-control my-2" placeholder="Meta_Data" />
                 <textarea name="Meta_Description" ref={register()} className="form-control my-2" placeholder="Meta_Description" cols={30} rows={4}></textarea>

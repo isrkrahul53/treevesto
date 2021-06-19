@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 const AccountPage = lazy(()=>import("../../../component/pages/account"))
 
-
 export default function AddAddresses(){
     const router = useRouter();
     const { register, handleSubmit, errors } = useForm();

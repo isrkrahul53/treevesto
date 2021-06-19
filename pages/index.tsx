@@ -5,6 +5,7 @@ import axios from 'axios';
 import https from 'https'
 import { useRouter } from 'next/router';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useMediaQuery } from 'react-responsive';
 
 const Layout = lazy(()=>import('../component/common/layout'))
 const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
@@ -19,12 +20,15 @@ function Cards(props){
         <Link key={key} href={data.href}><img src={data.src} className="w-100 cursor-pointer" /></Link>
       ))} 
     </div>
-
   </div>  
 }
 
 export default function Home(props) {
   
+  const isMobileDevice = useMediaQuery({
+    query: "(min-device-width: 500px)",
+  });
+
   const router = useRouter();
   const [navigation, setNavigation] = React.useState(0); 
   const [categories,setCategories] = React.useState([]);
@@ -40,22 +44,30 @@ export default function Home(props) {
     setSuccess("") 
   }
   const [banner,setBanner] = React.useState(props.banner) 
+  const [mobileBanner,setmobileBanner] = React.useState(props.banner) 
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
-
+  
   const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
- 
+  
   const [isFront, setIsFront] = React.useState(false);
 
 
   useEffect(()=>{
+    // const handler = e => setCheckedWidth(e.matches);
+    // window.matchMedia("(min-width: 768px)").addEventListener();
     process.nextTick(() => {
       if (globalThis.window ?? false) {
           setIsFront(true);
       }
     });
+
+    fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
+            setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage})))
+        }).catch(err=>console.log(err.message))
+
     fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
@@ -139,33 +151,28 @@ export default function Home(props) {
             <div className="spinner-border text-primary"></div>
         </div>}>
         <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
-  
           {/* ======================================== */}
           {/* Banners */}
-          {/* ======================================== */}
-          
+          {/* ======================================== */} 
           <div className="md:hidden">
             <Suspense fallback={<Skeleton className="w-full" height={240} />}>
-              <ReactMultiCarousel showDots={false} mobileItem={4} arrows={false} content={props.categories.map((e,k)=>(
+              <ReactMultiCarousel mobileItem={4} arrows={false}  content={props.categories.map((e,k)=>(
                   <Link href={"/"+e._id} key={k}><div className="text-center w-full">
                     <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
                     <div className="text-sm p-1">  {e.catName} </div>
                   </div></Link>
-                ))} />
+                ))} className="react-multi-carousel-dot button" />
             </Suspense>
           <br />
           </div>
 
-          
           <Suspense fallback={<Skeleton className="w-full" height={380} />}>
-            <ReactCarousel data={banner} arrows={false} showDots={true} />
+            <ReactCarousel data={isMobileDevice ? mobileBanner:banner} arrows={false} showDots={true} />
           </Suspense>
-      
-
+              
+          {/* {console.log(isMobileDevice)} */}
           <div className="container my-2"> 
-          
             
-  
             {/* =========================================== */}
             {/* Sections */}
             {/* =========================================== */}
@@ -192,10 +199,7 @@ export default function Home(props) {
               ))}
             </Suspense>
             
-            <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>
-
-            
-          
+            <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>  
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2"> 
                 <Skeleton className="w-full" height={240} />
                 <Skeleton className="w-full" height={240} />
@@ -250,6 +254,9 @@ export const getStaticProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
+  // const isMobileDevice = useMediaQuery({
+  //   query: "(min-device-width: 480px)",
+  // });
   try{
     var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
     var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
