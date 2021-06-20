@@ -62,11 +62,7 @@ export default function Home(props) {
           setIsFront(true);
       }
     });
-
-    fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
-            setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage})))
-        }).catch(err=>console.log(err.message))
-
+ 
     fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
