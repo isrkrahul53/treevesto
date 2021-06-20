@@ -195,17 +195,17 @@ export default function Checkout(props) {
                                 // console.log(json)
                             }).catch(err=>console.log(err.message))
                             
-                            fetch(`https://api.treevesto.com:4000/cart/`,{method:"DELETE"}).then(d=>d.json()).then(json=>{
-                                
+                            fetch(`https://api.treevesto.com:4000/cart/user/${user.userId}`,{method:"DELETE"}).then(d=>d.json()).then(json=>{
+                             console.log(json)   
                             }).catch(err=>console.log(err.message))
                         }
                     }).catch(err=>console.log(err.message))
                 })
 
-                router.push({pathname:"/success",query:{
-                    result:JSON.stringify(json.result),
-                    user:JSON.stringify(user),
-                }})
+                // router.push({pathname:"/success",query:{
+                //     result:JSON.stringify(json.result),
+                //     user:JSON.stringify(user),
+                // }})
                 // console.log(json.result)
             }
         })

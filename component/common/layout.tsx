@@ -108,11 +108,11 @@ export default function Layout(props){
                 </ul> 
                 <div className="ml-auto">
                     <ul className="flex ml-auto items-center"> 
-                        <li className="cursor-pointer">
+                        <li className="cursor-pointer mx-1">
                             <SearchProducts />
                         </li>
                         <li className={"dropdown"}>
-                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-1 cursor-pointer" width="20px" alt="user"/>
+                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>
                             {/* <section className="" id="navbarDropdownProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             </section>
                             <ul className={"dropdown-menu shadow z-40"} aria-labelledby="navbarDropdownProfile">
@@ -144,7 +144,7 @@ export default function Layout(props){
                         <li className="flex items-center justify-end">
                         <Link href="/wishlist">
                             <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/heart.png" className="mx-1" width="20px" alt="heart"/>
+                                <img src="/assets/icons/heart.png" className="mx-2" width="20px" alt="heart"/>
                                 {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded"> {wishlist} </sup> */}
                             </div>
                         </Link> 
@@ -152,7 +152,7 @@ export default function Layout(props){
                         <li className="flex items-center justify-end">
                         <Link href="/checkout/cart">
                             <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/shopping-bag.png" className="mx-1" width="20px" alt="shopping-bag"/>
+                                <img src="/assets/icons/shopping-bag.png" className="mx-2" width="20px" alt="shopping-bag"/>
                                 Bag ({cart})
                                 {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup> */}
                             </div>
