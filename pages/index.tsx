@@ -43,8 +43,7 @@ export default function Home(props) {
     setError("")
     setSuccess("") 
   }
-  const [banner,setBanner] = React.useState(props.banner) 
-  const [mobileBanner,setmobileBanner] = React.useState(props.banner) 
+  
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
   
@@ -167,7 +166,7 @@ export default function Home(props) {
           </div>
 
           <Suspense fallback={<Skeleton className="w-full" height={380} />}>
-            <ReactCarousel data={isMobileDevice ? mobileBanner:banner} arrows={false} showDots={true} />
+            <ReactCarousel data={!isMobileDevice ? props.mobBanner:props.deskBanner} arrows={false} showDots={true} />
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
@@ -261,8 +260,14 @@ export const getStaticProps = async (context) => {
     var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
     var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
     var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
-    banner = banner.data.result.map((el,key)=>{
+
+    const bannerData = await banner.data.result;
+
+    var deskBanner = bannerData.filter(e=>e.image).map((el,key)=>{
         return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
+    })
+    var mobBanner = bannerData.filter(e=>e.mobileImage).map((el,key)=>{
+      return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage}
     })
 
     var data = []
@@ -287,9 +292,10 @@ export const getStaticProps = async (context) => {
    
   return {
       props: {
-          banner:banner || [],
+          deskBanner,
+          mobBanner,
           products:arr,
-          categories:categories.data.result
+          categories:categories?.data.result
       }
   }; 
 }
