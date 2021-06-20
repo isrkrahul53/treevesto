@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Card, FormControl, FormLabel, InputLabel, List, ListItem, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 import RangeSlider from '../material/range';
+import {  } from '@material-ui/core';
 
 export default function FilterPage(props) {
     
@@ -17,7 +18,20 @@ export default function FilterPage(props) {
             </Button> */}
         </div>
         <div className="py-3">
-            <h5 className="text-lg font-medium">Price Range </h5>
+            <h5 className="text-lg font-medium mb-2">Sort By</h5>
+            <FormControl component="fieldset">
+                {/* <FormLabel component="legend">Gender</FormLabel> */}
+                <RadioGroup aria-label="wallet" name="wallet">
+                    <FormControlLabel className="-mt-3" value={"latest"} control={<Radio />} label={"Latest"} />        
+                    <FormControlLabel className="-mt-3" value={"popularity"} control={<Radio />} label={"Popularity"} />        
+                    <FormControlLabel className="-mt-3" value={"priceHigh"} control={<Radio />} label={"Price High to low"} />        
+                    <FormControlLabel className="-mt-3" value={"priceLow"} control={<Radio />} label={"Price Low to high"} />        
+                    {/* {paymentMethods && Object.keys(paymentMethods.wallet).map((e,k)=>(
+                    ))} */}
+                </RadioGroup>
+            </FormControl>
+
+            <h5 className="text-lg font-medium mt-2">Price Range </h5>
             <RangeSlider min={props.min} max={props.max} change={props.change.handleRangeChange} value={props.values.priceRange} />
 
             <h5 className="text-lg font-medium">Colour</h5>

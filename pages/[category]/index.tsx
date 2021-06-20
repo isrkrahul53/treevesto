@@ -6,6 +6,7 @@ import axios from 'axios';
 import https from 'https'
 import MaterialChipArray from '../../component/material/chipArray';
 import Skeleton from '@material-ui/lab/Skeleton';
+import MenuItem from '@material-ui/core/MenuItem'
 
 const Layout = lazy(()=>import('../../component/common/layout'))
 const FilterPage = lazy(()=>import('../../component/pages/filterPage'))
@@ -171,6 +172,12 @@ export default function Product(props){
                         </div>
                       </div>}>
 
+                        {/* <select name="sorting" id="sorting" className="form-select">
+                          <option value="popularity">Latest</option>
+                          <option value="popularity">Popularity</option>
+                          <option value="popularity">Price Low to High</option>
+                          <option value="popularity">Price High to Low</option>
+                        </select> */}
                         <FilterPage values={filterData} change={filterChange} 
                         min={min} 
                         max={max} 

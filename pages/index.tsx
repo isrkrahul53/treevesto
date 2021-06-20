@@ -6,6 +6,7 @@ import https from 'https'
 import { useRouter } from 'next/router';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useMediaQuery } from 'react-responsive';
+import { useSelector, useDispatch } from "react-redux";
 
 const Layout = lazy(()=>import('../component/common/layout'))
 const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
@@ -24,6 +25,7 @@ function Cards(props){
 }
 
 export default function Home(props) {
+  const cartVal = useSelector((state:any)=>state.cart)
   
   const isMobileDevice = useMediaQuery({
     query: "(min-device-width: 500px)",
@@ -79,8 +81,7 @@ export default function Home(props) {
     }).catch(err=>setError(err.message))
   },[])
 
-  console.log(sections)
-
+  
   const getCart = (x) => {
     fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
         setCart(json.result.filter(e=>e.type==="cart"))
@@ -158,7 +159,6 @@ export default function Home(props) {
                   </div></Link>
                 ))} className="react-multi-carousel-dot button" />
             </Suspense>
-          <br />
           </div>
 
           <Suspense fallback={<Skeleton className="w-full" height={380} />}>

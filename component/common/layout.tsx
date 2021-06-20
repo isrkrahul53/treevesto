@@ -10,6 +10,7 @@ import Footer from './footer';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchProducts from './searchProducts';
+import MenuListComposition from '../material/menu'
 
 declare var $:any;
 export default function Layout(props){
@@ -74,7 +75,7 @@ export default function Layout(props){
     
     return <div>
       <CustomAlert error={props.error} success={props.success} />
-        <div className="bg-yellow-100 border position-sticky top-0 w-full lg:static" style={{zIndex:150}}>
+        <div className="bg-white shadow-sm  border position-sticky top-0 w-full lg:static" style={{zIndex:150}}>
             <div className="container p-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
@@ -88,7 +89,15 @@ export default function Layout(props){
 
                     </span>
                 </div>
+                
                 <ul className="navbar-nav hidden lg:flex"> 
+                    {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
+                        <li key={key} className={"nav-item dropdown"}>
+                            <MenuListComposition cat={el.catName} subCat={categories.filter(e=>e.parentCatId === el._id)} /> 
+                        </li>
+                    ))}
+                </ul> 
+                {/* <ul className="navbar-nav hidden lg:flex"> 
                     {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
                         <li key={key} className={"nav-item dropdown"}>
                             <section className="nav-link text-sm font-medium px-3" id="navbarDropdownMen" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -105,11 +114,13 @@ export default function Layout(props){
 
                         </li>
                     ))}
-                </ul> 
+                </ul>  */}
                 <div className="ml-auto">
                     <ul className="flex ml-auto items-center"> 
                         <li className="cursor-pointer mx-1">
-                            <SearchProducts />
+                            {/* <SearchProducts /> */}
+                            <Link href="/search"><img src="/assets/icons/search.png" className="mx-1" width="20px" alt="search"/></Link>
+
                         </li>
                         <li className={"dropdown"}>
                             <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>

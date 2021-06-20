@@ -94,7 +94,7 @@ export default function Sidebar(props) {
         <Typography component={"span"} variant={'body2'}> 
             <List>
                 {props.data.filter(e=>e.parentCatId === el._id).map((text, index) => (
-                  <ListItem button key={index}>
+                  <ListItem button key={index} onClick={toggleDrawer('left', false)}>
                       {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                       <Link href={"/"+text._id}><ListItemText primary={text.catName} /></Link>
                   </ListItem>

@@ -4,9 +4,8 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'; 
 import Divider from '@material-ui/core/Divider'; 
-import SingleProduct from '../product/singleProduct';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
- 
+import Layout from '../../component/common/layout' 
  
 
 const useStyles = makeStyles({
@@ -21,6 +20,12 @@ const useStyles = makeStyles({
 export default function SearchProducts(props) {
 
   
+    const [error,setError] = React.useState("");
+    const [success,setSuccess] = React.useState("");
+    const closeAlert = () => { 
+        setError("")
+        setSuccess("") 
+    }
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -121,21 +126,23 @@ export default function SearchProducts(props) {
 
   return (
     <div>
-        <React.Fragment>
-            <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1 md:hidden" width="20px" alt="search"/>
-            <input type="text" className="form-control mr-2 hidden md:block" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} />
- 
-            {/* <Button onClick={toggleDrawer('top', true)}>
-            </Button> */}
-            {list('top')}
-            {/* <SwipeableDrawer
-                anchor={'top'}
-                open={state['top']}
-                onClose={toggleDrawer('top', false)}
-                onOpen={toggleDrawer('top', true)}
-            >
-          </SwipeableDrawer> */}
-        </React.Fragment>
+        <Layout error={error} success={success}>
+            <React.Fragment>
+                {/* <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1 md:hidden" width="20px" alt="search"/> */}
+                {/* <input type="text" className="form-control mr-2 hidden md:block" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} /> */}
+    
+                {/* <Button onClick={toggleDrawer('top', true)}>
+                </Button> */}
+                {list('top')}
+                {/* <SwipeableDrawer
+                    anchor={'top'}
+                    open={state['top']}
+                    onClose={toggleDrawer('top', false)}
+                    onOpen={toggleDrawer('top', true)}
+                >
+            </SwipeableDrawer> */}
+            </React.Fragment>
+        </Layout>
     </div>
   );
 }
