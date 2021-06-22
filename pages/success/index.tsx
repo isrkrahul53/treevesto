@@ -63,7 +63,7 @@ export default function SuccessPage(){
             <Button variant="outlined" color="secondary" onClick={()=>router.replace('/')}>
                 Continue Shopping
             </Button>
-            <Button className="m-2" variant="contained" color="secondary">
+            <Button className="m-2" variant="contained" color="secondary" onClick={()=>router.replace('/account/orders')}>
               My Orders
             </Button>
 
