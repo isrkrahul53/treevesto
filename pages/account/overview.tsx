@@ -49,7 +49,7 @@ export default function OverviewPage() {
                             <div className="flex-row md:flex items-start border p-3">
                                 {/* <img src="/assets/images/user.jpg" className="w-1/5" alt="User"/> */}
                                 <div className="flex items-center me-auto">
-                                    <div className="w-20 h-20 mr-2 bg-white shadow-sm border rounded"></div>
+                                    <div className="w-20 h-20 mr-2 bg-gray-300 shadow-sm border rounded-circle"></div>
                                     <div className="my-auto">
                                         <div>{user?.name || ""}</div>
                                         <div>{user?.email}</div>

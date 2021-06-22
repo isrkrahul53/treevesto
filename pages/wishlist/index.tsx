@@ -16,7 +16,7 @@ function Card(props){
           Move to Bag
         </Button> */}
         
-        <div onClick={()=>{props.movetoCart()}} className="w-full px-4 py-1 text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+        <div onClick={()=>{props.movetoCart()}} className="w-full px-4 py-1 md:text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
         Move to Bag
         </div>
     </div>
@@ -109,10 +109,10 @@ export default function Wishlist() {
 
 
                 <div className="">
-                    <div className="w-4/5 mx-auto my-4">
+                    <div className="container mx-auto my-4">
 
                         <h3 className="text-xl font-md my-4">My Wishlist ( {wishlist.length} items )</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-6 md:gap-4">
 
                             {wishlist?wishlist.map((el,key)=>(
                                 <div key={key}>

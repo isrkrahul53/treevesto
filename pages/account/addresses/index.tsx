@@ -49,7 +49,7 @@ export default function Addresses(){
             <AccountPage>
                 <div>
                     <div>
-                        {addresses?<div className="grid grid-cols-3 gap-2">
+                        {addresses?<div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                         {addresses.map((e,key)=>(
                             <div key={key} className="border shadow-sm bg-white p-2">
                                 <div className="text-right -mt-8 p-0">

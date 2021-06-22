@@ -40,15 +40,16 @@ export default function Product(props){
     if(cart){
       setCart(cart)
     }
-    var colourFilter = "",sizeFilter = "",fromFilter = "",toFilter = ""
+    var colourFilter = "",sortFilter = "",sizeFilter = "",fromFilter = "",toFilter = ""
     colourFilter += router.query.color || ""
     sizeFilter += router.query.size || ""
+    sortFilter = router.query.sort?.toString() || ""
     fromFilter += router.query.from || min
     toFilter += router.query.to || max
     setColour(colourFilter.split(",").filter(e=>e!=""))
     setSize(sizeFilter.split(",").filter(e=>e!=""))
     setPriceRange([fromFilter,toFilter])
-    filterProduct(colourFilter,sizeFilter,fromFilter,toFilter)
+    filterProduct(colourFilter,sizeFilter,sortFilter,fromFilter,toFilter)
   },[])
   
   
@@ -73,22 +74,24 @@ export default function Product(props){
   // FilterPage
   const [size, setSize] = React.useState([]);
   const [colour, setColour] = React.useState([]);
+  const [sort, setSort] = React.useState("latest");
   const [priceRange, setPriceRange] = React.useState([min,max]);
-  const filterData={size,colour,priceRange}
+  const filterData={size,colour,sort,priceRange}
 
   useEffect(()=>{
-    var colourFilter="color=",sizeFilter="size=",fromFilter="from=",toFilter="to=";
+    var colourFilter="color=",sortFilter="sort=",sizeFilter="size=",fromFilter="from=",toFilter="to=";
     filterData.colour.map((e,k)=>colourFilter+=k!=0?","+e:""+e)
     filterData.size.map((e,k)=>sizeFilter+=k!=0?","+e:""+e)
+    sortFilter += filterData.sort
     fromFilter += filterData.priceRange[0].toString()
     toFilter += filterData.priceRange[1].toString()
-    filterProduct(colourFilter,sizeFilter,fromFilter,toFilter) 
+    filterProduct(colourFilter,sizeFilter,sortFilter,fromFilter,toFilter) 
     // router.replace("/"+router.query.category+"?"+colourFilter+"&"+sizeFilter+"&"+fromFilter+"&"+toFilter)
-  },[filterData.colour,filterData.size,filterData.priceRange])
+  },[filterData.colour,filterData.size,filterData.sort,filterData.priceRange])
 
-  const filterProduct = (colour,size,from,to) => {
+  const filterProduct = (colour,size,sort,from,to) => {
     setProducts([])
-    fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+from+`&`+to+`&catId=`+router.query.category).then(d=>d.json()).then(json=>{
+    fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&catId=`+router.query.category).then(d=>d.json()).then(json=>{
       if(json.success === 1){
         var data = []
         json.result.forEach(element => {
@@ -111,11 +114,14 @@ export default function Product(props){
   }
 
   const handleSizeChange = (e) => {
-      if(e.target.checked){
-          setSize([...size,e.target.name])
-      }else{
-          setSize(size.filter(d=>d != e.target.name))
-      }
+    if(e.target.checked){
+        setSize([...size,e.target.name])
+    }else{
+        setSize(size.filter(d=>d != e.target.name))
+    }
+  }
+  const handleSortChange = (e) => {
+    setSort(e.target.value)
   }
   const handleColourChange = (e) => {
       if(e.target.checked){
@@ -129,7 +135,7 @@ export default function Product(props){
       setPriceRange(newValue);
   };
   
-  const filterChange={handleSizeChange,handleColourChange,handleRangeChange}
+  const filterChange={handleSizeChange,handleSortChange,handleColourChange,handleRangeChange}
   if (!isFront) return null;
 
   return <div>

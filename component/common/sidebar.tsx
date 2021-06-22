@@ -80,7 +80,7 @@ export default function Sidebar(props) {
             </ListItem>
         ))}
       </List> */}
-    <img src="/assets/images/login.jpg" className="w-100" />
+    <img src="/logo.png" className="w-100 my-3" />
     {props.data.filter(e=>e.parentCatId === "0").map((el,key)=>(
     <Accordion  expanded={expanded === ('panel'+key+'')} onChange={handleChange('panel'+key)} key={key}>
         <AccordionSummary
@@ -105,11 +105,7 @@ export default function Sidebar(props) {
     </Accordion>
     ))}
     <Divider />
-    <List>
-        <ListItem button>
-            <ListItemIcon> <AccountBoxIcon /> </ListItemIcon>
-            <ListItemText primary={"Account"} />        
-        </ListItem>
+    <List> 
         <ListItem button>
             <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
             <ListItemText primary={"Logout"} />        

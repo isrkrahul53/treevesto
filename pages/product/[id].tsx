@@ -175,7 +175,7 @@ export default function Product(props) {
             body:formData
           }).then(d=>d.json()).then(json=>{
             if(json.success === 1){
-              setSuccess('Item Added to cart')
+              setSuccess('Item Added to wishlist')
             }else{
               setError(json.msg)
             }

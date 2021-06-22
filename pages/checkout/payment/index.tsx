@@ -137,15 +137,15 @@ export default function PaymentPage() {
                                         <TextField name="cardName" defaultValue="Rahul Kumar" onChange={handleChange} label="Card Holder Name" variant="outlined" fullWidth size="small" className="my-2"/>
                                         <TextField name="cardNumber" defaultValue="4111 1111 1111 1111" onChange={handleChange} label="Card Number" variant="outlined" fullWidth size="small" className="my-2"/>
                                         <div className="row">
-                                            <div className="col-6">
+                                            <div className="col-12 col-md-6">
                                                 <TextField name="cardCVV" defaultValue="590" onChange={handleChange} label="CVV" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>
-                                            <div className="col-3">
+                                            <div className="col-6 col-md-3">
                                                 <TextField name="cardEXM" defaultValue="11" onChange={handleChange} label="M" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>
-                                            <div className="col-3">
+                                            <div className="col-6 col-md-3">
                                                 <TextField name="cardEXY" defaultValue="26" onChange={handleChange} label="Y" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>

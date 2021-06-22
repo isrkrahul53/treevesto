@@ -186,8 +186,10 @@ export default function Checkout(props) {
                     }).then(d=>d.json()).then(json=>{ 
                         if(json.success === 1){
                             var stock = +el.stock - +el.qty
+                            var popular = el.popular ? +el.popular + 1 : 1
                             var formData2 = new FormData();
                             formData2.append("stock",stock.toString())
+                            formData2.append("popular",popular.toString())
                             fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
                                 method:"PATCH",
                                 body:formData2

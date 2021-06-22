@@ -28,7 +28,7 @@ export default function OTPLoginPage(){
                                 <input type="number" name="otp" id="otp" placeholder="Enter OTP"
                                 className="w-100 p-2 border-0 outline-none" />
                             </div> 
-                            <h5 className="text-lg text-secondary my-2">Log in using <span  className="text-danger"><Link href="/auth/login/password">Password</Link> </span> </h5>
+                            <h5 className="text-lg text-secondary my-2">Log in using <span  className="text-danger"><Link href="/auth/login">Password</Link> </span> </h5>
                             <h5 className="text-lg text-secondary my-2">Having trouble logging in ? <span  className="text-danger">Get help</span> </h5>
                             
 
