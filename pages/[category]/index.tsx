@@ -91,7 +91,7 @@ export default function Product(props){
 
   const filterProduct = (colour,size,sort,from,to) => {
     setProducts([])
-    fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&catId=`+router.query.category).then(d=>d.json()).then(json=>{
+    fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category).then(d=>d.json()).then(json=>{
       if(json.success === 1){
         var data = []
         json.result.forEach(element => {
