@@ -4,6 +4,11 @@ import Button from '@material-ui/core/Button'
 import { Card, FormControl, FormControlLabel, FormLabel, InputLabel, List, ListItem, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 const Checkout = lazy(()=>import('../../../component/pages/checkout'))
  
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import NearMeIcon from '@material-ui/icons/NearMe';
 
 declare var Razorpay:any;
 export default function PaymentPage() {
@@ -15,13 +20,13 @@ export default function PaymentPage() {
     const [isFront, setIsFront] = React.useState(false);
 
     const [values,setValues] = React.useState({
-        contact:null,email:null,
+        // contact:null,email:null,
         vpa:null,
-        cardName:null,
-        cardNumber:null,
-        cardCVV:null,
-        cardEXM:null,
-        cardEXY:null,
+        cardName:"Rahul",
+        cardNumber:"4111 1111 1111 1111",
+        cardCVV:"590",
+        cardEXM:"11",
+        cardEXY:"26",
         bank:null,
         wallet:null
     })
@@ -48,15 +53,8 @@ export default function PaymentPage() {
     const [pay,setPay] = React.useState(null);
 
     const payNow = async (method,obj) => {
-
-        if(!values.contact){
-            alert('Your phone number is required'); 
-            return
-        }
-        if(!values.email) {
-            alert('Your email address is required');
-            return
-        }
+        var user = JSON.parse(localStorage.getItem('user'))
+ 
  
         var formData = new FormData();
         formData.append("amount",totalAmt.toString())
@@ -66,7 +64,7 @@ export default function PaymentPage() {
         }).then(d=>d.json())
         var options = {
             amount: totalAmt,currency: "INR",
-            email: values.email, contact: values.contact,
+            email: user.email, contact: user.phone,
             description: "Test Transaction",order_id: data.result.id,  
             method,...obj
         };
@@ -109,18 +107,19 @@ export default function PaymentPage() {
                         {/* <Button variant="contained" color="secondary" onClick={()=>setPay(true)}>
                         Cash on Delivery
                         </Button> */}
-                        {selectedMethods != "cod" && <>
+                        
+                        {/* {selectedMethods != "cod" && <>
                             <TextField type="text" name="contact" label="Phone Number" onChange={handleChange} variant="outlined" fullWidth size="small" className="my-2"/>
                             <TextField name="email" label="Email Address" onChange={handleChange} variant="outlined" fullWidth size="small" className="my-2"/>
-                        </>}
+                        </>} */}
 
                         <div className="row my-2">
                             <List className="col-4 p-0">
-                                <ListItem button selected={selectedMethods === "upi"} className="p-3" onClick={e=>setSelectedMethods('upi')}> Pay using UPI </ListItem>
-                                <ListItem button selected={selectedMethods === "card"} className="p-3" onClick={e=>setSelectedMethods('card')}> Credit/Debit Card </ListItem>
-                                <ListItem button selected={selectedMethods === "netbanking"} className="p-3" onClick={e=>setSelectedMethods('netbanking')}> NetBanking </ListItem>
-                                <ListItem button selected={selectedMethods === "wallet"} className="p-3" onClick={e=>setSelectedMethods('wallet')}> Wallet </ListItem>
-                                <ListItem button selected={selectedMethods === "cod"} className="p-3" onClick={e=>setSelectedMethods('cod')}> Cash On Delivery </ListItem>
+                                <ListItem button selected={selectedMethods === "upi"} className="p-3" onClick={e=>setSelectedMethods('upi')}> <NearMeIcon className="mr-1" /> Pay using UPI </ListItem>
+                                <ListItem button selected={selectedMethods === "card"} className="p-3" onClick={e=>setSelectedMethods('card')}> <CreditCardIcon className="mr-1" /> Credit/Debit Card </ListItem>
+                                <ListItem button selected={selectedMethods === "netbanking"} className="p-3" onClick={e=>setSelectedMethods('netbanking')}> <AccountBalanceIcon className="mr-1" /> NetBanking </ListItem>
+                                <ListItem button selected={selectedMethods === "wallet"} className="p-3" onClick={e=>setSelectedMethods('wallet')}> <AccountBalanceWalletIcon className="mr-1" /> Wallet </ListItem>
+                                <ListItem button selected={selectedMethods === "cod"} className="p-3" onClick={e=>setSelectedMethods('cod')}> <LocalShippingIcon className="mr-1" /> Cash On Delivery </ListItem>
                             </List>
                             <div className="col-8 p-0 border">
 
@@ -134,19 +133,20 @@ export default function PaymentPage() {
                                 {selectedMethods === 'card' && <div className="text-left p-3">
                                     <form>
                                         {/* <h2 className="text-lg"> Credit/Debit Card</h2> */}
-                                        <TextField name="cardName" defaultValue="Rahul Kumar" onChange={handleChange} label="Card Holder Name" variant="outlined" fullWidth size="small" className="my-2"/>
-                                        <TextField name="cardNumber" defaultValue="4111 1111 1111 1111" onChange={handleChange} label="Card Number" variant="outlined" fullWidth size="small" className="my-2"/>
+
+                                        <TextField name="cardName" defaultValue={values.cardName} onChange={handleChange} label="Card Holder Name" variant="outlined" fullWidth size="small" className="my-2"/>
+                                        <TextField name="cardNumber" defaultValue={values.cardNumber} onChange={handleChange} label="Card Number" variant="outlined" fullWidth size="small" className="my-2"/>
                                         <div className="row">
                                             <div className="col-12 col-md-6">
-                                                <TextField name="cardCVV" defaultValue="590" onChange={handleChange} label="CVV" variant="outlined" fullWidth size="small" className="my-2"/>
+                                                <TextField name="cardCVV"  defaultValue={values.cardCVV} onChange={handleChange} label="CVV" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>
                                             <div className="col-6 col-md-3">
-                                                <TextField name="cardEXM" defaultValue="11" onChange={handleChange} label="M" variant="outlined" fullWidth size="small" className="my-2"/>
+                                                <TextField name="cardEXM"  defaultValue={values.cardEXM} onChange={handleChange} label="M" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>
                                             <div className="col-6 col-md-3">
-                                                <TextField name="cardEXY" defaultValue="26" onChange={handleChange} label="Y" variant="outlined" fullWidth size="small" className="my-2"/>
+                                                <TextField name="cardEXY"  defaultValue={values.cardEXY} onChange={handleChange} label="Y" variant="outlined" fullWidth size="small" className="my-2"/>
 
                                             </div>
                                         </div>
@@ -160,6 +160,7 @@ export default function PaymentPage() {
                                         className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
                                         Pay Now
                                         </button>
+                                        
                                     </form>
                                 
                                 </div>}

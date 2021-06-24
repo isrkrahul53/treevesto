@@ -69,7 +69,7 @@ export default function Layout(props){
     
     return <div>
       <CustomAlert />
-        <div className="bg-white shadow-sm border position-sticky top-0 w-full lg:static" style={{zIndex:1500,}}>
+        <div className="bg-white shadow-sm border position-sticky top-0 w-full lg:static" style={{zIndex:1250,}}>
             <div className="container p-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">

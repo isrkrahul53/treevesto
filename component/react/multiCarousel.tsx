@@ -31,7 +31,7 @@ export default function ReactMultiCarousel(props){
     arrows={props.arrows}
     containerClass=""
     itemClass="my-1"
-    dotListClass="mt-4"
+    dotListClass="mt-10"
     responsive={responsive}>
       {props.content}
   </Carousel>;

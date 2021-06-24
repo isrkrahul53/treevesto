@@ -238,10 +238,13 @@ export const getStaticProps = async (context) => {
     const bannerData = await banner.data.result;
 
     var deskBanner = bannerData.filter(e=>e.image).map((el,key)=>{
-        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
+        // return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
+        return {id:el._id,href:el.link,src:"https://picsum.photos/1200/40"+key}
     })
     var mobBanner = bannerData.filter(e=>e.mobileImage).map((el,key)=>{
-      return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage}
+        // return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage}
+        return {id:el._id,href:el.link,src:"https://picsum.photos/1200/40"+key}
+      
     })
 
     var data = []
