@@ -6,15 +6,8 @@ import Button from '@material-ui/core/Button'
 
 export default function OTPLoginPage(){
     
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
- 
     return <div>
-        <Layout error={error} success={success}>
+        <Layout >
 
             <div className="container my-4">
                 <div className="row">

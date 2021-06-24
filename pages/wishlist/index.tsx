@@ -1,5 +1,7 @@
 import Button from '@material-ui/core/Button'
 import React, { useEffect, lazy, Suspense } from "react";
+import { useDispatch } from "react-redux";
+
 
 const Layout = lazy(()=>import('../../component/common/layout'))
 
@@ -25,14 +27,8 @@ function Card(props){
  
 export default function Wishlist() {
 
-    
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
-
+    const dispatch = useDispatch();
+     
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([]);
     const [isFront, setIsFront] = React.useState(false);
@@ -66,7 +62,7 @@ export default function Wishlist() {
         var data = wishlist.filter(e=>e.productId!=x)
         setWishlist(data)
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
-            setError('Item Deleted !')
+            dispatch({type:"setAlert",payloads:"Item Delete !"})
             getWishlist(JSON.parse(localStorage.getItem('user')).userId)
         })
         
@@ -77,25 +73,9 @@ export default function Wishlist() {
         var formData = new FormData();
         formData.append("type","cart")
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
-            setSuccess('Item Moved to Cart !')
+            dispatch({type:"setAlert",payloads:"Item moved to Cart"})
             getWishlist(JSON.parse(localStorage.getItem('user')).userId)
-        })
-        // var data = cart.filter(e=>e.id==pro.id)
-        // var x = [...cart,{
-        //     productId:pro.id,qty:1,
-        //     vendorId:pro.vendorId,
-        //     image:pro.image,
-        //     name:pro.name,
-        //     price:pro.price
-        // }]
-        // if(data.length == 0){
-        //     setCart(x)
-        //     localStorage.setItem('cart',JSON.stringify(x));
-        //     deleteWishlistItem(pro.productId)
-        //     setSuccess('Item moved cart')
-        // }else{
-        //     setError('Already exist to cart')
-        // }  
+        }) 
       }
       
       if (!isFront) return null;
@@ -105,7 +85,7 @@ export default function Wishlist() {
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-            <Layout error={error} success={success} close={closeAlert} cart={cart.length} wishlist={wishlist.length}>
+            <Layout>
 
 
                 <div className="">

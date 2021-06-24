@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+
 
 const Layout = lazy(()=>import("../../../component/common/layout"))
 
@@ -27,18 +29,12 @@ const firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
   
 export default function RegisterPage(){
+    const dispatch = useDispatch();
     const { register, handleSubmit, watch, errors } = useForm();
 
     const password = useRef({});
     password.current = watch("password", "");
-
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
-
+ 
     var recaptchaVerifier = null;
     const router = useRouter();
     const [isFront, setIsFront] = React.useState(false);
@@ -102,7 +98,7 @@ export default function RegisterPage(){
             if(json.success==1){ 
                 router.replace("/auth/login")
             }else{
-                setError(json.msg)
+                dispatch({type:"setAlert",payloads:json.msg})
             }
         })
     }
@@ -124,7 +120,7 @@ export default function RegisterPage(){
 
             // ...
             }).catch((error) => {
-                setError(error.message)
+                dispatch({type:"setAlert",payloads:error.message})
             });
     }
 
@@ -134,10 +130,10 @@ export default function RegisterPage(){
         // User signed in successfully.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         setCResult(null)
         setValues({...values,step:values.step+1,userId:result.user.uid,phone:result.user.phoneNumber})
-        setSuccess('OTP verified')
+        dispatch({type:"setAlert",payloads:"OTP verified !"})
         // ...
         }).catch((error) => { 
-            setError(error.message)
+            dispatch({type:"setAlert",payloads:error.message})
         });
     }
     if (!isFront) return null;
@@ -148,7 +144,7 @@ export default function RegisterPage(){
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-            <Layout error={error} success={success}>
+            <Layout>
             
                 <div className="container py-10">
                     <img src="/assets/images/login.png" className="absolute left-0 top-0 w-full md:w-4/5 xl:w-2/3" alt="" />

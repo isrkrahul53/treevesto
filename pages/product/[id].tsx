@@ -9,6 +9,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import MaterialDialog from '../../component/material/materialDialog';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useSelector, useDispatch } from "react-redux";
 
 
 import axios from 'axios';
@@ -33,16 +34,11 @@ function RatingUI(props){
     </div>
 }
                                                      
-export default function Product(props) {
-    
-    console.log(props.product)
+export default function Product(props) { 
+
+    const dispatch = useDispatch();
     const router = useRouter();
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
+    
     const rating = props.review.length > 0 ? (props.review.map(e=>+e.rating).reduce((a,b)=>a+b)/props.review.length).toFixed(2) : 0
     const [grid,setGrid] = React.useState(1);
     const [selectedImage,setSelectedImage] = React.useState(null)
@@ -67,7 +63,7 @@ export default function Product(props) {
         setSelectedImage(props.product?.productImages[0]?.src)
         fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
-        }).catch(err=>console.log(err.message))
+        }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
         
         fetch(`https://api.treevesto.com:4000/specificationTable`).then(d=>d.json()).then(json=>{
             setSpecsArr(json.result.filter(e=>e.catId === props.product.catId)[0].field) 
@@ -75,7 +71,7 @@ export default function Product(props) {
         fetch(`https://api.treevesto.com:4000/product/`).then(d=>d.json()).then(json=>{
             setSize(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
             setColour(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
-        }).catch(err=>console.log(err.message))
+        }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
     },[props.product])
     
 
@@ -129,29 +125,14 @@ export default function Product(props) {
             body:formData
           }).then(d=>d.json()).then(json=>{
             if(json.success === 1){
-              setSuccess('Item Added to cart')
+                dispatch({type:"setAlert",payloads:"Item added to cart"})
             }else{
-              setError(json.msg)
+                dispatch({type:"setAlert",payloads:json.msg})
             }
-          }).catch(err=>console.log(err.message))
+          }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
         }else{
           router.replace("/auth/login")
-        }
-        // var data = cart.filter(e=>e.productId==props.product?._id)
-        // var x = [...cart,{
-        //     productId:props.product?._id,qty:1,size:s,
-        //     vendorId:props.product?.vendorId,
-        //     image:props.product?.productImages[0]?.src,
-        //     name:props.product?.productName,
-        //     price:props.product?.sellingPrice
-        // }]
-        // if(data.length == 0){
-        //     setCart(x)
-        //     localStorage.setItem('cart',JSON.stringify(x));
-        //     setSuccess('Item Added to cart')
-        // }else{
-        //     setError('Already added to cart')
-        // }
+        } 
         
     }
     
@@ -174,30 +155,15 @@ export default function Product(props) {
             method:"POST",
             body:formData
           }).then(d=>d.json()).then(json=>{
-            if(json.success === 1){
-              setSuccess('Item Added to wishlist')
+            if(json.success === 1){ 
+                dispatch({type:"setAlert",payloads:"Item added to wishlist"})
             }else{
-              setError(json.msg)
+                dispatch({type:"setAlert",payloads:json.msg}) 
             }
-          }).catch(err=>console.log(err.message))
+          }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
         }else{
           router.replace("/auth/login")
-        }
-        // var data = wishlist.filter(e=>e.productId==props.product?._id)
-        // var x = [...wishlist,{
-        //     productId:props.product?._id,qty:1,
-        //     vendorId:props.product?.vendorId,
-        //     image:props.product?.productImages[0]?.src,
-        //     name:props.product?.productName,
-        //     price:props.product?.sellingPrice
-        // }]
-        // if(data.length == 0){
-        //     setWishlist(x)
-        //     localStorage.setItem('wishlist',JSON.stringify(x));
-        //     setSuccess('Item Added wishlist')
-        // }else{
-        //     setError('Already added to wishlist')
-        // } 
+        } 
       }
 
     if (!isFront) return null;
@@ -207,7 +173,7 @@ export default function Product(props) {
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-            <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
+            <Layout>
                 <Head>
                     <title>{props.product?.productName}</title>
                     <meta name="description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."}></meta>

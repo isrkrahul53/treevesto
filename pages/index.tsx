@@ -6,7 +6,7 @@ import https from 'https'
 import { useRouter } from 'next/router';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useMediaQuery } from 'react-responsive';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Layout = lazy(()=>import('../component/common/layout'))
 const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
@@ -25,12 +25,12 @@ function Cards(props){
 }
 
 export default function Home(props) {
-  const cartVal = useSelector((state:any)=>state.cart)
   
   const isMobileDevice = useMediaQuery({
     query: "(min-device-width: 500px)",
   });
 
+  const dispatch = useDispatch();
   const router = useRouter();
   const [navigation, setNavigation] = React.useState(0); 
   const [categories,setCategories] = React.useState([]);
@@ -38,14 +38,7 @@ export default function Home(props) {
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
   };
-
-  const [error,setError] = React.useState("");
-  const [success,setSuccess] = React.useState("");
-  const closeAlert = () => { 
-    setError("")
-    setSuccess("") 
-  }
-  
+ 
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
   
@@ -68,17 +61,17 @@ export default function Home(props) {
     fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
-    }).catch(err=>console.log(err.message))
+    }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
     fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
         setCards(json.result)
-    }).catch(err=>console.log(err.message))
+    }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
     var user = JSON.parse(localStorage.getItem('user'))
     if(user){
       getCart(user.userId)
     }
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
-    }).catch(err=>setError(err.message))
+    }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
   },[])
 
   
@@ -109,30 +102,14 @@ export default function Home(props) {
           body:formData
         }).then(d=>d.json()).then(json=>{
           if(json.success === 1){
-            setSuccess('Item Added to cart')
+            dispatch({type:"setAlert",payloads:"Item added to Cart"})
           }else{
-            setError(json.msg)
+            dispatch({type:"setAlert",payloads:json.msg})
           }
-        }).catch(err=>console.log(err.message))
+        }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
       }else{
         router.replace("/auth/login")
-      }
-    
-      // var data = cart.filter(e=>e.productId==pro._id)
-      // var x = [...cart,{
-      //   productId:pro._id,qty:1,size:pro.size,
-      //   vendorId:pro.vendorId,
-      //   image:pro.productImages[0].src,
-      //   name:pro.productName,
-      //   price:pro.sellingPrice
-      // }]
-      // if(data.length == 0){
-      //     setCart(x)
-      //     localStorage.setItem('cart',JSON.stringify(x));
-      //     setSuccess('Item Added to cart')
-      // }else{
-      //     setError('Already added to cart')
-      // }
+      } 
   }
   if (!isFront) return null;
 
@@ -146,7 +123,7 @@ export default function Home(props) {
       <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-        <Layout error={error} success={success} close={closeAlert} cart={cart.length}>
+        <Layout>
           {/* ======================================== */}
           {/* Banners */}
           {/* ======================================== */} 
@@ -246,6 +223,7 @@ export default function Home(props) {
 }
 
 export const getStaticProps = async (context) => {
+  
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
@@ -281,7 +259,7 @@ export const getStaticProps = async (context) => {
     })
     
   }catch(err){
-    console.log(err)
+    console.log(err.message)
   }
   
 

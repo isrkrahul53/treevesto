@@ -2,20 +2,16 @@ import React, { useEffect, lazy, Suspense } from 'react'
 import Link from 'next/link';
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
- 
+import { useDispatch } from "react-redux"; 
 import { useForm } from "react-hook-form";
 
 const Layout = lazy(()=>import("../../../component/common/layout"))
   
 export default function LoginPage(){
-    const { register, handleSubmit, errors } = useForm();
+    const dispatch = useDispatch();
 
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
+    const { register, handleSubmit, errors } = useForm();
+ 
     const [isFront, setIsFront] = React.useState(false);
  
     const router = useRouter();
@@ -53,7 +49,8 @@ export default function LoginPage(){
                 localStorage.setItem('user',JSON.stringify(user))
                 router.replace("/")
             }else{
-                setError(json.msg)
+                dispatch({type:"setAlert",payloads:json.msg})
+                
             }
         })
     }
@@ -64,7 +61,7 @@ export default function LoginPage(){
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-            <Layout error={error} success={success}>
+            <Layout>
                 <div className="container py-10">
                     <img src="/assets/images/login.png" className="absolute left-0 top-0 w-full md:w-4/5 xl:w-2/3" alt="" />
                     <form className="w-full md:w-3/5 xl:w-2/5 mx-auto my-10 relative bg-white p-6 opacity-90 md:border shadow-sm rounded" onSubmit={handleSubmit(onSubmit)}>

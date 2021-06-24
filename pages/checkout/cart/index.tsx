@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { useDispatch } from "react-redux";
 
 
 import axios from 'axios';
@@ -16,14 +16,8 @@ function SettingSVG(){
 }
 
 export default function CartPage({coupon}) {
-    
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-      setError("")
-      setSuccess("") 
-    }
-
+    const dispatch = useDispatch();
+     
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([]);
     const [totalAmt,setTotalAmt] = React.useState(0)
@@ -53,7 +47,7 @@ export default function CartPage({coupon}) {
         var data = cart.filter(e=>e.productId!=x)
         setCart(data)
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
-            setError('Item Deleted !')
+            dispatch({type:"setAlert",payloads:"Item Deleted !"})
             getCart(JSON.parse(localStorage.getItem('user')).userId)
         })
     }
@@ -63,27 +57,9 @@ export default function CartPage({coupon}) {
         var formData = new FormData();
         formData.append("type","wishlist")
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
-            setSuccess('Item Moved to Wishlist !')
+            dispatch({type:"setAlert",payloads:"Item moved to Wishlist"})
             getCart(JSON.parse(localStorage.getItem('user')).userId)
         })
-        
-
-        // var data = wishlist.filter(e=>e.productId==pro.productId)
-        // var x = [...wishlist,{
-        //     productId:pro.productId,qty:1,
-        //     vendorId:pro.vendorId,
-        //     image:pro.image,
-        //     name:pro.name,
-        //     price:pro.price
-        // }]
-        // if(data.length == 0){
-        //     setWishlist(x)
-        //     localStorage.setItem('wishlist',JSON.stringify(x));
-        //     deleteCartItem(pro.productId)
-        //     setSuccess('Item moved wishlist')
-        // }else{
-        //     setError('Already exist to wishlist')
-        // }  
       }
       
 
@@ -95,7 +71,7 @@ export default function CartPage({coupon}) {
             <div className="spinner-border text-primary"></div>
         </div>}>
         <Checkout cart={cart} coupon={coupon} getAmount={(amt)=>setTotalAmt(amt)}>
-            <CustomAlert error={error} success={success} />
+            <CustomAlert />
             <div className="container-fluid">
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">

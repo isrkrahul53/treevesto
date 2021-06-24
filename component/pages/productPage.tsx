@@ -72,7 +72,7 @@ export default function ProductPage(props) {
             {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
         </p>
         {/* Mobile */}
-        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1500}} >
+        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1200}} >
             <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                 <LocalMallOutlinedIcon /> Add Bag
             </div>

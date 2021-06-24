@@ -19,13 +19,7 @@ const useStyles = makeStyles({
 
 export default function SearchProducts(props) {
 
-  
-    const [error,setError] = React.useState("");
-    const [success,setSuccess] = React.useState("");
-    const closeAlert = () => { 
-        setError("")
-        setSuccess("") 
-    }
+   
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -126,7 +120,7 @@ export default function SearchProducts(props) {
 
   return (
     <div>
-        <Layout error={error} success={success}>
+        <Layout>
             <React.Fragment>
                 {/* <img src="/assets/icons/search.png" onClick={toggleDrawer('top', true)} className="mx-1 md:hidden" width="20px" alt="search"/> */}
                 {/* <input type="text" className="form-control mr-2 hidden md:block" onChange={toggleDrawer('top', true)} placeholder={"Search products ...."} /> */}

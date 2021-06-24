@@ -66,27 +66,33 @@ export default function MenuListComposition(props) {
           ref={anchorRef}
           aria-controls={open ? 'menu-list-grow' : undefined}
           aria-haspopup="true"
-          className="focus:outline-none cursor-pointer p-2"
+          className="focus:outline-none cursor-pointer"
           onMouseEnter={()=>handleToggle(true)}
           onMouseLeave={()=>handleToggle(false)}
         >
-          {props.cat.toUpperCase()} <span className="dropdown-toggle mx-1"></span>
+        <div style={{fontSize:"14px",fontWeight:500,color:"#282c3f",letterSpacing:"0.3px",fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
+          {props.cat} 
         </div>
-        <Popper onMouseEnter={()=>handleToggle(true)} onMouseLeave={()=>handleToggle(false)} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+          {/* <span className="dropdown-toggle mx-1"></span> */}
+        </div>
+        <Popper style={{marginTop:"18px"}} onMouseEnter={()=>handleToggle(true)} onMouseLeave={()=>handleToggle(false)} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
             >
-              <Paper>
+              <Paper className="border-yellow-700 border-t-4" style={{backgroundColor:"#fff",borderRadius:"0px"}}>
                 <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                  <MenuList autoFocusItem={open} id="menu-list-grow" className="border shadow  p-0" onKeyDown={handleListKeyDown}>
                     {props.subCat.map((el,key)=>(
                         <Link href={`/${el._id}`}>
-                            <MenuItem key={key} onClick={handleClose}>{el.catName}</MenuItem>
+                            <MenuItem key={key} onClick={handleClose}>
+                              <div style={{fontSize:"14px",fontWeight:400,fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
+                                {el.catName}
+                              </div>
+                            </MenuItem>
                         </Link>
-
-                    ))}
+                    ))} 
                     {/* <MenuItem onClick={handleClose}>My account</MenuItem>
                     <MenuItem onClick={handleClose}>Logout</MenuItem> */}
                   </MenuList>

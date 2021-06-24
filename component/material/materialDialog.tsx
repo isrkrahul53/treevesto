@@ -95,12 +95,11 @@ export default function MaterialDialog(props) {
           </div>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
+            Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.
             </DialogContentText>
           </DialogContent>
   
-          <form onSubmit={handleSubmit(onSubmit)} className="px-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6">
 
             <input type="file" name="reviewImages[]" multiple ref={register()} className="form-control my-2" />
 
@@ -117,7 +116,7 @@ export default function MaterialDialog(props) {
                 Submit  
               </Button>
             </DialogActions>
-
+            
           </form>
         </>:<>
           <DialogTitle id="alert-dialog-title"> Haven't purchased this product </DialogTitle>

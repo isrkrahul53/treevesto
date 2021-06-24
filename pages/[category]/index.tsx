@@ -6,7 +6,7 @@ import axios from 'axios';
 import https from 'https'
 import MaterialChipArray from '../../component/material/chipArray';
 import Skeleton from '@material-ui/lab/Skeleton';
-import MenuItem from '@material-ui/core/MenuItem'
+import { useDispatch } from "react-redux"; 
 
 const Layout = lazy(()=>import('../../component/common/layout'))
 const FilterPage = lazy(()=>import('../../component/pages/filterPage'))
@@ -14,19 +14,14 @@ const SingleProduct = lazy(()=>import('../../component/product/singleProduct'))
 const Filterbar = lazy(()=>import('../../component/common/filterbar'))
 
 export default function Product(props){
-  
-  const router = useRouter();
-  const [error,setError] = React.useState("");
-  const [success,setSuccess] = React.useState(""); 
+
+  const dispatch = useDispatch();
+  const router = useRouter(); 
   // console.log(props.productsArr)
   const min = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0;
   const max = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0;
-  const [showFilter,setShowFilter] = React.useState(false)
-  const [grid,setGrid] = React.useState(5)
   const [products,setProducts] = React.useState([])
   const [cart,setCart] = React.useState([])
-  const [wishlist,setWishlist] = React.useState([])
-  const [selectedFilters,setSelectedFilters] = React.useState(null)
   
   const [isFront, setIsFront] = React.useState(false);
   
@@ -54,21 +49,33 @@ export default function Product(props){
   
   
   const addtoCart = (pro) => { 
-    var data = cart.filter(e=>e.productId==pro._id)
-    var x = [...cart,{
-        productId:pro._id,qty:1,size:pro.size,
-        vendorId:pro.vendorId,
-        image:pro.productImages[0].src,
-        name:pro.productName,
-        price:pro.sellingPrice
-    }]
-    if(data.length == 0){
-        setCart(x)
-        localStorage.setItem('cart',JSON.stringify(x));
-        setSuccess('Item Added to cart')
+    var user = JSON.parse(localStorage.getItem('user'))
+    if(user){
+      var formData = new FormData();
+      formData.append("userId",user.userId)
+      formData.append("productId",pro._id)
+      formData.append("vendorId",pro.vendorId)
+      formData.append("type","cart")
+      formData.append("image",pro.productImages[0].src)
+      formData.append("name",pro.productName)
+      formData.append("price",pro.sellingPrice)
+      formData.append("qty","1")
+      formData.append("stock",pro.stock) 
+      formData.append("size",pro.size) 
+
+      fetch(`https://api.treevesto.com:4000/cart/`,{
+        method:"POST",
+        body:formData
+      }).then(d=>d.json()).then(json=>{
+        if(json.success === 1){
+          dispatch({type:"setAlert",payloads:"Item added to Cart"})
+        }else{
+          dispatch({type:"setAlert",payloads:json.msg})
+        }
+      }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
     }else{
-        setError('Already added to cart')
-    }
+      router.replace("/auth/login")
+    } 
 }
   
   // FilterPage
@@ -146,7 +153,7 @@ export default function Product(props){
     <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-      <Layout error={error} success={success} cart={cart.length} wishlist={wishlist.length}>
+      <Layout>
         
 
         <div className="container my-4">
