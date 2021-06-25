@@ -35,6 +35,14 @@ export default function Product(props){
     if(cart){
       setCart(cart)
     }
+    initializeProducts();
+  },[])
+
+  useEffect(()=>{
+    initializeProducts();
+  },[router.query])
+  
+  const initializeProducts = () => {
     var colourFilter = "",sortFilter = "",sizeFilter = "",fromFilter = "",toFilter = ""
     colourFilter += router.query.color || ""
     sizeFilter += router.query.size || ""
@@ -45,8 +53,8 @@ export default function Product(props){
     setSize(sizeFilter.split(",").filter(e=>e!=""))
     setPriceRange([fromFilter,toFilter])
     filterProduct(colourFilter,sizeFilter,sortFilter,fromFilter,toFilter)
-  },[])
-  
+    
+  }
   
   const addtoCart = (pro) => { 
     var user = JSON.parse(localStorage.getItem('user'))
@@ -147,8 +155,7 @@ export default function Product(props){
 
   return <div>
     <Head>
-      <title>Products</title>
-      <link rel="icon" href="/favicon.ico" />
+      <title> {props.catName} </title>
     </Head>
     <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>

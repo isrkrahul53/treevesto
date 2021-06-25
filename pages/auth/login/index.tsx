@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
 import { useDispatch } from "react-redux"; 
 import { useForm } from "react-hook-form";
+import Head from 'next/head'
 
 const Layout = lazy(()=>import("../../../component/common/layout"))
   
@@ -58,6 +59,10 @@ export default function LoginPage(){
     if (!isFront) return null;
     
     return <div>
+        
+    <Head>
+      <title> Authentication </title>
+    </Head>
         <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
