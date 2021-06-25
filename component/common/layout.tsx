@@ -106,24 +106,27 @@ export default function Layout(props){
                             </div>
                         </li>
                         <li className={"dropdown"}>
-                            {/* <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/> */}
-                            <MenuListComposition 
-                            cat={<img src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>} 
-                            subCat={[{_id:"account/profile",catName:<div className="p-1">
-                                
-                                <h2 className="text-xl px-1"> {user ? user?.name || user?.email : "Welcome"}</h2>
-                                <h4 className="px-1">{user ? user?.phone : "To access account and manage orders"}</h4>
-                                {!user && <Link href="/auth/login">
-                                <Button variant="text" color="primary">
-                                  Login / Register
-                                </Button>
-                                </Link>}
-                            </div>},
-                            {_id:"account/overview",catName:"Account"},
-                            {_id:"account/profile/edit",catName:"Edit Profile"},
-                            {_id:"wishlist",catName:"Wishlist"},
-                            {_id:"account/orders",catName:"Orders"},
-                            ]} /> 
+                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden mx-2 cursor-pointer" width="20px" alt="user"/>
+                            <div className="hidden md:block">
+                                <MenuListComposition 
+                                cat={<img src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>} 
+                                subCat={[{_id:"account/profile",catName:<div className="p-1">
+                                    
+                                    <h2 className="text-xl px-1"> {user ? user?.name || user?.email : "Welcome"}</h2>
+                                    <h4 className="px-1">{user ? user?.phone : "To access account and manage orders"}</h4>
+                                    {!user && <Link href="/auth/login">
+                                    <Button variant="text" color="primary">
+                                    Login / Register
+                                    </Button>
+                                    </Link>}
+                                </div>},
+                                {_id:"account/overview",catName:"Account"},
+                                {_id:"account/profile/edit",catName:"Edit Profile"},
+                                {_id:"wishlist",catName:"Wishlist"},
+                                {_id:"account/orders",catName:"Orders"},
+                                ]} /> 
+
+                            </div>
                             
                         </li> 
                         {/* <li className="flex items-center justify-end">

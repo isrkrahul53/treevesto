@@ -34,7 +34,7 @@ export default function ReactCarousel(props){
     arrows={props.arrows && true}
     responsive={responsive}>
         {props.data.map((e,k)=>(
-          <Link href={e.href} key={k}><img src={e.src} alt="banner" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} /></Link>
+          <Link href={e.href} key={k}><img src={e.src} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} /></Link>
         ))}
   </Carousel>;
 }

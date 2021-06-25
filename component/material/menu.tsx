@@ -85,8 +85,8 @@ export default function MenuListComposition(props) {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" className="border shadow  p-0" onKeyDown={handleListKeyDown}>
                     {props.subCat.map((el,key)=>(
-                        <Link href={`/${el._id}`}>
-                            <MenuItem key={key} onClick={handleClose}>
+                        <Link href={`/${el._id}`} key={key}>
+                            <MenuItem onClick={handleClose}>
                               <div style={{fontSize:"14px",fontWeight:400,fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
                                 {el.catName}
                               </div>

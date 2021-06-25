@@ -21,7 +21,7 @@ export default function RangeSlider(props) {
         Price range
       </Typography> */}
       <Slider
-        value={props.value}
+        value={props?.value}
         min={props.min}
         max={props.max}
         onChange={props.change}
