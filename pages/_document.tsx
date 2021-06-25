@@ -5,7 +5,7 @@ class MyDocument extends Document{
         return(
             <Html>
                 <Head>    
-                    <link rel="icon" href="/logoHead.png" />
+                    <link rel="icon" href="/logoHead.ico" />
                     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css"/>
                     <link rel="stylesheet" href="/assets/tailwind/tailwind.min.css"/> 
 

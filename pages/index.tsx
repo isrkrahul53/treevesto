@@ -117,7 +117,6 @@ export default function Home(props) {
     <div>
       <Head>
         <title>Treevetso</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <Suspense fallback={<div className="text-center py-10">
