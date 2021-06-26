@@ -48,6 +48,7 @@ function SelectInput(props){
 
 export default function AddImagetoSectionModal(props){
 
+    const [isLoading,setLoading] = React.useState(false)
     const [products,setProducts] = React.useState([])
     const [category,setCategory] = React.useState([])
     const min = products?.length > 0?products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0;
@@ -150,7 +151,9 @@ export default function AddImagetoSectionModal(props){
         <div className="p-2">
             <div className="d-flex justify-content-end">
                 <div className="btn-group float-right"> 
-                    <button className="btn btn-primary" onClick={()=>{props.submit();}}>Save</button>
+                    <button className="btn btn-primary" onClick={()=>{props.submit();setLoading(true)}} disabled={isLoading}>
+                        {!isLoading?"Save":"Loading..."}
+                    </button>
                 </div>
             </div>
         </div>

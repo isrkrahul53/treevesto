@@ -127,7 +127,7 @@ export default function Home(props) {
           {/* Banners */}
           {/* ======================================== */} 
           <div className="md:hidden">
-            <Suspense fallback={<Skeleton className="w-full" height={240} />}>
+            <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
               <ReactMultiCarousel mobileItem={4} arrows={false}  content={props.categories.map((e,k)=>(
                   <Link href={"/"+e._id} key={k}><div className="text-center w-full">
                     <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
@@ -137,7 +137,7 @@ export default function Home(props) {
             </Suspense>
           </div>
 
-          <Suspense fallback={<Skeleton className="w-full" height={380} />}>
+          <Suspense fallback={<Skeleton className="w-full" variant="rect" height={380} />}>
             <ReactCarousel data={!isMobileDevice ? props.mobBanner:props.deskBanner} arrows={false} showDots={true} />
           </Suspense>
               
@@ -150,10 +150,10 @@ export default function Home(props) {
 
           
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-2"> 
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
               {sections?.filter(e=>e.position === "Top").map((el,key)=>(
                 <div key={key}>
@@ -171,13 +171,13 @@ export default function Home(props) {
             </Suspense>
             
             <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>  
-            <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2"> 
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
+            <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2"> 
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
               <ReactMultiCarousel showDots={true} arrows={true} content={props.products.map((e,k)=>(
                     <div key={k} className="p-1">
@@ -188,10 +188,10 @@ export default function Home(props) {
 
           
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-2"> 
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
-                <Skeleton className="w-full" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
+                <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
               {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
                 <div key={key}>

@@ -4,7 +4,7 @@ import store from '../redux/store'
 import {Provider} from 'react-redux';
 
 function MyApp({ Component, pageProps }) {
-  store.subscribe(()=>console.log(store.getState()))
+  store.subscribe(()=>store.getState())
 
   return <Provider store={store}><Component {...pageProps} /></Provider>
 }

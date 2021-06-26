@@ -43,6 +43,7 @@ export default function Product(props){
   },[router.query])
   
   const initializeProducts = () => {
+    setLoading(true)
     var colourFilter = "",sortFilter = "",sizeFilter = "",fromFilter = "",toFilter = ""
     colourFilter += router.query.color || ""
     sizeFilter += router.query.size || ""
@@ -87,6 +88,7 @@ export default function Product(props){
 }
   
   // FilterPage
+  const [isLoading,setLoading] = React.useState(false)
   const [size, setSize] = React.useState([]);
   const [colour, setColour] = React.useState([]);
   const [sort, setSort] = React.useState("latest");
@@ -94,6 +96,7 @@ export default function Product(props){
   const filterData={size,colour,sort,priceRange}
 
   useEffect(()=>{
+    setLoading(true)
     var colourFilter="color=",sortFilter="sort=",sizeFilter="size=",fromFilter="from=",toFilter="to=";
     filterData.colour.map((e,k)=>colourFilter+=k!=0?","+e:""+e)
     filterData.size.map((e,k)=>sizeFilter+=k!=0?","+e:""+e)
@@ -122,6 +125,7 @@ export default function Product(props){
           arr.push(temp.filter(e=>e.productCode === el))
         })
         console.log(arr)
+        setLoading(false)
         setProducts(arr)
       }
     }).catch(err=>console.log(err))
@@ -174,21 +178,22 @@ export default function Product(props){
                 {props.products.length != 0?<>
                   <div className="col-md-3 hidden md:block">
                     <Suspense fallback={<div>
-                      <Skeleton className="w-full" />
                         <div className="container">
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
-                          <Skeleton className="w-full" />
+                          <Skeleton variant="text" className="w-1/3" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-1/3" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-1/3" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
+                          <Skeleton variant="text" className="w-full" />
                         </div>
                       </div>}>
 
@@ -211,57 +216,73 @@ export default function Product(props){
                 </>:<></>}
 
               <div className="col-md-9 p-2 px-3">
+                <div className="text-2xl p-2 font-normal"> {props.catName} </div>
+                <div className="flex-row md:flex items-center">
+                  <div className="hidden md:block">
+                    <MaterialChipArray data={filterData} 
+                    delSize={e=>setSize(size.filter((d,k)=>k!==e))}
+                    delColour={e=>setColour(size.filter((d,k)=>k!==e))}
+                    />
+                  </div>
+                  
+                  <Suspense fallback={<div>
+                    <Skeleton className="w-full" />
+                    </div>}>
+                      <Filterbar values={filterData} change={filterChange}
+                      min={min} 
+                      max={max} 
+                      colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                      sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
+                      /> 
+                  </Suspense>
+                </div>
 
-                  {props.products.length == 0?<div className="p-4">
-                    <div className="display-6"> No Products Available </div>
-                    <div className="text-secondary"> 
-                    Go to homepage 
-                    <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
-                    </div>
-                  </div>:<>
-                    <div className="text-2xl p-2 font-normal"> {props.catName} </div>
-                    <div className="flex-row md:flex items-center">
-                      <div className="hidden md:block">
-                        <MaterialChipArray data={filterData} 
-                        delSize={e=>setSize(size.filter((d,k)=>k!==e))}
-                        delColour={e=>setColour(size.filter((d,k)=>k!==e))}
-                        />
-                      </div>
-                      
-                      <Suspense fallback={<div>
-                        <Skeleton className="w-full" />
-                        </div>}>
-                          <Filterbar values={filterData} change={filterChange}
-                          min={min} 
-                          max={max} 
-                          colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                          sizeList={props.products?.map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) == k)}
-                          /> 
-                      </Suspense>
-                    </div>
-                    {products.length > 0 ?<>
-                          <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-2"}>
-                            {products?.map((el,key)=>(
-                              <div key={key}>
-                                <Suspense fallback={<div>
-                                  <Skeleton className="w-full" height={240} />
-                                  </div>}>
-                                    <SingleProduct data={el} cart={addtoCart} />
-                                </Suspense>
-
-                              </div> 
-                            ))}
-                          </div>
-                    </>:<>
-                      <div className="p-4">
-                        <div className="display-6"> No Products Available </div>
-                        <div className="text-secondary"> 
-                        Go to homepage 
-                        <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
+                {isLoading ?<>
+                  {props.products.length != 0 ? <> 
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 my-2">
+                      {[1,2,3,4].map(e=>(
+                        <div key={e}>
+                          <Skeleton className="my-1 w-full" variant="rect" height={140} />
+                          <Skeleton className="my-1 w-full" variant="text" height={20} />
+                          <Skeleton className="my-1 w-2/5" variant="text" height={20} /> 
                         </div>
+                      ))}
+                    </div>
+                  </>:<>
+                    <div className="p-4">
+                      <div className="display-6"> No Products Available </div>
+                      <div className="text-secondary"> 
+                      Go to homepage 
+                      <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
                       </div>
-                    </>}
+                    </div>
                   </>}
+                </>:<>
+                  {products.length > 0 ?<>
+                        <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-2"}>
+                          {products?.map((el,key)=>(
+                            <div key={key}>
+                              <Suspense fallback={<div>
+                                <Skeleton className="my-1 w-full" variant="rect" height={140} />
+                                <Skeleton className="w-full" variant="text" height={20} />
+                                <Skeleton className="w-2/5" variant="text" height={20} />
+                                </div>}>
+                                  <SingleProduct data={el} cart={addtoCart} />
+                              </Suspense>
+
+                            </div> 
+                          ))}
+                        </div>
+                  </>:<>
+                    <div className="p-4">
+                      <div className="display-6"> No Products Available </div>
+                      <div className="text-secondary"> 
+                      Go to homepage 
+                      <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
+                      </div>
+                    </div>
+                  </>}
+                </>}
 
 
               </div>
@@ -269,12 +290,7 @@ export default function Product(props){
 
         </div>
 
-        
-          {/* <div className={"bg-white w-full border shadow-sm rounded p-4 "+styles.filter}>
-            <FilterPage />
-          </div>
-        {showFilter?<>
-        </>:<></>} */}
+         
 
       </Layout>
     </Suspense>

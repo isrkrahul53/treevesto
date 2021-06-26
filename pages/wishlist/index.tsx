@@ -25,8 +25,8 @@ function Card(props){
 </div>
 }
  
-export default function Wishlist() {
-
+export default function Wishlist(props) {
+    
     const dispatch = useDispatch();
      
     const [cart,setCart] = React.useState([]);
@@ -39,7 +39,7 @@ export default function Wishlist() {
                 setIsFront(true);
             }
         });
-        var user = JSON.parse(localStorage.getItem('user'))
+        var user = props.user
         if(user){
             getCart(user.userId)
             getWishlist(user.userId)
