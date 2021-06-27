@@ -39,7 +39,7 @@ export default function OrdersPage() {
 
                 {orders.length > 0 ? orders.map((e,k)=>{
                     const color = e.orderStatus === "1"?"primary":e.orderStatus === "2"?"warning":e.orderStatus === "3"?"success":"danger"
-                    return <div className={"flex items-center bg-white rounded border-2 border-"+color+" shadow-sm m-2 p-1"}>
+                    return <div key={k} className={"flex items-center bg-white rounded border-2 border-"+color+" shadow-sm m-2 p-1"}>
                         <img src={e.image} alt="" width="50px" />
                         <div className="p-2">
                             <div> {e.name} | Size : {e.size} | Qty : {e.qty} </div>

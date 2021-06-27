@@ -33,7 +33,6 @@ export default function AddAddresses(){
                         "token":user.token
                     }
                 }).then(d=>d.json()).then(json=>{
-                    console.log(json)
                 })
             })
         }
@@ -41,7 +40,6 @@ export default function AddAddresses(){
 
     
     const onSubmit = (data) => {
-        // console.log(data)
         var user = JSON.parse(localStorage.getItem('user'))
         var formData = new FormData();
         formData.append('userId',userId)

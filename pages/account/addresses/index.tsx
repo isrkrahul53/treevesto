@@ -33,7 +33,6 @@ export default function Addresses(){
                     }
                 }).then(d=>d.json()).then(json=>{
                     setAddress(json.result)
-                    console.log(json)
                 })
             })
         }
@@ -47,7 +46,6 @@ export default function Addresses(){
                 "token":user.token
             }
         }).then(d=>d.json()).then(json=>{
-            console.log(json)
             fetchAddress();
             
         })

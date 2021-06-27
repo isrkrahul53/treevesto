@@ -22,7 +22,6 @@ export default function ProfilePage() {
                 }
             }).then(d=>d.json()).then(json=>{
                 setUser(json.result[0])
-                console.log(json.result)
             })
         }
     },[])

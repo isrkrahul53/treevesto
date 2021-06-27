@@ -57,6 +57,7 @@ export default function Wishlist(props) {
         })
     }
     const getWishlist = (x) => {
+        console.log(x)
         fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
                 method:"GET",
                 headers:{
@@ -72,8 +73,8 @@ export default function Wishlist(props) {
         setWishlist(data)
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
             dispatch({type:"setAlert",payloads:"Item Delete !"})
-            getWishlist(JSON.parse(localStorage.getItem('user')).userId)
-        })
+            getWishlist(JSON.parse(localStorage.getItem('user')))
+        }).catch(err=>console.log(err.message))
         
     }
 
@@ -83,7 +84,7 @@ export default function Wishlist(props) {
         formData.append("type","cart")
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
             dispatch({type:"setAlert",payloads:"Item moved to Cart"})
-            getWishlist(JSON.parse(localStorage.getItem('user')).userId)
+            getWishlist(JSON.parse(localStorage.getItem('user')))
         }) 
       }
       
@@ -101,7 +102,7 @@ export default function Wishlist(props) {
                     <div className="container mx-auto my-4">
 
                         <h3 className="text-xl font-md my-4">My Wishlist ( {wishlist.length} items )</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-6 md:gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 md:gap-4">
 
                             {wishlist?wishlist.map((el,key)=>(
                                 <div key={key}>

@@ -69,22 +69,22 @@ export default function Layout(props){
     
     return <div>
       <CustomAlert />
-        <div className="bg-white shadow-sm border position-sticky top-0 w-full lg:static" style={{zIndex:1250,}}>
+        <div className="bg-white shadow-sm border position-sticky top-0 w-full xl:static" style={{zIndex:1250,}}>
             <div className="container p-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
-                        <div className="lg:hidden"><Sidebar data={categories} /></div>
+                        <div className="xl:hidden"><Sidebar data={categories} /></div>
                         <Link href="/">
-                            <img src="/logo.png" className="w-20 hidden lg:block mx-2 cursor-pointer" alt="logo"/>
+                            <img src="/logo.png" className="w-20 hidden xl:block mx-2 cursor-pointer" alt="logo"/>
                         </Link>
                         <Link href="/">
-                            <img src="/logoHead.png" className="w-10 lg:hidden mx-2 cursor-pointer" alt="logo"/>
+                            <img src="/logoHead.png" className="w-10 xl:hidden mx-2 cursor-pointer" alt="logo"/>
                         </Link>
 
                     </span>
                 </div>
                 
-                <ul className="navbar-nav hidden lg:flex"> 
+                <ul className="navbar-nav hidden xl:flex"> 
                     {categories.filter(e=>e.parentCatId === "0").map((el,key)=>(
                         <li key={key} className={"nav-item dropdown p-2 mx-2"}>
                             <MenuListComposition cat={el.catName.toUpperCase()} subCat={categories.filter(e=>e.parentCatId === el._id)} /> 
@@ -102,7 +102,7 @@ export default function Layout(props){
 
                             <div className="hidden md:flex items-center border rounded w-full bg-light">
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
-                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-64 outline-none p-1 bg-light" placeholder="search...." />
+                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-light" placeholder="search...." />
                             </div>
                         </li>
                         <li className={"dropdown"}>
@@ -169,7 +169,7 @@ export default function Layout(props){
             {products?.length > 0 ?<div className="bg-white">
                 <h3 className="text-secondary text-md md:text-3xl py-2">You have searched for ' {search} ' </h3>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-content-center my-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 xl:grid-cols-6 justify-content-center my-2 gap-4">
                 {products?.map((el,key)=>(
                     <Link key={key} href={"/product/"+el._id}><div className="cursor-pointer">
                     <img src={"https://api.treevesto.com:4000/"+el.productImages[0]}  alt={el.productName} />
