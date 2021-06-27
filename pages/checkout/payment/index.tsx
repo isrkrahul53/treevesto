@@ -11,7 +11,7 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NearMeIcon from '@material-ui/icons/NearMe';
 
 declare var Razorpay:any;
-export default function PaymentPage() {
+export default function PaymentPage(props) {
     let rzp1; 
     
     const [paymentMethods,setMethods] = React.useState(null)
@@ -53,8 +53,6 @@ export default function PaymentPage() {
     const [pay,setPay] = React.useState(null);
 
     const payNow = async (method,obj) => {
-        var user = JSON.parse(localStorage.getItem('user'))
- 
  
         var formData = new FormData();
         formData.append("amount",totalAmt.toString())
@@ -64,7 +62,7 @@ export default function PaymentPage() {
         }).then(d=>d.json())
         var options = {
             amount: totalAmt,currency: "INR",
-            email: user.email, contact: user.phone,
+            email: props.user.email, contact: props.user.phone,
             description: "Test Transaction",order_id: data.result.id,  
             method,...obj
         };

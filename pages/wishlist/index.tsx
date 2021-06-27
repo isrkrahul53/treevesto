@@ -32,18 +32,17 @@ export default function Wishlist(props) {
     const [cart,setCart] = React.useState([]);
     const [wishlist,setWishlist] = React.useState([]);
     const [isFront, setIsFront] = React.useState(false);
-
+    
     useEffect(()=>{
         process.nextTick(() => {
             if (globalThis.window ?? false) {
                 setIsFront(true);
             }
         });
-        var user = props.user
-        if(user){
-            getCart(user.userId)
-            getWishlist(user.userId)
-        }
+        
+        props.user && getCart(props.user.userId)
+        props.user && getWishlist(props.user.userId)
+        
     },[])
  
 

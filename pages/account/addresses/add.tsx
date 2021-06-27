@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 const AccountPage = lazy(()=>import("../../../component/pages/account"))
 
-export default function AddAddresses(){
+export default function AddAddresses(props){
     const router = useRouter();
     const { register, handleSubmit, errors } = useForm();
     const [userId,setUserId] = React.useState(null)
@@ -18,15 +18,23 @@ export default function AddAddresses(){
                 setIsFront(true);
             }
         });
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
-                setUserId(json.result[0]._id)
-                fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id).then(d=>d.json()).then(json=>{
-                    console.log(json)
-                })
+        props.user && fetch(`https://api.treevesto.com:4000/user/`+props.user.userId,{
+            method:"GET",
+            headers:{
+                "token":props.user.token
+            }
+        }).then(d=>d.json()).then(json=>{
+            setUserId(json.result[0]._id)
+            fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id,{
+                method:"GET",
+                headers:{
+                    "token":props.user.token
+                }
+            }).then(d=>d.json()).then(json=>{
+                console.log(json)
             })
-        }
+        })
+        
     },[])
 
     
@@ -43,7 +51,10 @@ export default function AddAddresses(){
 
         fetch(`https://api.treevesto.com:4000/address`,{
             method:"POST",
-            body:formData
+            body:formData,
+            headers:{
+                "token":props.user.token
+            }
         }).then(d=>d.json()).then(json=>{ 
             router.replace("/account/addresses")
         })

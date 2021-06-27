@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Button from '@material-ui/core/Button'
 const AccountPage = lazy(()=>import("../../../component/pages/account"))
 
-export default function ProfilePage() {
+export default function ProfilePage(props) {
     const [user,setUser] = React.useState(null)
     const [isFront, setIsFront] = React.useState(false);
     
@@ -13,13 +13,16 @@ export default function ProfilePage() {
                 setIsFront(true);
             }
         });
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
-                setUser(json.result[0])
-                console.log(json.result)
-            })
-        }
+        props.user && fetch(`https://api.treevesto.com:4000/user/`+props.user.userId,{
+            method:"GET",
+            headers:{
+                "token":props.user.token
+            }
+        }).then(d=>d.json()).then(json=>{
+            setUser(json.result[0])
+            console.log(json.result)
+        }).catch(err=>console.log(err.message))
+        
     },[])
     if (!isFront) return null;
 

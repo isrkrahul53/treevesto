@@ -6,7 +6,7 @@ import axios from 'axios';
 import https from 'https'
 const AccountPage = lazy(()=>import("../../component/pages/account"))
 
-export default function OrdersPage() {
+export default function OrdersPage(props) {
     
     const [orders,setOrders] = React.useState([])
     const [isFront, setIsFront] = React.useState(false);
@@ -17,12 +17,16 @@ export default function OrdersPage() {
                 setIsFront(true);
             }
         });
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            fetch(`https://api.treevesto.com:4000/orderedproduct/user/`+user.userId).then(d=>d.json()).then(json=>{
-                setOrders(json.result)
-            })
-        }
+        
+        props.user && fetch(`https://api.treevesto.com:4000/orderedproduct/user/`+props.user.userId,{
+            method:"GET",
+            headers:{
+                "token":props.user.token
+            }
+        }).then(d=>d.json()).then(json=>{
+            setOrders(json.result)
+        }) 
+
     },[])
     if (!isFront) return null;
     
