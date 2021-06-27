@@ -36,4 +36,7 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(56, 55, 55); 
 }
+.categoryHideScrollbar::-webkit-scrollbar {
+  display: none;
+}
 

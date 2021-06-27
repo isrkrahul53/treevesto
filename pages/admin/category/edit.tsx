@@ -33,22 +33,27 @@ export default function AdminCategoryEditPage(props){
         }
     });
     
-    if(router.query.id){
-        fetch(`https://api.treevesto.com:4000/category/id/`+router.query.id).then(d=>d.json()).then(json=>{
-            var data = json.result[0];
-            if(json.success == 1){
-              setValue("catName",data.catName)
-              setValue("desc",data.desc)
-              setValue("Meta_Keywords",data.Meta_Keywords)
-              setValue("Meta_Data",data.Meta_Data)
-              setValue("Meta_Description",data.Meta_Description)
-              setValue("Meta_image_URL",data.Meta_image_URL)
-              data.catImage && setImage({...image,dataURL:"https://api.treevesto.com:4000/"+data.catImage})
-            }
-        })
-    }
+    initializeCategory()
   },[])
   
+  const initializeCategory = () => {
+    fetch(`https://api.treevesto.com:4000/category/id/`+router.query.id).then(d=>d.json()).then(json=>{
+        console.log(json)
+        var data = json.result[0];
+        if(json.success == 1){
+          setValue("catName",data.catName)
+          setValue("desc",data.desc)
+          setValue("Meta_Keywords",data.Meta_Keywords)
+          setValue("Meta_Data",data.Meta_Data)
+          setValue("Meta_Description",data.Meta_Description)
+          setValue("Meta_image_URL",data.Meta_image_URL)
+          data.catImage && setImage({...image,dataURL:"https://api.treevesto.com:4000/"+data.catImage})
+        }
+    })
+
+  }
+
+
   const renderImage = (img) => {
     
     var oFReader = new FileReader();
@@ -112,21 +117,4 @@ export default function AdminCategoryEditPage(props){
     </AdminLayout>
   </Suspense>
 }
-
-export const getStaticProps = async (context) => {
-
-  const agent = new https.Agent({  
-    rejectUnauthorized: false
-  });
-  var categories = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
-  const category = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
  
-  categories = categories.data.result.filter(e=>e.parentCatId !== "0")
-
-  return {
-    props: {
-      categories:categories, 
-      category:category.data.result, 
-    }
-  };
-}

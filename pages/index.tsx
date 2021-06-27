@@ -130,11 +130,23 @@ export default function Home(props) {
       <Suspense fallback={<div className="text-center py-10">
             <div className="spinner-border text-primary"></div>
         </div>}>
-        <Layout>
+        <Layout> 
+          <div className="sm:hidden">
+            <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
+                <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                  {props.categories.map((e,k)=>(<div className="px-2">
+                    <Link href={"/"+e._id} key={k}><div className="text-center" style={{width:"65px"}}>
+                      <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
+                      <div className="text-sm p-1">  {e.catName} </div>
+                    </div></Link>
+                  </div>))}
+                </div>
+            </Suspense>
+          </div>
           {/* ======================================== */}
           {/* Banners */}
           {/* ======================================== */} 
-          <div className="md:hidden">
+          {/* <div className="md:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
               <ReactMultiCarousel mobileItem={4} arrows={false}  content={props.categories.map((e,k)=>(
                   <Link href={"/"+e._id} key={k}><div className="text-center w-full">
@@ -143,7 +155,7 @@ export default function Home(props) {
                   </div></Link>
                 ))} className="react-multi-carousel-dot button" />
             </Suspense>
-          </div>
+          </div> */}
 
           <Suspense fallback={<Skeleton className="w-full" variant="rect" height={380} />}>
             <ReactCarousel data={!isMobileDevice ? props.mobBanner:props.deskBanner} arrows={false} showDots={true} />
@@ -155,7 +167,7 @@ export default function Home(props) {
             {/* =========================================== */}
             {/* Sections */}
             {/* =========================================== */}
-
+            
           
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-2"> 
                 <Skeleton className="w-full" variant="rect" height={240} />
@@ -163,7 +175,8 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              {sections?.filter(e=>e.position === "Top").map((el,key)=>(
+              
+              {sections?.filter(e=>e.position === "Top" && e.title != "Wedding Collection").map((el,key)=>(
                 <div key={key}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
@@ -176,8 +189,35 @@ export default function Home(props) {
                 
                 </div>
               ))}
+              {sections?.filter(e=>e.title === "Wedding Collection").map((el,key)=>(
+                <div key={key} className="mb-2"> 
+                  <div className="sm:hidden">
+                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                    <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                      {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                        return <Link href={e.link}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                      })}
+                    </div>
+                  </div>
+
+
+                  <div className="hidden lg:block">
+                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                    <div className="grid grid-cols-5 gap-2">
+                      {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                        return <Link href={e.link}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                      })}
+                    </div>
+                  </div>
+                
+                </div>
+              ))}
             </Suspense>
             
+
+            {/* ========================================================================= */}
+            {/* ========   Latest Products ============================= */}
+            {/* ========================================================================= */}
             <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>  
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2"> 
                 <Skeleton className="w-full" variant="rect" height={240} />
