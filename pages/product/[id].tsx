@@ -83,10 +83,8 @@ export default function Product(props) {
             }
         });
         var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            getCart(user.userId)
-            getWishlist(user.userId)
-        }
+        user && getCart(user)
+        user && getWishlist(user)
     },[])
 
     useEffect(()=>{
@@ -96,12 +94,22 @@ export default function Product(props) {
  
 
     const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+                method:"GET",
+                headers:{
+                    "token":x.token
+                }
+            }).then(d=>d.json()).then(json=>{
             setCart(json.result.filter(e=>e.type === "cart"))
         })
     }
     const getWishlist = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+                method:"GET",
+                headers:{
+                    "token":x.token
+                }
+            }).then(d=>d.json()).then(json=>{
             setWishlist(json.result.filter(e=>e.type === "wishlist"))
         })
     }
@@ -122,7 +130,10 @@ export default function Product(props) {
     
           fetch(`https://api.treevesto.com:4000/cart/`,{
             method:"POST",
-            body:formData
+            body:formData,
+            headers:{
+                "token":user.token
+            }
           }).then(d=>d.json()).then(json=>{
             if(json.success === 1){
                 dispatch({type:"setAlert",payloads:"Item added to cart"})
@@ -153,7 +164,10 @@ export default function Product(props) {
     
           fetch(`https://api.treevesto.com:4000/cart/`,{
             method:"POST",
-            body:formData
+            body:formData,
+            headers:{
+                "token":user.token
+            }
           }).then(d=>d.json()).then(json=>{
             if(json.success === 1){ 
                 dispatch({type:"setAlert",payloads:"Item added to wishlist"})

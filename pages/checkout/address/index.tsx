@@ -72,6 +72,7 @@ export default function AddressPage(props) {
 
     const onSubmit = (data) => {
         // console.log(data)
+        var user = JSON.parse(localStorage.getItem('user')) 
         var formData = new FormData();
         formData.append('userId',address.userId)
         formData.append('name',address.name) 
@@ -83,7 +84,10 @@ export default function AddressPage(props) {
 
         fetch(`https://api.treevesto.com:4000/address`,{
             method:"POST",
-            body:formData
+            body:formData,
+            headers:{
+                "token":user.token
+            }
         }).then(d=>d.json()).then(json=>{ 
             getUserAddress();
             router.replace(router.asPath)

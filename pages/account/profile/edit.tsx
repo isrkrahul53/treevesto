@@ -39,7 +39,10 @@ export default function EditProfilePage() {
         
         fetch(`https://api.treevesto.com:4000/user/`+user._id,{
             method:"PATCH",
-            body:formData
+            body:formData,
+            headers:{
+                "token":JSON.parse(localStorage.getItem('user')).token
+            }
         }).then(d=>d.json()).then(json=>{
             router.replace("/account/profile")
         })

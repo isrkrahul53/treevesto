@@ -19,7 +19,12 @@ export default function OrdersPage() {
         });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
-            fetch(`https://api.treevesto.com:4000/orderedproduct/user/`+user.userId).then(d=>d.json()).then(json=>{
+            fetch(`https://api.treevesto.com:4000/orderedproduct/user/`+user.userId,{
+                method:"GET",
+                headers:{
+                    "token":user.token
+                }
+            }).then(d=>d.json()).then(json=>{
                 setOrders(json.result)
             })
         }

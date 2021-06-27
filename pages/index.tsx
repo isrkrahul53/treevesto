@@ -65,10 +65,10 @@ export default function Home(props) {
     fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
         setCards(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
+    
     var user = JSON.parse(localStorage.getItem('user'))
-    if(user){
-      getCart(user.userId)
-    }
+    user && getCart(user)
+    
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
@@ -76,7 +76,12 @@ export default function Home(props) {
 
   
   const getCart = (x) => {
-    fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
+    fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+      method:"GET",
+      headers:{
+          "token":x.token
+      }
+  }).then(d=>d.json()).then(json=>{ 
         setCart(json.result.filter(e=>e.type==="cart"))
     })
     
@@ -99,7 +104,10 @@ export default function Home(props) {
   
         fetch(`https://api.treevesto.com:4000/cart/`,{
           method:"POST",
-          body:formData
+          body:formData,
+          headers:{
+            "token":user.token
+          }
         }).then(d=>d.json()).then(json=>{
           if(json.success === 1){
             dispatch({type:"setAlert",payloads:"Item added to Cart"})

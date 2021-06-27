@@ -31,14 +31,18 @@ export default function CartPage({coupon}) {
             }
         });
         var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            getCart(user.userId)
-        }
+        user  && getCart(user)
+        
     },[])
  
 
     const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+            method:"GET",
+            headers:{
+                "token":x.token
+            }
+        }).then(d=>d.json()).then(json=>{
             setCart(json.result.filter(e=>e.type === "cart"))
         })
     }

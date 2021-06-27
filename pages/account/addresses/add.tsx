@@ -20,9 +20,19 @@ export default function AddAddresses(){
         });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
+            fetch(`https://api.treevesto.com:4000/user/`+user.userId,{
+                method:"GET",
+                headers:{
+                    "token":user.token
+                }
+            }).then(d=>d.json()).then(json=>{
                 setUserId(json.result[0]._id)
-                fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id).then(d=>d.json()).then(json=>{
+                fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id,{
+                    method:"GET",
+                    headers:{
+                        "token":user.token
+                    }
+                }).then(d=>d.json()).then(json=>{
                     console.log(json)
                 })
             })
@@ -32,6 +42,7 @@ export default function AddAddresses(){
     
     const onSubmit = (data) => {
         // console.log(data)
+        var user = JSON.parse(localStorage.getItem('user'))
         var formData = new FormData();
         formData.append('userId',userId)
         formData.append('name',data.name) 
@@ -43,7 +54,10 @@ export default function AddAddresses(){
 
         fetch(`https://api.treevesto.com:4000/address`,{
             method:"POST",
-            body:formData
+            body:formData,
+            headers:{
+                "token":user.token
+            }
         }).then(d=>d.json()).then(json=>{ 
             router.replace("/account/addresses")
         })

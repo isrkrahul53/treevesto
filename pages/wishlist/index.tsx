@@ -39,21 +39,30 @@ export default function Wishlist(props) {
                 setIsFront(true);
             }
         });
-        var user = props.user
-        if(user){
-            getCart(user.userId)
-            getWishlist(user.userId)
-        }
+        var user = JSON.parse(localStorage.getItem('user'))
+        user && getCart(user)
+        user && getWishlist(user)
+        
     },[])
  
 
     const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+                method:"GET",
+                headers:{
+                    "token":x.token
+                }
+            }).then(d=>d.json()).then(json=>{
             setCart(json.result.filter(e=>e.type === "cart"))
         })
     }
     const getWishlist = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
+                method:"GET",
+                headers:{
+                    "token":x.token
+                }
+            }).then(d=>d.json()).then(json=>{
             setWishlist(json.result.filter(e=>e.type === "wishlist"))
         })
     }

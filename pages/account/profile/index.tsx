@@ -15,7 +15,12 @@ export default function ProfilePage() {
         });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
+            fetch(`https://api.treevesto.com:4000/user/`+user.userId,{
+                method:"GET",
+                headers:{
+                    "token":user.token
+                }
+            }).then(d=>d.json()).then(json=>{
                 setUser(json.result[0])
                 console.log(json.result)
             })

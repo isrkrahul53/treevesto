@@ -74,7 +74,10 @@ export default function Product(props){
 
       fetch(`https://api.treevesto.com:4000/cart/`,{
         method:"POST",
-        body:formData
+        body:formData,
+        headers:{
+          "token":user.token
+        }
       }).then(d=>d.json()).then(json=>{
         if(json.success === 1){
           dispatch({type:"setAlert",payloads:"Item added to Cart"})
