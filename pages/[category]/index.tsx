@@ -58,7 +58,7 @@ export default function Product(props){
   }
   
   const addtoCart = (pro) => { 
-    var user = props.user
+    var user = JSON.parse(localStorage.getItem('user'))
     if(user){
       var formData = new FormData();
       formData.append("userId",user.userId)

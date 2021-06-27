@@ -15,7 +15,7 @@ function SettingSVG(){
 
 }
 
-export default function CartPage({coupon,user}) {
+export default function CartPage({coupon}) {
     const dispatch = useDispatch();
      
     const [cart,setCart] = React.useState([]);
@@ -30,7 +30,10 @@ export default function CartPage({coupon,user}) {
                 setIsFront(true);
             }
         });
-        user && getCart(user.userId)
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            getCart(user.userId)
+        }
     },[])
  
 
@@ -45,7 +48,7 @@ export default function CartPage({coupon,user}) {
         setCart(data)
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
             dispatch({type:"setAlert",payloads:"Item Deleted !"})
-            getCart(user.userId)
+            getCart(JSON.parse(localStorage.getItem('user')).userId)
         })
     }
 
@@ -55,7 +58,7 @@ export default function CartPage({coupon,user}) {
         formData.append("type","wishlist")
         fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
             dispatch({type:"setAlert",payloads:"Item moved to Wishlist"})
-            getCart(user.userId)
+            getCart(JSON.parse(localStorage.getItem('user')).userId)
         })
       }
       

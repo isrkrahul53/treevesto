@@ -65,9 +65,9 @@ export default function Home(props) {
     fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
         setCards(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-    
-    if(props.user){
-      getCart(props.user.userId)
+    var user = JSON.parse(localStorage.getItem('user'))
+    if(user){
+      getCart(user.userId)
     }
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
@@ -76,21 +76,17 @@ export default function Home(props) {
 
   
   const getCart = (x) => {
-    fetch(`https://api.treevesto.com:4000/cart/user/`+x,{
-      method:"GET",
-      headers:{
-        "token":props.user.token
-      }
-    }).then(d=>d.json()).then(json=>{ 
+    fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{ 
         setCart(json.result.filter(e=>e.type==="cart"))
     })
     
   }
 
   const addtoCart = (pro) => { 
-      if(props.user){
+      var user = JSON.parse(localStorage.getItem('user'))
+      if(user){
         var formData = new FormData();
-        formData.append("userId",props.user.userId)
+        formData.append("userId",user.userId)
         formData.append("productId",pro._id)
         formData.append("vendorId",pro.vendorId)
         formData.append("type","cart")
@@ -103,10 +99,7 @@ export default function Home(props) {
   
         fetch(`https://api.treevesto.com:4000/cart/`,{
           method:"POST",
-          body:formData,
-          headers:{
-            "token":props.user.token
-          }
+          body:formData
         }).then(d=>d.json()).then(json=>{
           if(json.success === 1){
             dispatch({type:"setAlert",payloads:"Item added to Cart"})

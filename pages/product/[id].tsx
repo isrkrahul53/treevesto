@@ -82,10 +82,11 @@ export default function Product(props) {
                 setIsFront(true);
             }
         });
-        
-        props.user && getCart(props.user.userId)
-        props.user && getWishlist(props.user.userId)
-
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            getCart(user.userId)
+            getWishlist(user.userId)
+        }
     },[])
 
     useEffect(()=>{
@@ -105,7 +106,7 @@ export default function Product(props) {
         })
     }
     const addtoCart = (s) => { 
-        var user = props.user
+        var user = JSON.parse(localStorage.getItem('user'))
         if(user){
           var formData = new FormData();
           formData.append("userId",user.userId)
@@ -137,7 +138,7 @@ export default function Product(props) {
     
     const addtoWishlist = () => { 
         
-        var user = props.user
+        var user = JSON.parse(localStorage.getItem('user'))
         if(user){
           var formData = new FormData();
           formData.append("userId",user.userId)

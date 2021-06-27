@@ -46,8 +46,8 @@ export default function AddressPage(props) {
     },[])
     
     const getUserAddress = () => {
-        if(props.user){
-            var data = props.user
+        if(localStorage.getItem('user')){
+            var data = JSON.parse(localStorage.getItem('user')) 
             setAddress({...address,userId:data.userId,name:data.name,phone:data.phone})
             // fetch(`https://api.treevesto.com:4000/address/user/`+data.userId).then(d=>d.json()).then(json=>{
             fetch(`https://api.treevesto.com:4000/address`).then(d=>d.json()).then(json=>{

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 const AccountPage = lazy(()=>import("../../../component/pages/account"))
 
-export default function Addresses(props){
+export default function Addresses(){
     const router = useRouter();
     const [addresses,setAddress] = React.useState(null)
     const [isFront, setIsFront] = React.useState(false);
@@ -18,22 +18,15 @@ export default function Addresses(props){
     },[])
     
     const fetchAddress = () => {
-        props.user && fetch(`https://api.treevesto.com:4000/user/`+props.user.userId,{
-            method:"GET",
-            headers:{
-                "token":props.user.token
-            }
-        }).then(d=>d.json()).then(json=>{
-            fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id,{
-                method:"GET",
-                headers:{
-                    "token":props.user.token
-                }
-            }).then(d=>d.json()).then(json=>{
-                setAddress(json.result)
-                console.log(json)
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(user){
+            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
+                fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id).then(d=>d.json()).then(json=>{
+                    setAddress(json.result)
+                    console.log(json)
+                })
             })
-        }) 
+        }
     }
 
     const removeAddress = (id) => {
