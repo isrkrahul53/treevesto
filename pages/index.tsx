@@ -205,7 +205,7 @@ export default function Home(props) {
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                     <div className="grid grid-cols-5 gap-2">
                       {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                        return <Link href={e.link}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                        return <Link href={e.link}><div className="px-1"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                       })}
                     </div>
                   </div>
@@ -218,7 +218,7 @@ export default function Home(props) {
             {/* ========================================================================= */}
             {/* ========   Latest Products ============================= */}
             {/* ========================================================================= */}
-            <h3 className="text-lg md:text-4xl -mb-1 mt-1 px-2 text-secondary"> Latest Products  </h3>  
+            <h3 className="text-lg md:text-4xl -mb-2 mt-1 px-2 text-secondary"> Latest Products  </h3>  
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2"> 
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />

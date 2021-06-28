@@ -30,12 +30,12 @@ export default function SingleProduct(props){
         <Link href={"/product/"+productSelected._id}><div>
             <div className="text-sm text-secondary"> {productSelected?.productType} </div>
             <div className="text-sm font-normal hidden md:block">
-                {productSelected?.productName.length > 18 ? productSelected?.productName.substring(0,18):productSelected?.productName}
-                {productSelected?.productName.length > 18 ? " ...":""}
+                {productSelected?.productName.length > 30 ? productSelected?.productName.substring(0,30):productSelected?.productName}
+                {productSelected?.productName.length > 30 ? " ...":""}
             </div>
             <div className="text-sm font-normal md:hidden">
-                {productSelected?.productName.length > 42 ? productSelected?.productName.substring(0,42):productSelected?.productName}
-                {productSelected?.productName.length > 42 ? " ...":""}
+                {productSelected?.productName.length > 15 ? productSelected?.productName.substring(0,15):productSelected?.productName}
+                {productSelected?.productName.length > 15 ? " ...":""}
             </div>
             <div className="text-lg font-normal"> <s className="text-sm text-secondary">Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice}</div>
         </div></Link>

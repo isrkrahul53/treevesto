@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 
 const Layout = lazy(()=>import('../../component/common/layout'))
 const FilterPage = lazy(()=>import('../../component/pages/filterPage'))
+const SortByPage = lazy(()=>import('../../component/pages/sortByPage'))
 const SingleProduct = lazy(()=>import('../../component/product/singleProduct'))
 const Filterbar = lazy(()=>import('../../component/common/filterbar'))
 
@@ -171,15 +172,15 @@ export default function Product(props){
         
 
         <div className="container my-4">
-            <nav className="breadcrumb" aria-label="breadcrumb">
+            <nav className="breadcrumb my-0" aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
                     <li className="breadcrumb-item active"> {props.catName} </li> 
                 </ol>
             </nav>
-            <div className="row">
+            <div className="row m-0">
                 {props.products.length != 0?<>
-                  <div className="col-md-3 hidden md:block">
+                  <div className="col-md-3 p-0 hidden md:block">
                     <Suspense fallback={<div>
                         <div className="container">
                           <Skeleton variant="text" className="w-1/3" />
@@ -206,6 +207,8 @@ export default function Product(props){
                           <option value="popularity">Price Low to High</option>
                           <option value="popularity">Price High to Low</option>
                         </select> */}
+                        <SortByPage values={filterData} change={filterChange}/>
+
                         <FilterPage values={filterData} change={filterChange} 
                         min={min} 
                         max={max} 
@@ -218,8 +221,8 @@ export default function Product(props){
                   </div>
                 </>:<></>}
 
-              <div className="col-md-9 p-2 px-3">
-                <div className="text-2xl p-2 font-normal"> {props.catName} </div>
+              <div className="col-md-9 p-0 md:px-3">
+                {/* <div className="text-3xl py-2 font-light"> {props.catName} </div> */}
                 <div className="flex-row md:flex items-center">
                   <div className="hidden md:block">
                     <MaterialChipArray data={filterData} 
@@ -242,7 +245,7 @@ export default function Product(props){
 
                 {isLoading ?<>
                   {props.products.length != 0 ? <> 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 my-2">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-4 my-2">
                       {[1,2,3,4].map(e=>(
                         <div key={e}>
                           <Skeleton className="my-1 w-full" variant="rect" height={140} />
@@ -262,7 +265,7 @@ export default function Product(props){
                   </>}
                 </>:<>
                   {products.length > 0 ?<>
-                        <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-2"}>
+                        <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-4 p-0"}>
                           {products?.map((el,key)=>(
                             <div key={key}>
                               <Suspense fallback={<div>
