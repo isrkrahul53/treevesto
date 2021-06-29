@@ -9,9 +9,16 @@ const Layout = lazy(()=>import('../../component/common/layout'))
 function Card(props){
     return <div className="border bg-white shadow-sm">
     <div className="float-right"><span onClick={()=>{props.deleteWishlistItem()}} className="cursor-pointer text-xl p-1 px-2 rounded shadow-sm border-2 border-gray-500 text-gray-500">&times;</span></div>
-    <img src={props.image}  className="w-100" />
+    <img src={props.image}  className="w-100 h-56 md:h-64 lg:72" />
     <div className="p-2">
-        <div className="text-md">{props.name} </div>
+            <div className="text-sm font-normal hidden md:block">
+                {props?.name.length > 24 ? props?.name.substring(0,24):props?.name}
+                {props?.name.length > 24 ? " ...":""}
+            </div>
+            <div className="text-sm font-normal md:hidden">
+                {props?.name.length > 15 ? props?.name.substring(0,15):props?.name}
+                {props?.name.length > 15 ? " ...":""}
+            </div>
         <div className="text-lg">Rs. {props.price}</div>
         <hr className="my-2" />
         {/* <Button variant="text" color="secondary" fullWidth onClick={()=>{props.movetoCart()}}>
@@ -102,7 +109,7 @@ export default function Wishlist(props) {
                     <div className="container mx-auto my-4">
 
                         <h3 className="text-xl font-md my-4">My Wishlist ( {wishlist.length} items )</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 md:gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 md:gap-4">
 
                             {wishlist?wishlist.map((el,key)=>(
                                 <div key={key}>

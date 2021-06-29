@@ -284,9 +284,9 @@ export default function Product(props) {
                             <li className="nav-item" role="presentation">
                             <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
                             </li>
-                            <li className="nav-item" role="presentation">
+                            {/* <li className="nav-item" role="presentation">
                             <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Specification table-tab" data-bs-toggle="tab" data-bs-target="#Specification table" role="tab" aria-controls="Specification table" aria-selected="false">Specification table</span>
-                            </li>
+                            </li> */}
                         </ul>
                         <div className="tab-content" id="myTabContent">
                             <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
@@ -294,8 +294,6 @@ export default function Product(props) {
                             </div> 
                             <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
                                 <p>{props.product?.productDesc}</p>
-                            </div> 
-                            <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
                                 <div className="container">
 
                                     {specsArr.filter(e=>props.product[e]).map((e,k)=>(
@@ -307,6 +305,8 @@ export default function Product(props) {
                                     ))}
 
                                 </div>
+                            </div> 
+                            <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
                                 
                             </div> 
                         </div>

@@ -85,7 +85,7 @@ export default function CartPage({coupon}) {
 
                 
 
-                <div className="my-4">
+                {/* <div className="my-4">
                     <div className="flex items-center">
                         <SettingSVG />
                         <div className="text-xl px-2">Available Offers</div>        
@@ -96,7 +96,7 @@ export default function CartPage({coupon}) {
                 <div className="flex items-center my-4">
                     <img src="/assets/images/checkout/free-delivery-truck-icon-2049-thumb.png" width="30px" />
                     <div className="text-lg mx-2">Yah ! No Convenience fee on this order.</div>
-                </div>
+                </div> */}
 
 
                 <Suspense fallback={<div className="text-center py-10">

@@ -176,8 +176,31 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
               
-              {sections?.filter(e=>e.position === "Top" && e.title != "Wedding Collection").map((el,key)=>(
+              {sections?.filter(e=>e.position === "Top").map((el,key)=>(
                 <div key={key}>
+                  {el.title === "Wedding Collection" ? <>
+                    <div key={key} className="mb-2"> 
+                      <div className="sm:hidden">
+                        <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                        <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                          {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                            return <Link href={e.link}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                          })}
+                        </div>
+                      </div>
+
+
+                      <div className="hidden lg:block">
+                        <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                        <div className="grid grid-cols-5 gap-2">
+                          {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                            return <Link href={e.link}><div className="px-1"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
+                          })}
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </>:<div key={key}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
@@ -186,32 +209,13 @@ export default function Home(props) {
                             </div> 
                         })} 
                     </div>
+                  
+                  </div>}
                 
                 </div>
               ))}
-              {sections?.filter(e=>e.title === "Wedding Collection").map((el,key)=>(
-                <div key={key} className="mb-2"> 
-                  <div className="sm:hidden">
-                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                    <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
-                      {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                        return <Link href={e.link}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
-                      })}
-                    </div>
-                  </div>
-
-
-                  <div className="hidden lg:block">
-                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                    <div className="grid grid-cols-5 gap-2">
-                      {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                        return <Link href={e.link}><div className="px-1"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
-                      })}
-                    </div>
-                  </div>
-                
-                </div>
-              ))}
+              
+              
             </Suspense>
             
 
