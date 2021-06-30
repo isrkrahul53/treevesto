@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'; 
-import FilterPage from '../pages/filterPage';
+import MobileFilterPage from '../pages/mobileFilterPage';
 import SortByPage from '../pages/sortByPage';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
@@ -47,12 +47,13 @@ export default function Filterbar(props) {
     //   onClick={toggleDrawer(anchor, false)}
     //   onKeyDown={toggleDrawer(anchor, false)}
     > 
-    <div className="p-4">
-      <FilterPage values={props.values} change={props.change} min={props.min} max={props.max} 
+    <div className="">
+      <MobileFilterPage values={props.values} change={props.change} min={props.min} max={props.max} reset={props.clearAll}
+      chips={props.chips}
       colourList={props.colourList}
       sizeList={props.sizeList}
        />
-
+ 
     </div>
     
 

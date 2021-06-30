@@ -1,6 +1,6 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch } from "react-redux";
-
+import Link from 'next/link'
 
 import axios from 'axios';
 import https from 'https'
@@ -102,7 +102,17 @@ export default function CartPage({coupon}) {
                 <Suspense fallback={<div className="text-center py-10">
                         <div className="spinner-border text-primary"></div>
                     </div>}>
-                        <CartItem {...props} />
+                        {cart.length > 0 ? <>
+                            <CartItem {...props} />
+                        </>:<>
+                            <div className="py-4">
+                                <div className="display-6"> Cart is Empty </div>
+                                <div className="text-secondary"> 
+                                Continue Shopping
+                                <span className="cursor-pointer text-primary px-2"><Link href="/">click here</Link></span>  
+                                </div>
+                            </div>
+                        </>}
 
                 </Suspense>
 

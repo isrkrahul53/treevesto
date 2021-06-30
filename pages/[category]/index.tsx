@@ -66,7 +66,7 @@ export default function Product(props){
       formData.append("productId",pro._id)
       formData.append("vendorId",pro.vendorId)
       formData.append("type","cart")
-      formData.append("image",pro.productImages[0].src)
+      formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
       formData.append("name",pro.productName)
       formData.append("price",pro.sellingPrice)
       formData.append("qty","1")
@@ -111,28 +111,18 @@ export default function Product(props){
     // router.replace("/"+router.query.category+"?"+colourFilter+"&"+sizeFilter+"&"+fromFilter+"&"+toFilter)
   },[filterData.colour,filterData.size,filterData.sort,filterData.priceRange])
 
-  const filterProduct = (colour,size,sort,from,to) => {
-    setProducts([])
-    fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category).then(d=>d.json()).then(json=>{
-      if(json.success === 1){
-        var data = []
-        json.result.forEach(element => {
-          var images = [];
-          element.productImages.forEach(e => {
-            images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
-          });
-          data.push({...element,productImages:images})
-        }); 
-        var arr = []
-        var temp = data;
-        temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
-          arr.push(temp.filter(e=>e.productCode === el))
-        })
-        console.log(arr)
-        setLoading(false)
-        setProducts(arr)
-      }
-    }).catch(err=>console.log(err))
+  const filterProduct = async (colour,size,sort,from,to) => {
+    var arr = []
+    const res = await fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category);
+    const json = await res.json();
+    if(json.success === 1){ 
+      var temp = await json.result;
+      await temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+        arr.push(temp.filter(e=>e.productCode === el))
+      })
+      setProducts(arr)
+      setLoading(false)
+    }
 
   }
 
@@ -157,6 +147,13 @@ export default function Product(props){
   const handleRangeChange = (event, newValue) => {
       setPriceRange(newValue);
   };
+
+  const clearAll = () => {
+    setSize([])
+    setColour([])
+    setPriceRange([min,max])
+  }
+
   
   const filterChange={handleSizeChange,handleSortChange,handleColourChange,handleRangeChange}
   if (!isFront) return null;
@@ -234,7 +231,10 @@ export default function Product(props){
                   <Suspense fallback={<div>
                     <Skeleton className="w-full" />
                     </div>}>
-                      <Filterbar values={filterData} change={filterChange}
+                      <Filterbar values={filterData} change={filterChange} clearAll={clearAll} chips={<MaterialChipArray data={filterData} 
+                      delSize={e=>setSize(size.filter((d,k)=>k!==e))}
+                      delColour={e=>setColour(size.filter((d,k)=>k!==e))}
+                      />}
                       min={min} 
                       max={max} 
                       colourList={props.products?.map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) == k)}

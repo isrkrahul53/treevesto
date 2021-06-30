@@ -12,7 +12,8 @@ const Layout = lazy(()=>import('../component/common/layout'))
 const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
 const ReactMultiCarousel = lazy(()=>import('../component/react/multiCarousel'))
 const ReactCarousel = lazy(()=>import('../component/react/carousel'))
-
+const ReactBannerCarousel = lazy(()=>import('../component/react/bannerCarousel'))
+ 
 function Cards(props){
   return <div>
     <h3 className="display-5 my-8 text-secondary"> {props.title} </h3>
@@ -25,7 +26,7 @@ function Cards(props){
 }
 
 export default function Home(props) {
-  
+  console.log(props.bannerData)
   const isMobileDevice = useMediaQuery({
     query: "(min-device-width: 500px)",
   });
@@ -95,7 +96,7 @@ export default function Home(props) {
         formData.append("productId",pro._id)
         formData.append("vendorId",pro.vendorId)
         formData.append("type","cart")
-        formData.append("image",pro.productImages[0].src)
+        formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
         formData.append("name",pro.productName)
         formData.append("price",pro.sellingPrice)
         formData.append("qty","1")
@@ -131,6 +132,7 @@ export default function Home(props) {
             <div className="spinner-border text-primary"></div>
         </div>}>
         <Layout> 
+          
           <div className="sm:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
                 <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
@@ -143,22 +145,14 @@ export default function Home(props) {
                 </div>
             </Suspense>
           </div>
+
           {/* ======================================== */}
           {/* Banners */}
           {/* ======================================== */} 
-          {/* <div className="md:hidden">
-            <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
-              <ReactMultiCarousel mobileItem={4} arrows={false}  content={props.categories.map((e,k)=>(
-                  <Link href={"/"+e._id} key={k}><div className="text-center w-full">
-                    <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} className="w-16 h-16 mx-auto rounded-circle"  />
-                    <div className="text-sm p-1">  {e.catName} </div>
-                  </div></Link>
-                ))} className="react-multi-carousel-dot button" />
-            </Suspense>
-          </div> */}
+          
 
           <Suspense fallback={<Skeleton className="w-full" variant="rect" height={380} />}>
-            <ReactCarousel data={!isMobileDevice ? props.mobBanner:props.deskBanner} arrows={false} showDots={true} />
+            <ReactBannerCarousel data={props.bannerData} mobile={!isMobileDevice} arrows={false} showDots={true} />
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
@@ -278,50 +272,24 @@ export const getStaticProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  // const isMobileDevice = useMediaQuery({
-  //   query: "(min-device-width: 480px)",
-  // });
-  try{
-    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-    var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
-    var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
+   
+  var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
+  var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+  var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
 
-    const bannerData = await banner.data.result;
+  var bannerData = await banner.data.result;
+  var productData = await products.data.result;
 
-    var deskBanner = bannerData.filter(e=>e.image).map((el,key)=>{
-        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image}
-        // return {id:el._id,href:el.link,src:"https://picsum.photos/1200/40"+key}
-    })
-    var mobBanner = bannerData.filter(e=>e.mobileImage).map((el,key)=>{
-        return {id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.mobileImage}
-        // return {id:el._id,href:el.link,src:"https://picsum.photos/1200/40"+key}
-      
-    })
-
-    var data = []
-    products.data.result.forEach(element => {
-      var images = [];
-      element.productImages.forEach(e => {
-        images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
-      });
-      data.push({...element,productImages:images})
-    }); 
-    var arr = []
-    var temp = data;
-    temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
-      arr.push(temp.filter(e=>e.productCode === el))
-    })
-    
-  }catch(err){
-    console.log(err.message)
-  }
-  
-
+  var arr = []
+  var temp = productData
+  temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+    arr.push(temp.filter(e=>e.productCode === el))
+  })
+     
    
   return {
       props: {
-          deskBanner,
-          mobBanner,
+          bannerData,
           products:arr,
           categories:categories?.data.result
       }

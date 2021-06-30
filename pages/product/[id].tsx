@@ -33,7 +33,8 @@ function RatingUI(props){
         </div>
     </div>
 }
-                                                     
+               
+const apiUrl = "https://api.treevesto.com:4000/";
 export default function Product(props) { 
 
     const dispatch = useDispatch();
@@ -60,7 +61,7 @@ export default function Product(props) {
     }
 
     useEffect(()=>{
-        setSelectedImage(props.product?.productImages[0]?.src)
+        setSelectedImage(apiUrl+props.product?.productImages[0])
         fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
         }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
@@ -194,7 +195,7 @@ export default function Product(props) {
                     <meta property="og:title" content={props.product?.productName} />
                     <meta property="og:url" content={"https://admiring-bardeen-fc41ec.netlify.app"+router.asPath} />
                     <meta property="og:description" content={"Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."} />
-                    <meta property="og:image:secure_url" content={props.product?.productImages[0]?.src}></meta>
+                    <meta property="og:image:secure_url" content={apiUrl+props.product?.productImages[0]}></meta>
                     <meta property="og:type" content="article" />
 
                 </Head>
@@ -223,8 +224,8 @@ export default function Product(props) {
                                         <Skeleton className="w-full" height={240} />
                                     </div>}>
                                         {props.product?.productImages.map((el,key)=>(
-                                            <img key={key} src={el.src} onClick={()=>{setSelectedImage(el.src)}}
-                                            className={selectedImage==el.src?"w-100 cursor-pointer border-2 border-gray-500 rounded":"w-100 cursor-pointer"} />
+                                            <img key={key} src={apiUrl+el} onClick={()=>{setSelectedImage(apiUrl+el)}}
+                                            className={selectedImage==apiUrl+el?"w-100 cursor-pointer border-2 border-gray-500 rounded":"w-100 cursor-pointer"} />
                                         ))} 
                                     </Suspense>
                                 </div>
@@ -397,7 +398,7 @@ export default function Product(props) {
                     <div className="w-full md:w-2/3 m-2 md:ml-6">
                         <div className={"grid grid-cols-"+grid+" gap-8"}>
                             {props.product?.productImages.map((el,key)=>(
-                                <img key={key} src={el.src} className="w-100" />
+                                <img key={key} src={el} className="w-100" />
                             ))} 
                         </div>
                         
@@ -426,34 +427,20 @@ export const getStaticProps = async (context) => {
     });
     const res = await axios.get(`https://api.treevesto.com:4000/product/${context.params.id}`,{httpsAgent:agent})
     const review = await axios.get(`https://api.treevesto.com:4000/review/product/${context.params.id}`,{httpsAgent:agent})
-    var data = []
-    res.data.result.forEach(element => {
-        var images = [];
-        element.productImages.forEach(e => {
-            images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
-        });
-        data.push({...element,productImages:images})
-    });
-    const category = await axios.get(`https://api.treevesto.com:4000/category/id/${data[0].subcatId}`,{httpsAgent:agent})
-    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${data[0].subcatId}`,{httpsAgent:agent})    
+    const productData = await res.data.result;
 
-    var simData = []
-    similarProduct.data.result.forEach(element => {
-      var images = [];
-      element.productImages.forEach(e => {
-        images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
-      });
-      simData.push({...element,productImages:images})
-    }); 
+    const category = await axios.get(`https://api.treevesto.com:4000/category/id/${productData[0].subcatId}`,{httpsAgent:agent})
+    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${productData[0].subcatId}`,{httpsAgent:agent})    
+ 
+    var temp = await similarProduct.data.result;
     var arr = []
-    var temp = simData;
     temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
       arr.push(temp.filter(e=>e.productCode === el))
     })
     
     return {
       props: {
-        product:data[0] || [],
+        product:productData[0] || [],
         review:review.data.result,
         catName:category.data.result[0].catName,
         similarProduct:arr

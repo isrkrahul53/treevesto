@@ -34,26 +34,7 @@ export default function ReactCarouselZoom(props){
     arrows={props.arrows && true}
     responsive={responsive}>
         {props.data.map((e,k)=>(
-          <img src={e.src || "image.jpg"} width="100%" alt="test" />
-
-      //     <TransformWrapper
-      //     defaultScale={1}
-      //     defaultPositionX={200}
-      //     defaultPositionY={100}
-      // >
-      //     {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-      //     <React.Fragment>
-      //         <div className="tools text-right">
-      //             {/* <button className="btn m-1 btn-sm btn-primary" onClick={zoomIn}>+</button>
-      //             <button className="btn m-1 btn-sm btn-primary" onClick={zoomOut}>-</button>
-      //             <button className="btn m-1 btn-sm btn-danger" onClick={resetTransform}>x</button> */}
-      //         </div>
-      //         <TransformComponent>
-      //         <img src={e.src || "image.jpg"} width="100%" alt="test" />
-      //         </TransformComponent>
-      //     </React.Fragment>
-      //     )}
-      // </TransformWrapper>
+          <img src={"https://api.treevesto.com:4000/"+e || "image.jpg"} width="100%" alt="" />
         ))}
   </Carousel>;
 }

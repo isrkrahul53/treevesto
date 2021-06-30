@@ -24,7 +24,9 @@ export default function SingleProduct(props){
     
     return <div className={"cursor-pointer"} >
     {/* <ProductImageBanner indicator={false} images={productSelected?.productImages} /> */}
-    <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
+    <Link href={"/product/"+productSelected._id}>
+      <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
+    </Link>
 
     <div className="p-2">
         <Link href={"/product/"+productSelected._id}><div>
