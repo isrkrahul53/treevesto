@@ -4,10 +4,15 @@ import Button from '@material-ui/core/Button'
 import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import { useSelector, useDispatch } from "react-redux";
+
 
 import TextField from '@material-ui/core/TextField'
 import CustomAlert from '../common/customAlert';
 import { useRouter } from 'next/router';
+
 
 export default function ProductPage(props) {
     
@@ -18,6 +23,9 @@ export default function ProductPage(props) {
     const [colour,setColour] = React.useState(props.data.colour);
     const [size,setSize] = React.useState(props.data.size);
 
+    const [cart,setCart] = React.useState(null);
+    const cartPromise = useSelector((state:any)=>state.cart)
+    
     useEffect(()=>{
         fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
             var product = json.result.filter(e=>e.productCode === props.data.productCode) 
@@ -29,16 +37,24 @@ export default function ProductPage(props) {
     },[])
     
     useEffect(()=>{
+        cartPromise.then(d=>{
+            setCart(d.find(e=>e.productId === props.data._id))
+        })
+
+    },[cartPromise])
+
+    useEffect(()=>{
         setSizeList(products.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
         setColourList(products.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
         var pid = products.filter(e=>e.colour === colour && e.size === size)[0]?._id;
         pid && router.replace("/product/"+pid)
     },[size,colour])
  
+    
     return  <div> 
 
         {props.data?.stock > 3 ? <>
-            <span className="p-1 text-sm bg-success text-white">In Stock </span>
+            <span className="p-1 text-sm bg-success text-white">In Stock {props.data?.stock} </span>
         </>:props.data?.stock > 0 ? <>
             <span className="p-1 text-sm bg-primary text-white"> Only {props.data?.stock} left </span>
         </>:<>
@@ -71,38 +87,64 @@ export default function ProductPage(props) {
         <p className="my-3">
             {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
         </p>
-        {/* Mobile */}
-        <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1200}} >
-            <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
-                <LocalMallOutlinedIcon /> Add Bag
-            </div>
-            <div onClick={()=>{props.addtoWishlist()}} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
-                <FavoriteBorderOutlinedIcon /> Wishlist
-            </div>
-            <div className="p-2 border-2 border-dark mr-1">
-                <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
-                    <WhatsAppIcon />
-                </a>
 
-            </div>
-        </div> 
-
-        {/* Desktop */}
-        <div className="md:flex items-center justify-around w-3/5 hidden my-2">
-            {props.isAdded?<>
-                <Link href="/checkout/cart"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
-                    <LocalMallOutlinedIcon /> Go to Bag
-                </div></Link>
-            </>:<>
-                <div onClick={()=>{props.addtoCart(size)}} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
-                    <LocalMallOutlinedIcon /> Add To Bag
+        {props.data?.stock > 0 && <>
+        
+            {/* Mobile */}
+            <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1200}} >
+                {cart?<>
+                    <div className="flex items-center justify-between mx-1 w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
+                        <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
+                        <RemoveIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty-1}})} />
+                        </Button>
+                        <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
+                        <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
+                        <AddIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty+1}})} />
+                        </Button>
+                    </div>
+                </>:<>
+                    <div onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                        <LocalMallOutlinedIcon /> Add Bag
+                    </div>
+                </>}
+                <div onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <FavoriteBorderOutlinedIcon /> Wishlist
                 </div>
-            </>}
-            <div className="px-1"></div>
-            <div onClick={()=>{props.addtoWishlist()}} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
-                <FavoriteBorderOutlinedIcon /> Wishlist
-            </div>
-        </div> 
+                {/* <div className="p-2 border-2 border-dark mr-1">
+                    <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
+                        <WhatsAppIcon />
+                    </a>
+    
+                </div> */}
+            </div> 
+
+            {/* Desktop */}
+            <div className="md:flex items-center justify-around w-3/5 hidden my-2">
+                {cart?<>
+                    {/* <Link href="/checkout/cart"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
+                        <LocalMallOutlinedIcon /> Go to Bag
+                    </div></Link> */}
+                    <div className="flex items-center justify-between w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
+                        <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
+                        <RemoveIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty-1}})} />
+                        </Button>
+                        <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
+                        <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
+                        <AddIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty+1}})} />
+                        </Button>
+                    </div>
+                </>:<>
+                    <div onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                        <LocalMallOutlinedIcon /> Add To Bag
+                    </div>
+                </>}
+                <div className="px-1"></div>
+                <div onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <FavoriteBorderOutlinedIcon /> Wishlist
+                </div>
+            </div> 
+        
+        </>}
 
         {/* <hr/>
         <div className="my-3">

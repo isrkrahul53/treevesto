@@ -22,8 +22,7 @@ export default function Product(props){
   const min = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0;
   const max = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0;
   const [products,setProducts] = React.useState([])
-  const [cart,setCart] = React.useState([])
-  
+   
   const [isFront, setIsFront] = React.useState(false);
   
   useEffect(()=>{
@@ -32,10 +31,7 @@ export default function Product(props){
           setIsFront(true);
       }
     });
-    var cart = JSON.parse(localStorage.getItem('cart'))
-    if(cart){
-      setCart(cart)
-    }
+    
     initializeProducts();
   },[])
 
@@ -57,39 +53,7 @@ export default function Product(props){
     filterProduct(colourFilter,sizeFilter,sortFilter,fromFilter,toFilter)
     
   }
-  
-  const addtoCart = (pro) => { 
-    var user = JSON.parse(localStorage.getItem('user'))
-    if(user){
-      var formData = new FormData();
-      formData.append("userId",user.userId)
-      formData.append("productId",pro._id)
-      formData.append("vendorId",pro.vendorId)
-      formData.append("type","cart")
-      formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
-      formData.append("name",pro.productName)
-      formData.append("price",pro.sellingPrice)
-      formData.append("qty","1")
-      formData.append("stock",pro.stock) 
-      formData.append("size",pro.size) 
-
-      fetch(`https://api.treevesto.com:4000/cart/`,{
-        method:"POST",
-        body:formData,
-        headers:{
-          "token":user.token
-        }
-      }).then(d=>d.json()).then(json=>{
-        if(json.success === 1){
-          dispatch({type:"setAlert",payloads:"Item added to Cart"})
-        }else{
-          dispatch({type:"setAlert",payloads:json.msg})
-        }
-      }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-    }else{
-      router.replace("/auth/login")
-    } 
-}
+   
   
   // FilterPage
   const [isLoading,setLoading] = React.useState(false)
@@ -273,7 +237,7 @@ export default function Product(props){
                                 <Skeleton className="w-full" variant="text" height={20} />
                                 <Skeleton className="w-2/5" variant="text" height={20} />
                                 </div>}>
-                                  <SingleProduct data={el} cart={addtoCart} />
+                                  <SingleProduct data={el} cart={dispatch} />
                               </Suspense>
 
                             </div> 

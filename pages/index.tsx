@@ -25,8 +25,8 @@ function Cards(props){
   </div>  
 }
 
-export default function Home(props) {
-  console.log(props.bannerData)
+export default function Home(props) { 
+  
   const isMobileDevice = useMediaQuery({
     query: "(min-device-width: 500px)",
   });
@@ -35,7 +35,7 @@ export default function Home(props) {
   const router = useRouter();
   const [navigation, setNavigation] = React.useState(0); 
   const [categories,setCategories] = React.useState([]);
-
+ 
   const handleNavigationChange = (event, newValue) => {
     setNavigation(newValue);
   };
@@ -43,16 +43,13 @@ export default function Home(props) {
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
   
-  const [cart,setCart] = React.useState([]);
   const [grid1,setGrid1] = React.useState(5)
   const [grid2,setGrid2] = React.useState(5)
   
   const [isFront, setIsFront] = React.useState(false);
 
 
-  useEffect(()=>{
-    // const handler = e => setCheckedWidth(e.matches);
-    // window.matchMedia("(min-width: 768px)").addEventListener();
+  useEffect(()=>{ 
     process.nextTick(() => {
       if (globalThis.window ?? false) {
           setIsFront(true);
@@ -66,60 +63,14 @@ export default function Home(props) {
     fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
         setCards(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-    
-    var user = JSON.parse(localStorage.getItem('user'))
-    user && getCart(user)
-    
+     
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-  },[])
 
-  
-  const getCart = (x) => {
-    fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-      method:"GET",
-      headers:{
-          "token":x.token
-      }
-  }).then(d=>d.json()).then(json=>{ 
-        setCart(json.result.filter(e=>e.type==="cart"))
-    })
     
-  }
-
-  const addtoCart = (pro) => { 
-      var user = JSON.parse(localStorage.getItem('user'))
-      if(user){
-        var formData = new FormData();
-        formData.append("userId",user.userId)
-        formData.append("productId",pro._id)
-        formData.append("vendorId",pro.vendorId)
-        formData.append("type","cart")
-        formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
-        formData.append("name",pro.productName)
-        formData.append("price",pro.sellingPrice)
-        formData.append("qty","1")
-        formData.append("stock",pro.stock) 
-        formData.append("size",pro.size) 
+  },[])
   
-        fetch(`https://api.treevesto.com:4000/cart/`,{
-          method:"POST",
-          body:formData,
-          headers:{
-            "token":user.token
-          }
-        }).then(d=>d.json()).then(json=>{
-          if(json.success === 1){
-            dispatch({type:"setAlert",payloads:"Item added to Cart"})
-          }else{
-            dispatch({type:"setAlert",payloads:json.msg})
-          }
-        }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-      }else{
-        router.replace("/auth/login")
-      } 
-  }
   if (!isFront) return null;
 
   return (
@@ -136,8 +87,8 @@ export default function Home(props) {
           <div className="sm:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
                 <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
-                  {props.categories.map((e,k)=>(<div className="px-2">
-                    <Link href={"/"+e._id} key={k}><div className="text-center" style={{width:"65px"}}>
+                  {props.categories.map((e,k)=>(<div className="px-2" key={k}>
+                    <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
                       <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
                       <div className="text-sm p-1">  {e.catName} </div>
                     </div></Link>
@@ -184,7 +135,7 @@ export default function Home(props) {
                       </div>
 
 
-                      <div className="hidden lg:block">
+                      <div key={key} className="hidden lg:block">
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                         <div className="grid grid-cols-5 gap-2">
                           {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
@@ -227,7 +178,7 @@ export default function Home(props) {
               </div>}>
               <ReactMultiCarousel showDots={true} arrows={true} content={props.products.map((e,k)=>(
                     <div key={k} className="p-1">
-                        <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+                        <SingleProduct data={e} hideDetails={false} cart={dispatch} />
                     </div>
                 ))} />
             </Suspense>

@@ -11,39 +11,39 @@ import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchProducts from './searchProducts';
 import MenuListComposition from '../material/menu'
+import { useSelector } from "react-redux";
 
 
 declare var $:any;
 export default function Layout(props){
+    const cartPromise = useSelector((state:any)=>state.cart)
     const router = useRouter(); 
-
+    
+    
     const [categories,setCategories] = React.useState([]);
     const [subcategories,setSubCategories] = React.useState([]);
-
-    const [cart,setCart] = React.useState(0)
+    
+    const [cart,setCart] = React.useState(0);
+    
     const [wishlist,setWishlist] = React.useState(0)
     const [user,setUser] = React.useState(null)
-     
+    
     const [search,setSearch] = React.useState("")
     const [products,setProducts] = React.useState(null)
     const [isLoading,setLoading] = React.useState(false)
     
-
+    
     useEffect(()=>{
         fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
             setCategories(json.result)
         })
-          
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-            setUser(user)
-            fetch(`https://api.treevesto.com:4000/cart/user/`+user.userId).then(d=>d.json()).then(json=>{
-                setCart(json.result.filter(e=>e.type == "cart").length)
-            })
-        }
-
+        setUser(JSON.parse(localStorage.getItem('user')))
     },[])
-     
+    
+    useEffect(()=>{
+         cartPromise.then(d=>setCart(d.length))
+
+    },[cartPromise])
     
     useEffect(()=>{
         searchProducts()
@@ -141,7 +141,7 @@ export default function Layout(props){
                             <div className="flex items-center cursor-pointer">
                                 <img src="/assets/icons/shopping-bag.png" className="mx-2" width="20px" alt="shopping-bag"/>
                                 <div style={{fontSize:"14px",fontWeight:500,color:"#282c3f",letterSpacing:"0.3px",fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
-                                    <sup className="font-bold -ml-2 bg-danger text-white rounded-circle" style={{padding:"2px 5px"}} >{cart}</sup>
+                                    <sup className="font-bold -ml-2 bg-danger text-white rounded-circle" style={{padding:"2px 5px"}} >{user ? cart : 0}</sup>
                                 </div>
                                 {/* <sup className="font-bold -ml-2 bg-danger text-white p-1 py-2 rounded">{cart}</sup> */}
                             </div>

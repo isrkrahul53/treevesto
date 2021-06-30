@@ -45,9 +45,7 @@ export default function Product(props) {
     const [selectedImage,setSelectedImage] = React.useState(null)
     const imageProps = {width: 400, height: 250, zoomWidth: 500, img: selectedImage};
     const [vendordata,setVendordata] = React.useState(null)
-    const [cart,setCart] = React.useState([]);
-    const [isAdded,setAdded] = React.useState(false)
-    const [wishlist,setWishlist] = React.useState([])
+      
     const [navigation,setNavigation] = React.useState(1)
     
     const [size,setSize] = React.useState([])
@@ -82,105 +80,10 @@ export default function Product(props) {
             if (globalThis.window ?? false) {
                 setIsFront(true);
             }
-        });
-        var user = JSON.parse(localStorage.getItem('user'))
-        user && getCart(user)
-        user && getWishlist(user)
+        }); 
     },[])
-
-    useEffect(()=>{
-        cart.find(e=>e.productId === router.query.id) && setAdded(true)
-    },[cart])
-
  
-
-    const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-                method:"GET",
-                headers:{
-                    "token":x.token
-                }
-            }).then(d=>d.json()).then(json=>{
-            setCart(json.result.filter(e=>e.type === "cart"))
-        })
-    }
-    const getWishlist = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-                method:"GET",
-                headers:{
-                    "token":x.token
-                }
-            }).then(d=>d.json()).then(json=>{
-            setWishlist(json.result.filter(e=>e.type === "wishlist"))
-        })
-    }
-    const addtoCart = (s) => { 
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-          var formData = new FormData();
-          formData.append("userId",user.userId)
-          formData.append("productId",props.product._id)
-          formData.append("vendorId",props.product.vendorId)
-          formData.append("type","cart")
-          formData.append("image",props.product.productImages[0]?.src)
-          formData.append("name",props.product.productName)
-          formData.append("price",props.product.sellingPrice)
-          formData.append("qty","1")
-          formData.append("stock",props.product.stock) 
-          formData.append("size",s) 
-    
-          fetch(`https://api.treevesto.com:4000/cart/`,{
-            method:"POST",
-            body:formData,
-            headers:{
-                "token":user.token
-            }
-          }).then(d=>d.json()).then(json=>{
-            if(json.success === 1){
-                dispatch({type:"setAlert",payloads:"Item added to cart"})
-            }else{
-                dispatch({type:"setAlert",payloads:json.msg})
-            }
-          }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-        }else{
-          router.replace("/auth/login")
-        } 
-        
-    }
-    
-    const addtoWishlist = () => { 
-        
-        var user = JSON.parse(localStorage.getItem('user'))
-        if(user){
-          var formData = new FormData();
-          formData.append("userId",user.userId)
-          formData.append("productId",props.product._id)
-          formData.append("vendorId",props.product.vendorId)
-          formData.append("type","wishlist")
-          formData.append("image",props.product.productImages[0]?.src)
-          formData.append("name",props.product.productName)
-          formData.append("price",props.product.sellingPrice)
-          formData.append("qty","1")
-          formData.append("stock",props.product.stock) 
-    
-          fetch(`https://api.treevesto.com:4000/cart/`,{
-            method:"POST",
-            body:formData,
-            headers:{
-                "token":user.token
-            }
-          }).then(d=>d.json()).then(json=>{
-            if(json.success === 1){ 
-                dispatch({type:"setAlert",payloads:"Item added to wishlist"})
-            }else{
-                dispatch({type:"setAlert",payloads:json.msg}) 
-            }
-          }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-        }else{
-          router.replace("/auth/login")
-        } 
-      }
-
+     
     if (!isFront) return null;
      
     return <div> 
@@ -270,7 +173,7 @@ export default function Product(props) {
                                 <Suspense fallback={<div className="text-center py-10">
                                         <div className="spinner-border text-primary"></div>
                                     </div>}>
-                                    <ProductPage isAdded={isAdded} addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} 
+                                    <ProductPage addtoCart={dispatch} updateItemQty={dispatch} addtoWishlist={dispatch} data={props.product} 
                                     size={size} colour={colour} />
                                 </Suspense>
                             </div>
@@ -383,7 +286,7 @@ export default function Product(props) {
                     <Suspense fallback={<Skeleton className="w-full" height={180} />}>
                         <ReactMultiCarousel showDots={true} arrows={true} content={props.similarProduct.map((e,k)=>(
                         <div key={k} className="p-1">
-                            <SingleProduct data={e} hideDetails={false} cart={addtoCart} />
+                            <SingleProduct data={e} hideDetails={false} cart={dispatch} />
                         </div>
                         ))} />
                     </Suspense>
@@ -392,24 +295,7 @@ export default function Product(props) {
 
                 </div>
     
-
-
-                {/* {grid==2?<div className="flex-row md:flex items-start">
-                    <div className="w-full md:w-2/3 m-2 md:ml-6">
-                        <div className={"grid grid-cols-"+grid+" gap-8"}>
-                            {props.product?.productImages.map((el,key)=>(
-                                <img key={key} src={el} className="w-100" />
-                            ))} 
-                        </div>
-                        
-                    </div>
-                    <div className="w-full md:w-1/3 md:px-6"> 
-                        <ProductPage addtoCart={(s)=>{addtoCart(s)}} addtoWishlist={()=>{addtoWishlist()}} data={props.product} />
-
-                    </div>
-                </div>:<></>} */}
-                
-                
+ 
     
 
 

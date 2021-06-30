@@ -3,10 +3,29 @@ import Link from 'next/link';
 import { useRouter } from "next/router";
 import ProductImageBanner from './productImage';
 import ReactCarousel from '../react/carousel';
+import { useSelector, useDispatch } from "react-redux";
+import Button from '@material-ui/core/Button'
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+
+const UpdatQtyButton = (props) => {
+  return <div className="flex items-center justify-between w-full border-2 border-blue-800 text-blue-800 p-0">
+      <Button variant="text" color="primary" disabled={+props.cart.qty <= 0}>
+      <RemoveIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty-1}})} />
+      </Button>
+      <div className="p-1 px-2 text-md font-medium">{props.cart.qty}</div>
+      <Button variant="text" color="primary" disabled={+props.cart.qty >= (+props.pro.stock)}>
+      <AddIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty+1}})} />
+      </Button>
+  </div>
+}
 
 export default function SingleProduct(props){
     const router = useRouter();
   
+    const dispatch = useDispatch();
+    const [cart,setCart] = React.useState(null);
+    const cartPromise = useSelector((state:any)=>state.cart)
     
     const [productSelected,setProductSelected] = React.useState(props.data[0])
     const [colourSelected,setColourSelected] = React.useState(0)
@@ -21,6 +40,9 @@ export default function SingleProduct(props){
       setProductSelected(props.data.find(e=>e.colour === colour[colourSelected] && e.size === size[sizeSelected]))
     },[colourSelected,sizeSelected])
   
+    cartPromise.then(d=>{
+        setCart(d.find(e=>e.productId === productSelected._id))
+    })
     
     return <div className={"cursor-pointer"} >
     {/* <ProductImageBanner indicator={false} images={productSelected?.productImages} /> */}
@@ -53,9 +75,19 @@ export default function SingleProduct(props){
           ))}
         </div>
         <div className="my-2 flex items-center">
-          <span  onClick={()=>props.cart(productSelected)} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
-            ADD TO CART
-          </span>
+          {+productSelected?.stock <= 0 ? <>
+            <span className="text-center py-2 w-full text-sm font-normal border-1 border-red-200 bg-red-200 text-red-500">
+              OUT OF STOCK
+            </span>
+          </>:<>
+              {cart?<> 
+                <UpdatQtyButton pro={productSelected} cart={cart} dispatch={dispatch} />
+              </>:<> 
+                <span  onClick={()=>props.cart({type:"addToCart",payloads:productSelected})} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
+                  ADD TO CART
+                </span>
+              </>}
+          </>}
         </div>
       </>}
     </div>

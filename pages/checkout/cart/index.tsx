@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from 'next/link'
 
 import axios from 'axios';
@@ -16,10 +16,11 @@ function SettingSVG(){
 }
 
 export default function CartPage({coupon}) {
+    const cartPromise = useSelector((state:any)=>state.cart) 
     const dispatch = useDispatch();
      
     const [cart,setCart] = React.useState([]);
-    const [wishlist,setWishlist] = React.useState([]);
+    
     const [totalAmt,setTotalAmt] = React.useState(0)
 
     const [isFront, setIsFront] = React.useState(false);
@@ -29,51 +30,22 @@ export default function CartPage({coupon}) {
             if (globalThis.window ?? false) {
                 setIsFront(true);
             }
-        });
-        var user = JSON.parse(localStorage.getItem('user'))
-        user  && getCart(user)
+        }); 
         
-    },[])
- 
+    },[]) 
 
-    const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-            method:"GET",
-            headers:{
-                "token":x.token
-            }
-        }).then(d=>d.json()).then(json=>{
-            setCart(json.result.filter(e=>e.type === "cart"))
-        })
-    }
+    useEffect(()=>{
+        cartPromise.then(d=>setCart(d))
 
-    const deleteCartItem = (x) => {
-        var data = cart.filter(e=>e.productId!=x)
-        setCart(data)
-        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
-            dispatch({type:"setAlert",payloads:"Item Deleted !"})
-            getCart(JSON.parse(localStorage.getItem('user')))
-        })
-    }
+    },[cartPromise])
+     
+    const props = {cart,dispatch}
+    if (!isFront) return null;
 
-    
-    const movetoWishlist = (x) => { 
-        var formData = new FormData();
-        formData.append("type","wishlist")
-        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
-            dispatch({type:"setAlert",payloads:"Item moved to Wishlist"})
-            getCart(JSON.parse(localStorage.getItem('user')))
-        })
-      }
-      
-
-      const props = {cart,deleteCartItem,movetoWishlist}
-      if (!isFront) return null;
-
-      return <div>
-      <Suspense fallback={<div className="text-center py-10">
-            <div className="spinner-border text-primary"></div>
-        </div>}>
+    return <div>
+    <Suspense fallback={<div className="text-center py-10">
+        <div className="spinner-border text-primary"></div>
+    </div>}>
         <Checkout cart={cart} coupon={coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             <CustomAlert />
             <div className="container-fluid">
@@ -120,7 +92,7 @@ export default function CartPage({coupon}) {
             
         </Checkout>
 
-      </Suspense>
+    </Suspense>
     </div>
 }
 

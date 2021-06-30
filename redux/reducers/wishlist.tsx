@@ -1,5 +1,5 @@
 
-const getCart = async () => {
+const getWishlist = async () => {
     var user = JSON.parse(localStorage.getItem('user'))
     if(!user) return []
     const res = await fetch(`https://api.treevesto.com:4000/cart/user/`+user.userId,{
@@ -9,17 +9,17 @@ const getCart = async () => {
         }
     })
     const json = await res.json();
-    const data = await json.result.filter(e=>e.type === "cart") || []
+    const data = await json.result.filter(e=>e.type === "wishlist")
     return data
 }
 
-const addtoCart = async (pro) => {
+const addtoWishlist = async (pro) => {
     var user = JSON.parse(localStorage.getItem('user')) 
     var formData = new FormData();
     formData.append("userId",user.userId)
     formData.append("productId",pro._id)
     formData.append("vendorId",pro.vendorId)
-    formData.append("type","cart")
+    formData.append("type","wishlist")
     formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
     formData.append("name",pro.productName)
     formData.append("price",pro.sellingPrice)
@@ -35,47 +35,37 @@ const addtoCart = async (pro) => {
         }
     })
     const json = await res.json();
-    return getCart();
+    return getWishlist();
 }
 
-const deleteCartItem = async (x) => {
+const deleteWishlistItem = async (x) => {
     const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"})
     const json = await res.json();
-    return getCart();
+    console.log(json)
+
+    return getWishlist();
 
 }
 
-const updateItemQty = async (x,qty) => { 
-    if(qty <= 0){
-        deleteCartItem(x);
-    }else{
-        var formData = new FormData();
-        formData.append("qty",qty)
-        const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData})
-        const json = await res.json();
-    }
-    return getCart();
-}
-
-const movetoWishlist = async (x) => { 
+const movetoCart = async (x) => { 
     var formData = new FormData();
     formData.append("type","wishlist")
     const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData})
     const json = await res.json();
-    return getCart();
+    console.log(json)
+    return getWishlist();
 }
 
-const initialState =  getCart();
+const initialState =  getWishlist();
 
-const cart = (state = initialState, action) => {
+const wishlist = (state = initialState, action) => {
     switch(action.type){
-        case "getCart" : return state;
-        case "addToCart" : return addtoCart(action.payloads);
-        case "deleteCartItem" : return deleteCartItem(action.payloads);
-        case "updateItemQty" : return updateItemQty(action.payloads.id,action.payloads.qty);
-        case "movetoWishlist" : return movetoWishlist(action.payloads);
+        case "getWishlist" : return state;
+        case "addToWishlist" : return addtoWishlist(action.payloads);
+        case "deleteWishlistItem" : return deleteWishlistItem(action.payloads);
+        case "movetoCart" : return movetoCart(action.payloads);
         default : return state;
     }
 }
 
-export default cart;
+export default wishlist;

@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button'
 import React, { useEffect, lazy, Suspense } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Layout = lazy(()=>import('../../component/common/layout'))
@@ -8,7 +8,7 @@ const Layout = lazy(()=>import('../../component/common/layout'))
 
 function Card(props){
     return <div className="border bg-white shadow-sm">
-    <div className="float-right"><span onClick={()=>{props.deleteWishlistItem()}} className="cursor-pointer text-xl p-1 px-2 rounded shadow-sm border-2 border-gray-500 text-gray-500">&times;</span></div>
+    <div className="float-right"><span onClick={()=>{props.deleteWishlistItem({type:"deleteWishlistItem",payloads:props.productId})}} className="cursor-pointer text-xl p-1 px-2 rounded shadow-sm border-2 border-gray-500 text-gray-500">&times;</span></div>
     <img src={props.image}  className="w-100 h-56 md:h-64 lg:72" />
     <div className="p-2">
             <div className="text-sm font-normal hidden md:block">
@@ -21,11 +21,11 @@ function Card(props){
             </div>
         <div className="text-lg">Rs. {props.price}</div>
         <hr className="my-2" />
-        {/* <Button variant="text" color="secondary" fullWidth onClick={()=>{props.movetoCart()}}>
+        {/* <Button variant="text" color="secondary" fullWidth onClick={()=>{props.movetoCart({type:"",payloads:props.id})}}>
           Move to Bag
         </Button> */}
         
-        <div onClick={()=>{props.movetoCart()}} className="w-full px-4 py-1 md:text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+        <div onClick={()=>{props.movetoCart({type:"movetoCart",payloads:props.id})}} className="w-full px-4 py-1 md:text-xl rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
         Move to Bag
         </div>
     </div>
@@ -35,9 +35,11 @@ function Card(props){
 export default function Wishlist(props) {
     
     const dispatch = useDispatch();
-     
-    const [cart,setCart] = React.useState([]);
+      
     const [wishlist,setWishlist] = React.useState([]);
+    const wishlistPromise = useSelector((state:any)=>state.wishlist)
+    wishlistPromise.then(d=>setWishlist(d))
+    
     const [isFront, setIsFront] = React.useState(false);
 
     useEffect(()=>{
@@ -45,57 +47,11 @@ export default function Wishlist(props) {
             if (globalThis.window ?? false) {
                 setIsFront(true);
             }
-        });
-        var user = JSON.parse(localStorage.getItem('user'))
-        user && getCart(user)
-        user && getWishlist(user)
-        
+        }); 
     },[])
  
-
-    const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-                method:"GET",
-                headers:{
-                    "token":x.token
-                }
-            }).then(d=>d.json()).then(json=>{
-            setCart(json.result.filter(e=>e.type === "cart"))
-        })
-    }
-    const getWishlist = (x) => {
-        console.log(x)
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x.userId,{
-                method:"GET",
-                headers:{
-                    "token":x.token
-                }
-            }).then(d=>d.json()).then(json=>{
-            setWishlist(json.result.filter(e=>e.type === "wishlist"))
-        })
-    }
-
-    const deleteWishlistItem = (x) => {
-        var data = wishlist.filter(e=>e.productId!=x)
-        setWishlist(data)
-        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"}).then(d=>d.json()).then(json=>{
-            dispatch({type:"setAlert",payloads:"Item Delete !"})
-            getWishlist(JSON.parse(localStorage.getItem('user')))
-        }).catch(err=>console.log(err.message))
-        
-    }
-
-    
-    const movetoCart = (x) => {  
-        var formData = new FormData();
-        formData.append("type","cart")
-        fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData}).then(d=>d.json()).then(json=>{
-            dispatch({type:"setAlert",payloads:"Item moved to Cart"})
-            getWishlist(JSON.parse(localStorage.getItem('user')))
-        }) 
-      }
-      
-      if (!isFront) return null;
+  
+    if (!isFront) return null;
 
     return <div>
         
@@ -113,8 +69,8 @@ export default function Wishlist(props) {
 
                             {wishlist?wishlist.map((el,key)=>(
                                 <div key={key}>
-                                    <Card  name={el.name} price={el.price} image={el.image} 
-                                    movetoCart={()=>{movetoCart(el._id)}} deleteWishlistItem={()=>{deleteWishlistItem(el.productId)}} />
+                                    <Card  name={el.name} price={el.price} image={el.image} id={el._id} productId={el.productId}
+                                    movetoCart={dispatch} deleteWishlistItem={dispatch} />
                                 </div>
                             )):<div></div>} 
                             

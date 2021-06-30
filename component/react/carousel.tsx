@@ -33,7 +33,7 @@ export default function ReactCarousel(props){
     autoPlaySpeed={props.autoplayOnhover && 900}
     arrows={props.arrows && true}
     responsive={responsive}
-    containerClass="pb-6"
+    // containerClass={props.class}
     >
         {props.data.map((e,k)=>(
           <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />

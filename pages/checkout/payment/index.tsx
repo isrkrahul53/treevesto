@@ -16,12 +16,14 @@ export default function PaymentPage() {
     
     const [paymentMethods,setMethods] = React.useState(null)
     const [selectedMethods,setSelectedMethods] = React.useState('card')
+    const [selectedUPI,setSelectedUPI] = React.useState('google')
     const [totalAmt,setTotalAmt] = React.useState(0)
     const [isFront, setIsFront] = React.useState(false);
 
     const [values,setValues] = React.useState({
         // contact:null,email:null,
         vpa:null,
+        googlepayupioptions:"@okhdfcbank",
         cardName:"Rahul",
         cardNumber:"4111 1111 1111 1111",
         cardCVV:"590",
@@ -124,11 +126,43 @@ export default function PaymentPage() {
                             <div className="col-8 p-0 border">
 
                                 {selectedMethods === 'upi' && <div className="p-3">
-                                    <TextField name="vpa" label="vpa" onChange={handleChange} variant="outlined" fullWidth size="small" helperText="johndoe@somebank" className="my-2"/>
-                                    <button type="button" onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa,flow: 'collect'}})} 
-                                    className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
-                                    Continue
-                                    </button>
+
+                                    <div className="grid grid-cols-1 gap-2">
+                                        <FormControl component="fieldset">
+                                            {/* <FormLabel component="legend">Gender</FormLabel> */}
+                                            <RadioGroup aria-label="upi" name="upi" defaultValue={selectedUPI} onChange={e=>setSelectedUPI(e.target.value)} >
+                                                <FormControlLabel value={"google"} control={<Radio />} label={<img src="/assets/images/checkout/gpay.jpg" alt="Googlepay" className="w-20" />} />
+                                                {selectedUPI === "google" && <>
+                                                    <div className="input-group m-2">
+                                                        <input type="text" name="vpa" onChange={handleChange} className="form-control" placeholder="Enter UPI Id here" />
+                                                        <div className="input-group-append">
+                                                            <select name="googlepayupioptions" defaultValue={values.googlepayupioptions} onChange={handleChange} className="form-select">
+                                                                <option value="@okhdfcbank">@okhdfcbank</option>
+                                                                <option value="@okicici">@okicici</option>
+                                                                <option value="@okaxis">@okaxis</option>
+                                                                <option value="@oksbi">@oksbi</option>
+                                                            </select>    
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa+values.googlepayupioptions,flow: 'collect'}})} 
+                                                    className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                                    Continue
+                                                    </button>
+                                                
+                                                </>}
+                                                <FormControlLabel value={"upi"} control={<Radio />} label={<img src="/assets/images/checkout/upi.png" alt="Googlepay" className="w-20" />} />
+                                                {selectedUPI === "upi" && <>
+                                                    <TextField name="vpa" label="vpa" onChange={handleChange} variant="outlined" fullWidth size="small" helperText="johndoe@somebank" className="my-2"/>
+                                                    <button type="button" onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa,flow: 'collect'}})} 
+                                                    className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                                    Continue
+                                                    </button>
+                                                
+                                                </>}
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+
                                 </div>}
                                 {selectedMethods === 'card' && <div className="text-left p-3">
                                     <form>
@@ -173,7 +207,7 @@ export default function PaymentPage() {
                                             <em>Select Bank</em>
                                         </MenuItem>
                                         {paymentMethods && Object.keys(paymentMethods?.netbanking).map((e,k)=>(
-                                            <MenuItem key={k} value={e}>{e}</MenuItem>
+                                            <MenuItem key={k} value={e}> {paymentMethods.netbanking[e]} </MenuItem>
 
                                         ))}
                                         </Select>

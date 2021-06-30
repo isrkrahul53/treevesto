@@ -26,7 +26,6 @@ const responsive = {
 };
 export default function ReactBannerCarousel(props){
     const apiUrl = "https://api.treevesto.com:4000/"; 
-    console.log(props.data)
     const [autoplay,setAutoplay] = React.useState(false)
     return <>
       {props.mobile ? <>

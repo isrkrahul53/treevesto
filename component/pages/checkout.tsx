@@ -50,6 +50,7 @@ export default function Checkout(props) {
     const [cart,setCart] = React.useState(null)
     const [user,setUser] = React.useState(null)
     const [discount,setDiscount] = React.useState(0)
+    const [deliveryFee,setDeliveryFee] = React.useState(50)
     const [searchCoupon,setSearchCoupon] = React.useState("")
     const [hidden,setHidden] = React.useState(false)
     const [couponUsed,setCouponUsed] = React.useState(null)
@@ -85,7 +86,7 @@ export default function Checkout(props) {
 
     },[])
 
-    props.getAmount(totalPrice - discount)
+    props.getAmount(totalPrice + deliveryFee - discount)
     
     useEffect(()=>{
         if(props.cart || cart){
@@ -151,7 +152,7 @@ export default function Checkout(props) {
         formData.append('cart',JSON.stringify(cart))
         formData.append('address',selectedAddress)
         formData.append('userId',user.userId)
-        formData.append('totalAmount',(+totalPrice-+discount).toString())
+        formData.append('totalAmount',(+totalPrice+deliveryFee-+discount).toString())
         formData.append('couponDiscount',discount.toString())
         formData.append('couponId',couponUsed)
         formData.append('customerPhone',"6209460626")
@@ -267,11 +268,18 @@ export default function Checkout(props) {
                             </div>
                         </>:<></>} 
                         
+                        <div className="flex items-center font-normal text-lg my-2">
+                            <img src="/assets/images/checkout/insurance.png" alt="Secured" className="w-8 mr-3" /> 100% SECURE
+                        </div>
                         <div className="py-3">
                             <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
                             <div className="flex items-center justify-between">
                                 <h4 className="text-md">Total MRP</h4>
                                 <div>Rs.{totalPrice}</div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <h4 className="text-md">Delivery Fee</h4>
+                                <div>Rs. {deliveryFee} </div>
                             </div>
                             <div className="flex items-center justify-between">
                                 <h4 className="text-md">Discount on MRP</h4>
@@ -285,7 +293,7 @@ export default function Checkout(props) {
 
                             <div className="flex items-center justify-between">
                                 <h4 className="text-md">Total Amount</h4>
-                                <div>Rs. {totalPrice - discount} </div>
+                                <div>Rs. {totalPrice + deliveryFee - discount} </div>
                             </div>
                             {active == 1?<Link href="/checkout/address">
                             {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
@@ -295,26 +303,16 @@ export default function Checkout(props) {
                                 Place Order
                             </button>
                             </Link>:<></>}
+
                             
                         </div>
 
 
                     </div>
                 </div>
-                <div className="hidden lg:flex items-center justify-between my-6 lg:w-2/3 mx-auto">
-                    <div className="flex items-center">
-                        <img className="footer-bank-ssl" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-ssl.png" width={70} height={37} />
-                        <img className="footer-bank-visa" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-visa.png" width={60} height={37} /> 
-                        <img className="footer-bank-mc" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-mc.png" width={60} height={37} /> 
-                        <img className="footer-bank-ae" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-ae.png" width={60} height={37} /> 
-                        <img className="footer-bank-dc" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-dc.png" width={60} height={37} /> 
-                        <img className="footer-bank-nb" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-nb.png" width={60} height={37} /> 
-                        <img className="footer-bank-cod" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-cod.png" width={60} height={37} /> 
-                        <img className="footer-bank-rupay" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-rupay.png" width={60} height={37} /> 
-                        <img className="footer-bank-paypal" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-paypal.png" width={60} height={37} />
-                        <img className="footer-bank-bhim" src="https://constant.myntassets.com/checkout/assets/img/footer-bank-bhim.png" width={60} height={37} /> 
-                    </div>
-                    <div className="text-sm cursor-pointer">Need Help ? Contact Us</div>
+                <div className="hidden lg:flex items-center justify-between my-10 lg:w-2/3 mx-auto">
+                    <img src="/assets/images/checkout/payment-method_69e7ec.svg" alt="" className="w-full" />
+                    {/* <div className="text-sm cursor-pointer">Need Help ? Contact Us</div> */}
                 </div>
             </div>
 
