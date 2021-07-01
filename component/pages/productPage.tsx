@@ -45,7 +45,8 @@ export default function ProductPage(props) {
 
         })
     },[cartPromise,wishlistPromise])
-console.log(wishlist)
+    
+
     useEffect(()=>{
         setSizeList(products.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
         setColourList(products.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
@@ -53,6 +54,17 @@ console.log(wishlist)
         pid && router.replace("/product/"+pid)
     },[size,colour])
  
+
+
+    const dispatchMiddleware = (type,payloads) => {
+        var user = JSON.parse(localStorage.getItem('user'))
+        if(!user){
+            router.replace('/auth/login')
+            return
+        }
+        props.dispatch({type,payloads})
+
+    }
     
     return  <div> 
 
@@ -98,15 +110,15 @@ console.log(wishlist)
                 {cart?<>
                     <div className="flex items-center justify-between mx-1 w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
                         <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
-                        <RemoveIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty-1}})} />
+                        <RemoveIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty-1})} />
                         </Button>
                         <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
                         <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
-                        <AddIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty+1}})} />
+                        <AddIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty+1})} />
                         </Button>
                     </div>
                 </>:<>
-                    <button type="button" onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                         <LocalMallOutlinedIcon /> Add Bag
                     </button>
                 </>}
@@ -116,7 +128,7 @@ console.log(wishlist)
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </div></Link>
                 </>:<>
-                    <button type="button" onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </button>
                 </>}
@@ -136,15 +148,15 @@ console.log(wishlist)
                     </div></Link> */}
                     <div className="flex items-center justify-between w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
                         <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
-                        <RemoveIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty-1}})} />
+                        <RemoveIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty-1})} />
                         </Button>
                         <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
                         <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
-                        <AddIcon onClick={()=>props.updateItemQty({type:"updateItemQty",payloads:{id:cart._id,qty:+cart.qty+1}})} />
+                        <AddIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty+1})} />
                         </Button>
                     </div>
                 </>:<>
-                    <button type="button" onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                         <LocalMallOutlinedIcon /> Add To Bag
                     </button>
                 </>}
@@ -154,7 +166,7 @@ console.log(wishlist)
                         <FavoriteBorderOutlinedIcon /> Go to Wishlist
                     </div></Link>
                 </>:<>
-                    <button type="button" onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </button>
                 </>}

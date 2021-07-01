@@ -11,14 +11,14 @@ import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchProducts from './searchProducts';
 import MenuListComposition from '../material/menu'
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 
 declare var $:any;
 export default function Layout(props){
     const cartPromise = useSelector((state:any)=>state.cart)
     const router = useRouter(); 
-    
+    const dispatch = useDispatch()
     
     const [categories,setCategories] = React.useState([]);
     const [subcategories,setSubCategories] = React.useState([]);
@@ -38,6 +38,8 @@ export default function Layout(props){
             setCategories(json.result)
         })
         setUser(JSON.parse(localStorage.getItem('user')))
+        dispatch({type:"getCart"})
+
     },[])
     
     useEffect(()=>{
@@ -64,6 +66,7 @@ export default function Layout(props){
     const logout = () => {
         localStorage.removeItem('user')
         setUser(null);
+        dispatch({type:"getCart"})
         router.push("/")
     } 
     

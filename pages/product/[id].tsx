@@ -173,7 +173,7 @@ export default function Product(props) {
                                 <Suspense fallback={<div className="text-center py-10">
                                         <div className="spinner-border text-primary"></div>
                                     </div>}>
-                                    <ProductPage addtoCart={dispatch} updateItemQty={dispatch} addtoWishlist={dispatch} data={props.product} 
+                                    <ProductPage dispatch={dispatch} data={props.product} 
                                     size={size} colour={colour} />
                                 </Suspense>
                             </div>
@@ -286,7 +286,7 @@ export default function Product(props) {
                     <Suspense fallback={<Skeleton className="w-full" height={180} />}>
                         <ReactMultiCarousel showDots={true} arrows={true} content={props.similarProduct.map((e,k)=>(
                         <div key={k} className="p-1">
-                            <SingleProduct data={e} hideDetails={false} cart={dispatch} />
+                            <SingleProduct data={e} hideDetails={false} dispatch={dispatch} />
                         </div>
                         ))} />
                     </Suspense>

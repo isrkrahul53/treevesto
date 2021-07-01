@@ -11,11 +11,11 @@ import RemoveIcon from '@material-ui/icons/Remove';
 const UpdatQtyButton = (props) => {
   return <div className="flex items-center justify-between w-full border-2 border-blue-800 text-blue-800 p-0">
       <Button variant="text" size="small" color="primary" disabled={+props.cart.qty <= 0}>
-      <RemoveIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty-1}})} />
+      <RemoveIcon onClick={()=>props.dispatch("updateItemQty",{id:props.cart._id,qty:+props.cart.qty-1})} />
       </Button>
       <div className="text-md font-medium">{props.cart.qty}</div>
       <Button variant="text" size="small" color="primary" disabled={+props.cart.qty >= (+props.pro.stock)}>
-      <AddIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty+1}})} />
+      <AddIcon onClick={()=>props.dispatch("updateItemQty",{id:props.cart._id,qty:+props.cart.qty+1})} />
       </Button>
   </div>
 }
@@ -44,6 +44,16 @@ export default function SingleProduct(props){
         setCart(d.find(e=>e.productId === productSelected._id))
     })
     
+    const dispatchMiddleware = (type,payloads) => {
+      var user = JSON.parse(localStorage.getItem('user'))
+      if(!user){
+          router.replace('/auth/login')
+          return
+      }
+      props.dispatch({type,payloads})
+
+  }
+  
     return <div className={"cursor-pointer"} >
     {/* <ProductImageBanner indicator={false} images={productSelected?.productImages} /> */}
     <Link href={"/product/"+productSelected._id}>
@@ -81,9 +91,9 @@ export default function SingleProduct(props){
             </span>
           </>:<>
               {cart?<> 
-                <UpdatQtyButton pro={productSelected} cart={cart} dispatch={dispatch} />
+                <UpdatQtyButton pro={productSelected} cart={cart} dispatch={dispatchMiddleware} />
               </>:<> 
-                <button type="button"  onClick={()=>props.cart({type:"addToCart",payloads:productSelected})} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
+                <button type="button"  onClick={()=>dispatchMiddleware("addToCart",productSelected)} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
                   ADD TO CART
                 </button>
               </>}
