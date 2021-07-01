@@ -10,7 +10,16 @@ export default function CartItem(props) {
                             <div className="text-sm font-bold">{el.name}</div>
                             <div className="text-sm text-secondary">Sold by : Flashtech Retail</div>
                             <div className="text-sm "> Size : {el.size}  </div>
-                            <div className="text-sm "> Qty : {el.qty}  </div>
+                            <div className="text-sm flex items-center">
+                                <div>Qty : </div>
+                                <div className="flex items-center">
+                                    <button type="button" className="px-2 mx-1 border-1 border-gray-700"  disabled={+el.qty <= 0}
+                                    onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:el._id,qty:+el.qty-1}})}>-</button>
+                                    <div className="text-sm ">{el.qty}  </div>
+                                    <button type="button" className="px-2 mx-1 border-1 border-gray-700" disabled={+el.qty >= (+el.stock)}
+                                    onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:el._id,qty:+el.qty+1}})}>+</button>
+                                </div>
+                            </div>
                         </div>
                         <div className="ml-auto text-right">
                             <div>Rs. {el.price} </div>

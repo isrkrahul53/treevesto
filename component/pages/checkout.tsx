@@ -140,7 +140,8 @@ export default function Checkout(props) {
         var data = y;
         var x = 0;
         data?.forEach(element => {
-            x += Number(element.price);
+            console.log(element)
+            x += Number(element.price) * element.qty;
         });
         
         // setCart(data)

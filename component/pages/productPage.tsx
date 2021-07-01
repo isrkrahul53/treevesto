@@ -24,7 +24,9 @@ export default function ProductPage(props) {
     const [size,setSize] = React.useState(props.data.size);
 
     const [cart,setCart] = React.useState(null);
+    const [wishlist,setWishlist] = React.useState(null);
     const cartPromise = useSelector((state:any)=>state.cart)
+    const wishlistPromise = useSelector((state:any)=>state.wishlist)
     
     useEffect(()=>{
         fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
@@ -37,12 +39,13 @@ export default function ProductPage(props) {
     },[])
     
     useEffect(()=>{
-        cartPromise.then(d=>{
-            setCart(d.find(e=>e.productId === props.data._id))
+        cartPromise.then(d=>setCart(d.find(e=>e.productId === props.data._id)))
+        wishlistPromise.then(d=>{
+            setWishlist(d.find(e=>e.productId === props.data._id))
+
         })
-
-    },[cartPromise])
-
+    },[cartPromise,wishlistPromise])
+console.log(wishlist)
     useEffect(()=>{
         setSizeList(products.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
         setColourList(products.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
@@ -54,7 +57,7 @@ export default function ProductPage(props) {
     return  <div> 
 
         {props.data?.stock > 3 ? <>
-            <span className="p-1 text-sm bg-success text-white">In Stock {props.data?.stock} </span>
+            <span className="p-1 text-sm bg-success text-white">In Stock </span>
         </>:props.data?.stock > 0 ? <>
             <span className="p-1 text-sm bg-primary text-white"> Only {props.data?.stock} left </span>
         </>:<>
@@ -103,13 +106,20 @@ export default function ProductPage(props) {
                         </Button>
                     </div>
                 </>:<>
-                    <div onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                         <LocalMallOutlinedIcon /> Add Bag
-                    </div>
+                    </button>
                 </>}
-                <div onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
-                    <FavoriteBorderOutlinedIcon /> Wishlist
-                </div>
+                
+                {wishlist ? <>
+                    <Link href="/wishlist"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
+                        <FavoriteBorderOutlinedIcon /> Wishlist
+                    </div></Link>
+                </>:<>
+                    <button type="button" onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                        <FavoriteBorderOutlinedIcon /> Wishlist
+                    </button>
+                </>}
                 {/* <div className="p-2 border-2 border-dark mr-1">
                     <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
                         <WhatsAppIcon />
@@ -134,14 +144,20 @@ export default function ProductPage(props) {
                         </Button>
                     </div>
                 </>:<>
-                    <div onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>props.addtoCart({type:"addToCart",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
                         <LocalMallOutlinedIcon /> Add To Bag
-                    </div>
+                    </button>
                 </>}
                 <div className="px-1"></div>
-                <div onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
-                    <FavoriteBorderOutlinedIcon /> Wishlist
-                </div>
+                {wishlist ? <>
+                    <Link href="/wishlist"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
+                        <FavoriteBorderOutlinedIcon /> Go to Wishlist
+                    </div></Link>
+                </>:<>
+                    <button type="button" onClick={()=>props.addtoCart({type:"addToWishlist",payloads:props.data})} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                        <FavoriteBorderOutlinedIcon /> Wishlist
+                    </button>
+                </>}
             </div> 
         
         </>}

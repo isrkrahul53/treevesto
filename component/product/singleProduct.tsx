@@ -10,11 +10,11 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 const UpdatQtyButton = (props) => {
   return <div className="flex items-center justify-between w-full border-2 border-blue-800 text-blue-800 p-0">
-      <Button variant="text" color="primary" disabled={+props.cart.qty <= 0}>
+      <Button variant="text" size="small" color="primary" disabled={+props.cart.qty <= 0}>
       <RemoveIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty-1}})} />
       </Button>
-      <div className="p-1 px-2 text-md font-medium">{props.cart.qty}</div>
-      <Button variant="text" color="primary" disabled={+props.cart.qty >= (+props.pro.stock)}>
+      <div className="text-md font-medium">{props.cart.qty}</div>
+      <Button variant="text" size="small" color="primary" disabled={+props.cart.qty >= (+props.pro.stock)}>
       <AddIcon onClick={()=>props.dispatch({type:"updateItemQty",payloads:{id:props.cart._id,qty:+props.cart.qty+1}})} />
       </Button>
   </div>
@@ -83,9 +83,9 @@ export default function SingleProduct(props){
               {cart?<> 
                 <UpdatQtyButton pro={productSelected} cart={cart} dispatch={dispatch} />
               </>:<> 
-                <span  onClick={()=>props.cart({type:"addToCart",payloads:productSelected})} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
+                <button type="button"  onClick={()=>props.cart({type:"addToCart",payloads:productSelected})} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
                   ADD TO CART
-                </span>
+                </button>
               </>}
           </>}
         </div>
