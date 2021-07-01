@@ -172,7 +172,7 @@ export default function Home(props) {
             {/* ========================================================================= */}
 
 
-            <h3 className="text-lg md:text-4xl -mb-2 mt-1 px-2 text-secondary"> Latest Products  </h3>  
+            <h3 className="text-lg md:text-4xl mt-1 text-secondary"> Latest Products  </h3>  
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2"> 
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
