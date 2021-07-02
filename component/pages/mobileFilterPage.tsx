@@ -29,12 +29,12 @@ export default function MobileFilterPage(props) {
                 </div>
  
 
-                <div className="row p-0 m-0 border-t-2">
-                    <div className="col-4 p-0">
-                        <div onClick={()=>setNavigation("colour")} className={navigation === "colour"?"p-2 px-3 text-xl":"p-2 px-3 bg-gray-200 font-medium text-xl"}>Colour</div>
-                        <div onClick={()=>setNavigation("size")} className={navigation === "size"?"p-2 px-3 text-xl":"p-2 px-3 bg-gray-200 font-medium text-xl"}>Size</div>
+                <div className="row p-0 m-0">
+                    <div className="col-4 my-2 p-0">
+                        <div onClick={()=>setNavigation("colour")} className={navigation === "colour"?"p-2 px-3 bg-gray-200 font-medium text-xl":"p-2 px-3 text-xl"}>Colour</div>
+                        <div onClick={()=>setNavigation("size")} className={navigation === "size"?"p-2 px-3 bg-gray-200 font-medium text-xl":"p-2 px-3 text-xl"}>Size</div>
                     </div>
-                    <div className="col-8 p-0">
+                    <div className="col-8 border-2 border-gray-300 p-2">
                         {navigation === "colour" && <div className="p-1">
                             <ul className="p-0 my-1">
                                 {colourList.map((e,k)=>(
