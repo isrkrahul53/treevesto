@@ -7,8 +7,7 @@ class MyDocument extends Document{
                 <Head>    
                     <link rel="icon" href="/logoHead.ico" />
                     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css"/>
-                    {/* <link rel="stylesheet" href="/assets/tailwind/tailwind.min.css"/>  */}
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                    <link rel="stylesheet" href="/assets/tailwind/tailwind.min.css"/> 
                 </Head>
                 <body className="bg-white">
                     <Main />
