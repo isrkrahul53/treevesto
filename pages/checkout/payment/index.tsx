@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Button from '@material-ui/core/Button'
 import { Card, FormControl, FormControlLabel, FormLabel, InputLabel, List, ListItem, MenuItem, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 const Checkout = lazy(()=>import('../../../component/pages/checkout'))
- 
+import PaymentMethodSlider from '../../../component/react/paymentMethodSlider'  
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
@@ -116,14 +116,18 @@ export default function PaymentPage() {
                         </>} */}
 
                         <div className="row my-2">
-                            <List className="col-4 p-0">
+                            <div className="md:hidden fixed left-0 bottom-0 w-full bg-white z-50 shadow border-t-2 shadow">
+                                <PaymentMethodSlider value={selectedMethods} setSelected={(e,v)=>setSelectedMethods(v)} />
+
+                            </div>
+                            <List className="col-md-4 hidden md:block py-2">
                                 <ListItem button selected={selectedMethods === "upi"} className="p-3" onClick={e=>setSelectedMethods('upi')}> <NearMeIcon className="mr-1" /> Pay using UPI </ListItem>
                                 <ListItem button selected={selectedMethods === "card"} className="p-3" onClick={e=>setSelectedMethods('card')}> <CreditCardIcon className="mr-1" /> Credit/Debit Card </ListItem>
                                 <ListItem button selected={selectedMethods === "netbanking"} className="p-3" onClick={e=>setSelectedMethods('netbanking')}> <AccountBalanceIcon className="mr-1" /> NetBanking </ListItem>
                                 <ListItem button selected={selectedMethods === "wallet"} className="p-3" onClick={e=>setSelectedMethods('wallet')}> <AccountBalanceWalletIcon className="mr-1" /> Wallet </ListItem>
                                 <ListItem button selected={selectedMethods === "cod"} className="p-3" onClick={e=>setSelectedMethods('cod')}> <LocalShippingIcon className="mr-1" /> Cash On Delivery </ListItem>
                             </List>
-                            <div className="col-8 p-0 border">
+                            <div className="col-md-8 p-0 border">
 
                                 {selectedMethods === 'upi' && <div className="p-3">
 
@@ -133,7 +137,7 @@ export default function PaymentPage() {
                                             <RadioGroup aria-label="upi" name="upi" defaultValue={selectedUPI} onChange={e=>setSelectedUPI(e.target.value)} >
                                                 <FormControlLabel value={"google"} control={<Radio />} label={<img src="/assets/images/checkout/gpay.jpg" alt="Googlepay" className="w-20" />} />
                                                 {selectedUPI === "google" && <>
-                                                    <div className="input-group m-2">
+                                                    <div className="input-group my-4">
                                                         <input type="text" name="vpa" onChange={handleChange} className="form-control" placeholder="Enter UPI Id here" />
                                                         <div className="input-group-append">
                                                             <select name="googlepayupioptions" defaultValue={values.googlepayupioptions} onChange={handleChange} className="form-select">
@@ -144,19 +148,17 @@ export default function PaymentPage() {
                                                             </select>    
                                                         </div>
                                                     </div>
-                                                    <button type="button" onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa+values.googlepayupioptions,flow: 'collect'}})} 
-                                                    className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                                    <Button onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa+values.googlepayupioptions,flow: 'collect'}})} variant="contained" color="primary">
                                                     Continue
-                                                    </button>
+                                                    </Button>
                                                 
                                                 </>}
                                                 <FormControlLabel value={"upi"} control={<Radio />} label={<img src="/assets/images/checkout/upi.png" alt="Googlepay" className="w-20" />} />
                                                 {selectedUPI === "upi" && <>
                                                     <TextField name="vpa" label="vpa" onChange={handleChange} variant="outlined" fullWidth size="small" helperText="johndoe@somebank" className="my-2"/>
-                                                    <button type="button" onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa,flow: 'collect'}})} 
-                                                    className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                                    <Button onClick={()=>payNow(selectedMethods,{upi:{vpa: values.vpa,flow: 'collect'}})} variant="contained" color="primary">
                                                     Continue
-                                                    </button>
+                                                    </Button>
                                                 
                                                 </>}
                                             </RadioGroup>
@@ -184,16 +186,15 @@ export default function PaymentPage() {
 
                                             </div>
                                         </div>
-                                        <button type="button" onClick={()=>payNow(selectedMethods,{    
+                                        <Button type="button" onClick={()=>payNow(selectedMethods,{    
                                             'card[name]': values.cardName,
                                             'card[number]': values.cardNumber,
                                             'card[cvv]': values.cardCVV,
                                             'card[expiry_month]': values.cardEXM,
                                             'card[expiry_year]': values.cardEXY
-                                        })} 
-                                        className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                        })} variant="contained" color="primary">
                                         Pay Now
-                                        </button>
+                                        </Button>
                                         
                                     </form>
                                 
@@ -213,9 +214,9 @@ export default function PaymentPage() {
                                         </Select>
                                     </FormControl>
                                     
-                                    <button type="button" onClick={()=>payNow(selectedMethods,{bank:values.bank})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                    <Button onClick={()=>payNow(selectedMethods,{bank:values.bank})} variant="contained" color="primary">
                                     Continue
-                                    </button>
+                                    </Button>
                                 </div>}
                                 {selectedMethods === 'wallet' && <div className="p-3">
                                     <div className="grid grid-cols-4 gap-2">
@@ -230,14 +231,17 @@ export default function PaymentPage() {
 
                                     </div>
                                     
-                                    <button type="button" onClick={()=>payNow(selectedMethods,{wallet: values.wallet})} className="mx-2 px-4 py-1 rounded cursor-pointer border-2 border-green-800 bg-green-800 text-green-50 hover:bg-green-50 hover:text-green-800">
+                                    <Button onClick={()=>payNow(selectedMethods,{wallet: values.wallet})} variant="contained" color="primary" >
                                     Continue
-                                    </button>
+                                    </Button>
                                 </div>}
                                 {selectedMethods === 'cod' && <>
-                                    <button type="submit" onClick={()=>setPay({mode:"COD"})} className="m-2 px-4 py-1 rounded cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                                    Place Order
-                                    </button>
+                                    <div className="w-2/3 mx-auto">
+                                        <img src="/assets/images/checkout/cod.jpg" alt="Cash on delivery" className="w-full" />
+                                        <Button type="submit" onClick={()=>setPay({mode:"COD"})} variant="contained" color="primary" fullWidth className="my-4">
+                                        Place Order
+                                        </Button>
+                                    </div>
                                 
                                 </>}
 

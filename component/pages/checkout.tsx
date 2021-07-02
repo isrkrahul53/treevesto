@@ -140,7 +140,6 @@ export default function Checkout(props) {
         var data = y;
         var x = 0;
         data?.forEach(element => {
-            console.log(element)
             x += Number(element.price) * element.qty;
         });
         

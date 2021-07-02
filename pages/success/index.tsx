@@ -21,7 +21,6 @@ export default function SuccessPage(){
             setCart(JSON.parse(order.cart.toString()))
             setUser(JSON.parse(data.user.toString()))
             setOID(order._id)
-            console.log(order.address)
             fetch(`https://api.treevesto.com:4000/address/`+order.address).then(d=>d.json()).then(json=>{ 
                 console.log(json)
                 if(json.success == 1){
@@ -91,7 +90,7 @@ export default function SuccessPage(){
                 </div>
             </div>
 
-            <div className="text-right absolute bottom-0 right-0 m-2">
+            <div className="text-right m-2 mt-6 text-primary">
                 <Link href={{pathname:"/success/invoice",query:{result:router.query.result,address:JSON.stringify(address)}}}>generate invoice</Link>
             </div>
 
