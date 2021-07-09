@@ -205,16 +205,12 @@ export default function Checkout(props) {
                     }).catch(err=>console.log(err.message))
                 })
 
-                router.push({pathname:"/success",query:{
-                    result:JSON.stringify(json.result),
-                    user:JSON.stringify(user),
-                }})
-                // console.log(json.result)
+                // router.push({pathname:"/success",query:{
+                //     result:JSON.stringify(json.result),
+                //     user:JSON.stringify(user),
+                // }}) 
             }
-        })
-        // console.log(cart)
-        // console.log(selectedAddress) 
-        // console.log(user) 
+        }) 
     }
 
     return <div>

@@ -2,6 +2,8 @@ import React, { useEffect, lazy, Suspense } from 'react'
 import Link from 'next/link';
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router';
+import { useMediaQuery } from 'react-responsive';
+
 const Banner = lazy(()=>import('../../../component/common/banner'));
 const MaterialModal = lazy(()=>import('../../../component/material/materialModal'));
 const AdminLayout = lazy(()=>import('../../../component/common/AdminLayout'));
@@ -12,6 +14,8 @@ const BottomNavigationAction = lazy(()=>import('@material-ui/core/BottomNavigati
 const ViewCarouselIcon = lazy(()=>import('@material-ui/icons/ViewCarousel'));
 const ViewAgendaIcon = lazy(()=>import('@material-ui/icons/ViewAgenda'));
 const AddPhotoAlternateIcon = lazy(()=>import('@material-ui/icons/AddPhotoAlternate'));
+const ReactBannerCarousel = lazy(()=>import('../../../component/react/bannerCarousel'))
+
 
 const EasyEdit = lazy(()=>import('react-easy-edit'));
 
@@ -19,6 +23,11 @@ import { Card, CardActions, CardContent, Avatar, CardHeader, IconButton } from '
 import { MoreVert as MoreVertIcon } from '@material-ui/icons'
  
 export default function CustomizeHomepage(props) {
+        
+    const isMobileDevice = useMediaQuery({
+        query: "(min-device-width: 500px)",
+    });
+
     const router = useRouter(); 
     const [images,setImages] = React.useState({ 
         image:null,
@@ -49,7 +58,7 @@ export default function CustomizeHomepage(props) {
     const fetchData = () => {
         fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
             console.log(json.result)
-            setBanner(json.result.map((el,key)=>({id:el._id,href:el.link,src:"https://api.treevesto.com:4000/"+el.image})))
+            setBanner(json.result)
         }).catch(err=>console.log(err.message))
         fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
             var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
@@ -178,19 +187,27 @@ export default function CustomizeHomepage(props) {
         
             {navigation === "banner" && <>
                 <Card className="my-2">
-                    <Banner images={banner} />
+                    {/* <Banner images={banner} />  */}
+                    
+                    
+                    <ReactBannerCarousel data={banner} mobile={!isMobileDevice} arrows={true} showDots={true} />
+                        
+              
+              
                 </Card>
 
-                <div className="grid grid-cols-3 gap-4 my-2">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {banner.map((element,key)=>(
-                        <Card key={key} className="p-0">
+                        <Card key={key} className="p-0 border-2 shadow-sm">
                             <CardActions>
-                                <div className="ml-auto">
+                                <div className="ml-auto text-red-500">
                                     <CloseIcon  onClick={e=>deleteBanner(element.id)} />
                                 </div>
                             </CardActions>
-                            <CardContent className="p-0">
-                                <img key={key} src={element.src} className="w-full"  />
+                            <CardContent className="p-0 grid grid-cols-2">
+                                {element.image && <img key={key} src={"https://api.treevesto.com:4000/"+element.image} className="w-full border shadow-sm"  />}
+                                {element.mobileImage && <img key={key} src={"https://api.treevesto.com:4000/"+element.mobileImage} className="w-full border shadow-sm"  />}
+                                
                             </CardContent>
                         </Card>
                     ))}
