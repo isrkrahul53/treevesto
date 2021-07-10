@@ -142,5 +142,5 @@ export const getStaticPaths:GetStaticPaths = async () => {
         params: { edit: el._id },
     }))
     
-    return { paths, fallback: false }
+    return { paths, fallback: true }
   }
