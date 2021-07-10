@@ -3,8 +3,8 @@ import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form';
 
-const AdminLayout = lazy(()=>import('../../../component/common/AdminLayout'));
-const RangeSlider = lazy(()=>import('../../../component/material/range'));
+const AdminLayout = lazy(()=>import('../../../../component/common/AdminLayout'));
+const RangeSlider = lazy(()=>import('../../../../component/material/range'));
 
 import axios from 'axios';
 import https from 'https'
@@ -38,12 +38,12 @@ export default function HomepageBanner(props) {
 
     useEffect(()=>{
         var link = '/';
-        link += filters.subcat && filters.subcat
-        link += filters.color.length > 0 ? '?color='+filters.color.join(","):''
-        link += filters.size.length > 0 ? '&size='+filters.size.join(","):''
-        link += filters.from && '&from='+filters.from
-        link += filters.to && '&to='+filters.to
-        setValue("imagelink",link)
+        link += filters.subcat && filters.subcat + "?"
+        link += filters.color.length > 0 ? 'color='+filters.color.join(",")+"&":''
+        link += filters.size.length > 0 ? 'size='+filters.size.join(",")+"&":''
+        link += filters.from && 'from='+filters.from+"&"
+        link += filters.to && 'to='+filters.to+"&"
+        setValue("imagelink",link.substr(0,link.length-1))
         // console.log(link.split("?")[1].split("&"))
     },[filters])
 

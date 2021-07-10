@@ -15,6 +15,7 @@ const ViewCarouselIcon = lazy(()=>import('@material-ui/icons/ViewCarousel'));
 const ViewAgendaIcon = lazy(()=>import('@material-ui/icons/ViewAgenda'));
 const AddPhotoAlternateIcon = lazy(()=>import('@material-ui/icons/AddPhotoAlternate'));
 const ReactBannerCarousel = lazy(()=>import('../../../component/react/bannerCarousel'))
+const EditIcon = lazy(()=>import('@material-ui/icons/Edit'));
 
 
 const EasyEdit = lazy(()=>import('react-easy-edit'));
@@ -201,7 +202,8 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="p-0 border-2 shadow-sm">
                             <CardActions>
                                 <div className="ml-auto text-red-500">
-                                    <CloseIcon  onClick={e=>deleteBanner(element.id)} />
+                                    <Link href={"/admin/homepage/banner/"+element._id}><EditIcon className="cursor-pointer text-blue-500" /></Link>
+                                    <CloseIcon className="text-red-500" onClick={e=>deleteBanner(element._id)} />
                                 </div>
                             </CardActions>
                             <CardContent className="p-0 grid grid-cols-2">
@@ -213,7 +215,7 @@ export default function CustomizeHomepage(props) {
                     ))}
                 </div> 
                 <div className="text-right m-3">
-                    <Link href="/admin/homepage/banner"><Button variant="contained" color="secondary">
+                    <Link href="/admin/homepage/banner/create"><Button variant="contained" color="secondary">
                         Add New Banner +
                     </Button></Link>
                 </div>
@@ -248,9 +250,9 @@ export default function CustomizeHomepage(props) {
                                     </div>
                                 </CardContent>
                                 <CardActions>
-                                    <Button variant="contained" color="primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>
+                                    <Link href={`/admin/homepage/section/${el._id}`}><Button variant="contained" color="primary">
                                     Edit
-                                    </Button>
+                                    </Button></Link>
                                     <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
                                     Delete
                                     </Button>
@@ -297,9 +299,9 @@ export default function CustomizeHomepage(props) {
                                     </div>
                                 </CardContent>
                                 <CardActions>
-                                    <Button variant="contained" color="primary" onClick={()=>router.push({pathname:"/admin/homepage/editSection",query:{id:el._id}})}>
+                                    <Link href={`/admin/homepage/section/${el._id}`}><Button variant="contained" color="primary">
                                     Edit
-                                    </Button>
+                                    </Button></Link>
                                     <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
                                     Delete
                                     </Button>
@@ -323,7 +325,7 @@ export default function CustomizeHomepage(props) {
 
                 </div>
                 <div className="text-right m-3">
-                    <Link href="/admin/homepage/addSection"><Button variant="contained" color="secondary">
+                    <Link href="/admin/homepage/section/create"><Button variant="contained" color="secondary">
                         Add New Section +
                     </Button></Link>
                 </div> 

@@ -127,12 +127,12 @@ export default function Home(props) {
               {sections?.filter(e=>e.position === "Top").map((el,key)=>(
                 <div key={key}>
                   {el.title === "Wedding Collection" ? <>
-                    <div key={key} className="mb-2"> 
+                    <div key={key} className="mb-2 -m-1"> 
                       <div className="sm:hidden">
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                         <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
                           {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                            return <Link href={e.link} key={k}><div className="px-1"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                            return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
                           })}
                         </div>
                       </div>
@@ -142,7 +142,7 @@ export default function Home(props) {
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                         <div className="grid grid-cols-5 gap-2">
                           {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                            return <Link href={e.link} key={k}><div className="px-1"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
+                            return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
                         </div>
                       </div>
@@ -151,9 +151,10 @@ export default function Home(props) {
                   </>:<div key={key}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
-                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                          return <div key={k} className={"col-"+(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6)+" col-md-"+(12/el.grid)+" p-2"}> 
-                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""} width="100%" className="border cursor-pointer" /></Link>
+                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
+                          var mobile = Number(el.mobileGrid)
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
                     </div>
@@ -205,9 +206,10 @@ export default function Home(props) {
                 <div key={key}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
-                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                          return <div key={k} className={"col-"+(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6)+" col-md-"+(12/el.grid)+" p-2"}> 
-                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""} width="100%" className="border cursor-pointer" /></Link>
+                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
+                          var mobile = Number(el.mobileGrid)
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
                     </div>

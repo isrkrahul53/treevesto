@@ -148,6 +148,7 @@ export default function Checkout(props) {
     }
  
     const checkout = (x) => {
+        console.log(selectedAddress)
         var formData = new FormData();
         formData.append('cart',JSON.stringify(cart))
         formData.append('address',selectedAddress)
@@ -164,7 +165,7 @@ export default function Checkout(props) {
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 
-            // console.log(json)
+            console.log(json)
             if(json.success === 1 && json.result){
                 localStorage.removeItem("discount")
                 localStorage.removeItem("couponUsed")
@@ -191,6 +192,7 @@ export default function Checkout(props) {
                             var formData2 = new FormData();
                             formData2.append("stock",stock.toString())
                             formData2.append("popular",popular.toString())
+                            console.log(stock,popular)
                             fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
                                 method:"PATCH",
                                 body:formData2

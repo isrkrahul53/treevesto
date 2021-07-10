@@ -103,9 +103,9 @@ export default function Layout(props){
                                 <Link href="/search"><img src="/assets/icons/search.png" className="mx-1" width="20px" alt="search"/></Link>
                             </div>
 
-                            <div className="hidden md:flex items-center border rounded w-full bg-light">
+                            <div className="hidden md:flex items-center w-full bg-gray-100 rounded p-1 px-2">
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
-                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-light" placeholder="search...." />
+                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-100" placeholder="Search" />
                             </div>
                         </li>
                         <li className={"dropdown"}>
