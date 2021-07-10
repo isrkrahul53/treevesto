@@ -2,6 +2,7 @@ import React, { useEffect, lazy, Suspense } from 'react'
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router'
 import {useForm} from 'react-hook-form'
+import { GetStaticPaths,GetStaticProps } from 'next'
 
 import axios from 'axios';
 import https from 'https'
@@ -113,7 +114,7 @@ export default function EditSection(props) {
     </Suspense>
 }
  
-export const getStaticProps = async (context) => {
+export const getStaticProps:GetStaticProps = async (context) => {
     
     const agent = new https.Agent({  
         rejectUnauthorized: false
@@ -123,12 +124,13 @@ export const getStaticProps = async (context) => {
     return {
         props: {
             section:section.data.result
-        }
+        },
+        revalidate:4
     };
  
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths:GetStaticPaths = async () => {
     const agent = new https.Agent({  
       rejectUnauthorized: false
     });
