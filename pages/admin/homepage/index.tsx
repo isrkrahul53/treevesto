@@ -202,7 +202,7 @@ export default function CustomizeHomepage(props) {
                         <Card key={key} className="p-0 border-2 shadow-sm">
                             <CardActions>
                                 <div className="ml-auto text-red-500">
-                                    <Link href={"/admin/homepage/banner/"+element._id}><EditIcon className="cursor-pointer text-blue-500" /></Link>
+                                    <Link href={`/admin/homepage/banner/edit?id=${element._id}`}><EditIcon className="cursor-pointer text-blue-500" /></Link>
                                     <CloseIcon className="text-red-500" onClick={e=>deleteBanner(element._id)} />
                                 </div>
                             </CardActions>
@@ -250,7 +250,7 @@ export default function CustomizeHomepage(props) {
                                     </div>
                                 </CardContent>
                                 <CardActions>
-                                    <Link href={`/admin/homepage/section/${el._id}`}><Button variant="contained" color="primary">
+                                    <Link href={`/admin/homepage/section/edit?id=${el._id}`}><Button variant="contained" color="primary">
                                     Edit
                                     </Button></Link>
                                     <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>
@@ -299,7 +299,7 @@ export default function CustomizeHomepage(props) {
                                     </div>
                                 </CardContent>
                                 <CardActions>
-                                    <Link href={`/admin/homepage/section/${el._id}`}><Button variant="contained" color="primary">
+                                    <Link href={`/admin/homepage/section/edit?id=${el._id}`}><Button variant="contained" color="primary">
                                     Edit
                                     </Button></Link>
                                     <Button variant="contained" color="secondary" onClick={()=>deleteSection(el._id)}>

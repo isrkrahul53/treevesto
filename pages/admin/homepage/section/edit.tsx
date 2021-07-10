@@ -1,30 +1,16 @@
 import React, { useEffect, lazy, Suspense } from 'react'
 import Button from '@material-ui/core/Button'
 import { useRouter } from 'next/router'
-import {useForm} from 'react-hook-form'
-import { GetStaticPaths,GetStaticProps } from 'next'
-
-import axios from 'axios';
-import https from 'https'
-
+import {useForm} from 'react-hook-form' 
 
 const AdminLayout = lazy(()=>import('../../../../component/common/AdminLayout'));
 
-export default function EditSection(props) {
-    console.log(props.section)
+export default function EditSection() {
+    
     const router = useRouter();
-    const [isLoading,setLoading] = React.useState(false)
-    const {register,setValue,handleSubmit,errors} = useForm({
-        defaultValues:{
-            title:props.section.title,
-            position:props.section.position,
-            grid:props.section.grid,
-            mobileGrid:props.section.mobileGrid,
-            desktopView:props.section.desktopView === "true" ? true : false,
-            mobileView:props.section.mobileView === "true" ? true : false,
-        }
-    });
- 
+    const [isLoading,setLoading] = React.useState(true)
+    const {register,setValue,handleSubmit,errors} = useForm();
+    const [values,setValues] = React.useState(null)
     const [isFront, setIsFront] = React.useState(false);
     
     useEffect(()=>{ 
@@ -33,8 +19,18 @@ export default function EditSection(props) {
               setIsFront(true);
           }
         });
+        var id = router.query.id; 
+        if(id){
+            fetch(`https://api.treevesto.com:4000/section/`+id).then(d=>d.json()).then(json=>{
+                var d = json.result;
+                setValues(d)
+                setLoading(false)
+            })
+        }
+        
     },[])
 
+    
     const onSubmit = (data) => {
         var formData = new FormData();
         formData.append('title',data.title)
@@ -44,7 +40,7 @@ export default function EditSection(props) {
         formData.append('mobileView',data.mobileView)
         formData.append('position',data.position)
 
-        fetch(`https://api.treevesto.com:4000/section/${props.section._id}`,{
+        fetch(`https://api.treevesto.com:4000/section/${router.query.id}`,{
                 method:"PATCH",
                 body:formData
             }).then(d=>d.json()).then(json=>{
@@ -69,13 +65,13 @@ export default function EditSection(props) {
                 <div className="p-3 text-xl border shadow-sm mb-2 bg-white" style={{borderRadius:"10px"}}>Edit Section</div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white border shadow-sm p-3" style={{borderRadius:"10px"}}>
-                    <select name="position" id="position" className="form-select my-2" ref={register({required:true})} >
+                    <select name="position" id="position" defaultValue={values?.position} className="form-select my-2" ref={register({required:true})} >
                         <option value="Top">Top</option>
                         <option value="Bottom">Bottom</option>
                     </select>
-                    <input type="text" name="title" id="title" ref={register({required:true})}
+                    <input type="text" name="title" id="title" defaultValue={values?.title} ref={register({required:true})}
                     className="form-control my-2" placeholder="Enter title of the card" />
-                    <select name="grid" id="grid"  className="form-select my-2" ref={register({required:true})}>
+                    <select name="grid" id="grid" defaultValue={values.grid} className="form-select my-2" ref={register({required:true})}>
                         <option value="">Select grid for Desktop View</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -83,7 +79,7 @@ export default function EditSection(props) {
                         <option value="4">4</option>
                         <option value="6">6</option>
                     </select>
-                    <select name="mobileGrid" id="mobileGrid"  className="form-select my-2" ref={register()}>
+                    <select name="mobileGrid" id="mobileGrid" defaultValue={values?.mobileGrid} className="form-select my-2" ref={register()}>
                         <option value="">Select grid for Mobile View</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -92,11 +88,11 @@ export default function EditSection(props) {
                         <option value="6">6</option>
                     </select>
                     <div className="flex-items-center">
-                        <input type="checkbox" name="desktopView" id="desktopView" ref={register()} />
+                        <input type="checkbox" name="desktopView" id="desktopView" defaultChecked={values?.desktopView === "true"?true:false} ref={register()} />
                         <label htmlFor="desktopView" className="mx-2">Desktop</label>
                     </div>
                     <div className="flex-items-center">
-                        <input type="checkbox" name="mobileView" id="mobileView" ref={register()} />
+                        <input type="checkbox" name="mobileView" id="mobileView" defaultChecked={values?.mobileView === "true"?true:false} ref={register()} />
                         <label htmlFor="mobileView" className="mx-2">Mobile</label>
                     </div>
                     <div className="text-right">
@@ -113,34 +109,4 @@ export default function EditSection(props) {
         </AdminLayout>
     </Suspense>
 }
- 
-export const getStaticProps:GetStaticProps = async (context) => {
-    
-    const agent = new https.Agent({  
-        rejectUnauthorized: false
-    });
-    const section = await axios.get(`https://api.treevesto.com:4000/section/${context.params.edit}`,{httpsAgent:agent})
-    
-    return {
-        props: {
-            section:section.data.result
-        },
-        revalidate:4
-    };
- 
-}
-
-export const getStaticPaths:GetStaticPaths = async () => {
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
-    const res = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
-    
-    const json = await res.data.result;
-    
-    const paths = json.map((el) => ({
-        params: { edit: el._id },
-    }))
-    
-    return { paths, fallback: true }
-  }
+  

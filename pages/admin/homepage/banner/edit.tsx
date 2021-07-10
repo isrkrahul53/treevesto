@@ -10,43 +10,70 @@ import axios from 'axios';
 import https from 'https'
 
 export default function EditBanner(props) {
-    const { register,setValue, handleSubmit, errors } = useForm({
-        defaultValues:{
-            Meta_Keywords:props.banner.Meta_Keywords,   
-            Meta_Data:props.banner.Meta_Data,   
-            Meta_Description:props.banner.Meta_Description,   
-            Meta_image_URL:props.banner.Meta_image_URL,   
-        }
-    });
-    console.log(props.banner)
+    const { register,setValue, handleSubmit, errors } = useForm();
+    
     const router = useRouter()
     
     const min = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.min(a,b))-1:0;
     const max = props.products?.length > 0?props.products?.map(e=>e.sellingPrice).reduce((a,b)=>Math.max(a,b))+1:0;
-    var data = props.banner.link.split("/")[1].split("?");
-    
+    const [values,setValues] = React.useState(null)
     
     const [filters,setFilters] = React.useState({
-        subcat:data[0],
-        color:data[1]?.split("&").find(e=>e.indexOf("color")>=0).split("=")[1].split(","),
-        size:data[1]?.split("&").find(e=>e.indexOf("size")>=0).split("=")[1].split(","),
-        from:data[1]?.split("&").find(e=>e.indexOf("from")>=0).split("=")[1],
-        to:data[1]?.split("&").find(e=>e.indexOf("to")>=0).split("=")[1]
+        subcat:'',
+        color:[],
+        size:[],
+        from:''+min,
+        to:''+max
     })
-    
+
+     
     const [isFront, setIsFront] = React.useState(false);
     
-    
+     
     useEffect(()=>{ 
         process.nextTick(() => {
           if (globalThis.window ?? false) {
               setIsFront(true);
             }
         });
+         
         
     },[])
-     
     useEffect(()=>{
+        
+        var id = router.query.id; 
+        if(id){
+            fetch(`https://api.treevesto.com:4000/banner/`+id).then(d=>d.json()).then(json=>{
+                var d = json.result;
+                if(json.success == 1){
+                    setValues(d) 
+                }
+            })
+        }
+    },[router.query])
+    
+    useEffect(()=>{
+        var data = values?.link.split("/")[1]?.split("?");
+        if(data){
+            setFilters({...filters,
+                subcat:data ? data[0]:'',
+                color:data ? data[1]?.split("&").find(e=>e.indexOf("color")>=0).split("=")[1].split(","):[],
+                size:data ? data[1]?.split("&").find(e=>e.indexOf("size")>=0).split("=")[1].split(","):[],
+                from:data ? data[1]?.split("&").find(e=>e.indexOf("from")>=0).split("=")[1]:'',
+                to:data ? data[1]?.split("&").find(e=>e.indexOf("to")>=0).split("=")[1]:'',
+            })
+            handleFiltersChange()
+
+
+        }
+    },[values])
+
+    useEffect(()=>{
+        handleFiltersChange()
+    },[filters])
+
+    const handleFiltersChange = () => {
+        
         var link = '/';
         link += filters.subcat && filters.subcat + "?"
         link += filters.color?.length > 0 ? 'color='+filters.color?.join(",")+"&":''
@@ -54,7 +81,7 @@ export default function EditBanner(props) {
         link += filters.from && 'from='+filters.from+"&"
         link += filters.to && 'to='+filters.to+"&"
         setValue("link",link.substr(0,link?.length-1))
-    },[filters])
+    }
 
     const addColourFilter = (e) => {
         filters.color?.find(a=>a==e) ? setFilters({...filters,color:[...filters.color?.filter(a=>a!=e)]}):setFilters({...filters,color:[...filters.color,e]})
@@ -66,15 +93,15 @@ export default function EditBanner(props) {
     const onSubmit = (data) => {
         console.log(data)
         var formData = new FormData();
-        formData.append('image',data.image[0] || props.banner.image)
-        formData.append('mobileImage',data.mobileImage[0] || props.banner.mobileImage)
+        formData.append('image',data.image[0] || values?.image)
+        formData.append('mobileImage',data.mobileImage[0] || values?.mobileImage)
         formData.append('link',data.link)
         formData.append('Meta_Keywords',data.Meta_Keywords)
         formData.append('Meta_Data',data.Meta_Data)
         formData.append('Meta_Description',data.Meta_Description)
         formData.append('Meta_image_URL',data.Meta_image_URL)
 
-        fetch(`https://api.treevesto.com:4000/banner/${props.banner._id}`,{
+        fetch(`https://api.treevesto.com:4000/banner/${values?._id}`,{
             method:"PATCH",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -100,18 +127,18 @@ export default function EditBanner(props) {
                 <label className="col-md-6 mr-auto">Mobile Banner
                 <input type="file" name="mobileImage" id="mobileImage" ref={register()}  className="form-control my-2"  /></label>
                 </div>
-                <input type="text" name="Meta_Keywords" ref={register()} className="form-control my-2" placeholder="Meta_Keywords" />
-                <input type="text" name="Meta_Data" ref={register()} className="form-control my-2" placeholder="Meta_Data" />
-                <textarea name="Meta_Description" ref={register()} className="form-control my-2" placeholder="Meta_Description" cols={30} rows={4}></textarea>
-                <input type="text" name="Meta_image_URL" ref={register()} className="form-control my-2" placeholder="Meta_image_URL" />
+                <input type="text" name="Meta_Keywords" defaultValue={values?.Meta_Keywords} ref={register()} className="form-control my-2" placeholder="Meta_Keywords" />
+                <input type="text" name="Meta_Data" defaultValue={values?.Meta_Data} ref={register()} className="form-control my-2" placeholder="Meta_Data" />
+                <textarea name="Meta_Description" defaultValue={values?.Meta_Description} ref={register()} className="form-control my-2" placeholder="Meta_Description" cols={30} rows={4}></textarea>
+                <input type="text" name="Meta_image_URL" defaultValue={values?.Meta_image_URL} ref={register()} className="form-control my-2" placeholder="Meta_image_URL" />
 
 
 
                 <input type="text" name="link" id="link" readOnly ref={register({required:true})} className="form-control my-2" 
                 placeholder="Enter the link of the page to be redirected" 
                 />
-
-                <select name="subCatId" id="subCatId" className="form-select my-2" defaultValue={props.banner.link.split("/")[1].split("?")[0]} onChange={e=>setFilters({...filters,subcat:e.target.value})}>
+                
+                <select name="subCatId" id="subCatId" className="form-select my-2" defaultValue={filters.subcat} onChange={e=>setFilters({...filters,subcat:e.target.value})}>
                     <option value="">Select Category</option>
                     {props.category.map((e,k)=>(
                         <option key={k} value={e._id}> {e.catName} </option>
@@ -158,40 +185,19 @@ export default function EditBanner(props) {
         </AdminLayout>
     </Suspense>
 }
-
+ 
 export const getStaticProps = async (context) => {
-    
     const agent = new https.Agent({  
-        rejectUnauthorized: false
+      rejectUnauthorized: false
     });
     var category = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
     const products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
-    const banner = await axios.get(`https://api.treevesto.com:4000/banner/${context.params.edit}`,{httpsAgent:agent})
     
     category = category.data.result.filter(e=>e.parentCatId != "0")
     return {
         props: {
             category:category,
             products:products.data.result,
-            banner:banner.data.result
         }
     };
- 
 }
-
-export const getStaticPaths = async () => {
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
-    const res = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-    var data = [];
-    // res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
-    res.data.result.forEach((el,key)=>{
-      data[key] = {params:{edit:el._id}}
-    })
-    
-    return {
-      paths: data,
-      fallback: false
-    };
-  }
