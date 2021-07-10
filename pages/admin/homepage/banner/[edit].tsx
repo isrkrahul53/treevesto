@@ -28,10 +28,10 @@ export default function EditBanner(props) {
     
     const [filters,setFilters] = React.useState({
         subcat:data[0],
-        color:data[1].split("&").find(e=>e.indexOf("color")>=0).split("=")[1].split(","),
-        size:data[1].split("&").find(e=>e.indexOf("size")>=0).split("=")[1].split(","),
-        from:data[1].split("&").find(e=>e.indexOf("from")>=0).split("=")[1],
-        to:data[1].split("&").find(e=>e.indexOf("to")>=0).split("=")[1]
+        color:data[1]?.split("&").find(e=>e.indexOf("color")>=0).split("=")[1].split(","),
+        size:data[1]?.split("&").find(e=>e.indexOf("size")>=0).split("=")[1].split(","),
+        from:data[1]?.split("&").find(e=>e.indexOf("from")>=0).split("=")[1],
+        to:data[1]?.split("&").find(e=>e.indexOf("to")>=0).split("=")[1]
     })
     
     const [isFront, setIsFront] = React.useState(false);
