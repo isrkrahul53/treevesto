@@ -133,9 +133,10 @@ export const getStaticPaths = async () => {
       rejectUnauthorized: false
     });
     const res = await axios.get(`https://api.treevesto.com:4000/section`,{httpsAgent:agent})
+    const json = await res.data.result;
     var data = [];
     // res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
-    res.data.result.forEach((el,key)=>{
+    json.map((el,key)=>{
       data[key] = {params:{edit:el._id}}
     })
     
