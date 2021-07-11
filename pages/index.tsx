@@ -129,7 +129,7 @@ export default function Home(props) {
                 console.log(el.mobileGrid)
                 return <div key={key}>
                   {el.title === "Wedding Collection" ? <>
-                    <div key={key} className={`mb-2 -m-1`}> 
+                    <div key={key} className={`mb-2 -m-1 ${responsiveCss}`}> 
 
                       {el.mobileGrid === ""?<>
                         <div className="sm:hidden">
