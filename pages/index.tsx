@@ -42,7 +42,8 @@ export default function Home(props) {
  
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
-   
+  const [values,setValues] = React.useState(null)
+  
   const [isFront, setIsFront] = React.useState(false);
 
 
@@ -65,8 +66,36 @@ export default function Home(props) {
         setCategories(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
 
+    initializeData();
     
   },[])
+
+  const initializeData = async () => {
+    
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    });
+    
+    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
+    var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+    var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
+
+    var bannerData = await banner.data.result;
+    var productData = await products.data.result;
+  
+    var arr = []
+    var temp = productData
+    temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+      arr.push(temp.filter(e=>e.productCode === el))
+    })
+
+    setValues({
+      bannerData,
+      products:arr,
+      categories:categories?.data.result
+    })
+  }
+
   
   if (!isFront) return null;
 
@@ -88,7 +117,7 @@ export default function Home(props) {
           <div className="sm:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
                 <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
-                  {props.categories.map((e,k)=>(
+                  {values?.categories.map((e,k)=>(
                     <div className="px-2" key={k}>
                       <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
                         <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
@@ -106,7 +135,7 @@ export default function Home(props) {
           
 
           <Suspense fallback={<Skeleton className="w-full" variant="rect" height={380} />}>
-            <ReactBannerCarousel data={props.bannerData} mobile={!isMobileDevice} arrows={false} showDots={true} />
+            <ReactBannerCarousel data={values?.bannerData} mobile={!isMobileDevice} arrows={false} showDots={true} />
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
@@ -126,7 +155,7 @@ export default function Home(props) {
               
               {sections?.filter(e=>e.position === "Top").map((el,key)=>{
                 var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
-                console.log(el.mobileGrid)
+                
                 return <div key={key}>
                   {el.title === "Wedding Collection" ? <>
                     <div key={key} className={`mb-2 -m-1 ${responsiveCss}`}> 
@@ -135,23 +164,23 @@ export default function Home(props) {
                         <div className="sm:hidden">
                           <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                           <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
-                            {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                            {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                               return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
                             })}
                           </div>
                         </div>
                         <div key={key} className="hidden lg:block">
                           <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                          <div className={`grid grid-cols-5 gap-2`}>
-                            {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                          <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-${el.grid} gap-2`}>
+                            {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                               return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                             })}
                           </div>
                         </div>
                       </>:<div key={key} className={`${responsiveCss}`}>
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-2`}>
-                          {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-${el.grid} gap-2`}>
+                          {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                             return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
                         </div>
@@ -161,9 +190,9 @@ export default function Home(props) {
                   </>:<div key={key} className={`${responsiveCss}`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
-                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
+                        {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
@@ -192,7 +221,7 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              <ReactMultiCarousel showDots={true} arrows={true} content={props.products.map((e,k)=>(
+              <ReactMultiCarousel showDots={true} arrows={true} content={values?.products.map((e,k)=>(
                     <div key={k} className="p-1">
                         <SingleProduct key={k} data={e} hideDetails={false} dispatch={dispatch} />
                     </div>
@@ -218,9 +247,9 @@ export default function Home(props) {
                 return <div key={key} className={`${responsiveCss}`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
-                        {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
+                        {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards.filter(e=>el._id === e.sectionId).length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
@@ -242,32 +271,4 @@ export default function Home(props) {
     </div>
   )
 }
-
-export const getStaticProps = async (context) => {
-  
-  const agent = new https.Agent({  
-    rejectUnauthorized: false
-  });
-   
-  var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-  var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
-  var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
-
-  var bannerData = await banner.data.result;
-  var productData = await products.data.result;
-
-  var arr = []
-  var temp = productData
-  temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
-    arr.push(temp.filter(e=>e.productCode === el))
-  })
-     
-   
-  return {
-      props: {
-          bannerData,
-          products:arr,
-          categories:categories?.data.result
-      }
-  }; 
-}
+ 

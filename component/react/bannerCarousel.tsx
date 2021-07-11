@@ -38,7 +38,7 @@ export default function ReactBannerCarousel(props){
         responsive={responsive}
         containerClass="pb-6"
         >
-            {props.data.filter(e=>e.mobileImage).map((e,k)=>{
+            {props.data?.length > 0 && props.data?.filter(e=>e.mobileImage).map((e,k)=>{
                 return <Link href={e.link} key={k}>
                   <img src={"https://api.treevesto.com:4000/"+e.mobileImage} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
                 </Link>
@@ -55,7 +55,7 @@ export default function ReactBannerCarousel(props){
           responsive={responsive}
           containerClass="pb-6"
           >
-            {props.data.filter(e=>e.image).map((e,k)=>{
+            {props.data?.length > 0 && props.data?.filter(e=>e.image).map((e,k)=>{
                 return <Link href={e.link} key={k}>
                   <img src={"https://api.treevesto.com:4000/"+e.image} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
                 </Link>

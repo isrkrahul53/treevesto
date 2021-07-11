@@ -35,7 +35,7 @@ export default function ReactCarousel(props){
     responsive={responsive}
     // containerClass={props.class}
     >
-        {props.data.map((e,k)=>(
+        {props.data?.map((e,k)=>(
           <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
         ))}
   </Carousel>;

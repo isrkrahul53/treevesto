@@ -33,7 +33,7 @@ export default function ReactMultiCarousel(props){
     itemClass="my-1"
     dotListClass="mt-10"
     responsive={responsive}>
-      {props.content}
+      {props?.content}
   </Carousel>;
 }
 

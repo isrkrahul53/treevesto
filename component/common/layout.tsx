@@ -180,12 +180,12 @@ export default function Layout(props){
                         <div>
                         {/* <div className="text-sm text-secondary"> {el?.productType} </div> */}
                         <div className="text-sm font-normal hidden md:block">
-                            {el?.productName.length > 18 ? el?.productName.substring(0,18):el?.productName}
-                            {el?.productName.length > 18 ? " ...":""}
+                            {el?.productName?.length > 18 ? el?.productName.substring(0,18):el?.productName}
+                            {el?.productName?.length > 18 ? " ...":""}
                         </div>
                         <div className="text-sm font-normal md:hidden">
-                            {el?.productName.length > 42 ? el?.productName.substring(0,42):el?.productName}
-                            {el?.productName.length > 42 ? " ...":""}
+                            {el?.productName?.length > 42 ? el?.productName.substring(0,42):el?.productName}
+                            {el?.productName?.length > 42 ? " ...":""}
                         </div>
                         <div className="text-lg font-normal"> <s className="text-sm text-secondary">Rs. {el?.regularPrice} </s> Rs. {el?.sellingPrice}</div>
                     </div>
