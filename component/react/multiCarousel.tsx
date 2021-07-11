@@ -1,7 +1,5 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import ProductImageBanner from "../product/productImage";
-import SingleProduct from '../product/singleProduct';
 
 export default function ReactMultiCarousel(props){
   const responsive = {
@@ -20,15 +18,15 @@ export default function ReactMultiCarousel(props){
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: props.mobileItem || 2
+      items: props?.mobileItem || 2
     }
   };
   
   return <Carousel 
     swipeable={true}
-    showDots={props.showDots}
-    infinite={props.infinite}
-    arrows={props.arrows}
+    showDots={props?.showDots}
+    infinite={props?.infinite}
+    arrows={props?.arrows}
     containerClass=""
     itemClass="my-1"
     dotListClass="mt-10"

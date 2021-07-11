@@ -1,9 +1,6 @@
 import React from 'react';
-import Carousel from "react-multi-carousel";
-import Link from 'next/link';
-import "react-multi-carousel/lib/styles.css";
-import ProductImageBanner from "../product/productImage";
-import SingleProduct from '../product/singleProduct';
+import Carousel from "react-multi-carousel"; 
+import "react-multi-carousel/lib/styles.css"; 
 
 const responsive = {
   superLargeDesktop: {

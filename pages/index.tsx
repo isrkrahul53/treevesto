@@ -11,7 +11,6 @@ import { useDispatch } from "react-redux";
 const Layout = lazy(()=>import('../component/common/layout'))
 const SingleProduct = lazy(()=>import('../component/product/singleProduct'))
 const ReactMultiCarousel = lazy(()=>import('../component/react/multiCarousel'))
-const ReactCarousel = lazy(()=>import('../component/react/carousel'))
 const ReactBannerCarousel = lazy(()=>import('../component/react/bannerCarousel'))
  
 function Cards(props){
@@ -42,7 +41,9 @@ export default function Home(props) {
  
   const [sections,setSections] = React.useState([]) 
   const [cards,setCards] = React.useState([]) 
-  const [values,setValues] = React.useState(null)
+  const [values,setValues] = React.useState({
+    bannerData:null,products:[],categories:[]
+  })
   
   const [isFront, setIsFront] = React.useState(false);
 
@@ -54,6 +55,16 @@ export default function Home(props) {
       }
     });
  
+     
+    initializeData();
+    
+  },[])
+  
+  const initializeData = async () => {
+    
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    });
     fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
@@ -65,16 +76,6 @@ export default function Home(props) {
     fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-
-    initializeData();
-    
-  },[])
-
-  const initializeData = async () => {
-    
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
     
     var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
     var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
@@ -221,7 +222,7 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              <ReactMultiCarousel showDots={true} arrows={true} content={values?.products.map((e,k)=>(
+              <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
                     <div key={k} className="p-1">
                         <SingleProduct key={k} data={e} hideDetails={false} dispatch={dispatch} />
                     </div>
