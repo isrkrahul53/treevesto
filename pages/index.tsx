@@ -140,7 +140,7 @@ export default function Home(props) {
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
-          <div className="container my-2"> 
+          <div className="container-fluid my-2"> 
             
             {/* =========================================== */}
             {/* Sections Top */}
@@ -180,7 +180,7 @@ export default function Home(props) {
                         </div>
                       </>:<div key={key} className={`${responsiveCss}`}>
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-${el.grid} gap-2`}>
+                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-2`}>
                           {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                             return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
