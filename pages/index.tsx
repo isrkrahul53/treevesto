@@ -124,31 +124,41 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
               
-              {sections?.filter(e=>e.position === "Top").map((el,key)=>(
-                <div key={key}>
+              {sections?.filter(e=>e.position === "Top").map((el,key)=>{
+                var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
+                console.log(el.mobileGrid)
+                return <div key={key}>
                   {el.title === "Wedding Collection" ? <>
-                    <div key={key} className="mb-2 -m-1"> 
-                      <div className="sm:hidden">
-                        <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                        <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
-                          {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                            return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
-                          })}
+                    <div key={key} className={`mb-2 -m-1`}> 
+
+                      {el.mobileGrid === ""?<>
+                        <div className="sm:hidden">
+                          <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                          <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                            {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                              return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                            })}
+                          </div>
                         </div>
-                      </div>
-
-
-                      <div key={key} className="hidden lg:block">
+                        <div key={key} className="hidden lg:block">
+                          <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
+                          <div className={`grid grid-cols-5 gap-2`}>
+                            {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
+                              return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
+                            })}
+                          </div>
+                        </div>
+                      </>:<div key={key} className={`${responsiveCss}`}>
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-2`}>
                           {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                             return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
                         </div>
-                      </div>
-                    
+                      </div>}
+                      
                     </div>
-                  </>:<div key={key}>
+                  </>:<div key={key} className={`${responsiveCss}`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
@@ -162,7 +172,7 @@ export default function Home(props) {
                   </div>}
                 
                 </div>
-              ))}
+              })}
               
               
             </Suspense>
@@ -202,8 +212,10 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              {sections?.filter(e=>e.position === "Bottom").map((el,key)=>(
-                <div key={key}>
+              {sections?.filter(e=>e.position === "Bottom").map((el,key)=>{
+                var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
+
+                return <div key={key} className={`${responsiveCss}`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
@@ -215,7 +227,7 @@ export default function Home(props) {
                     </div>
                 
                 </div>
-              ))}
+              })}
             </Suspense>
   
 
