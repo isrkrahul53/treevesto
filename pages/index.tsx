@@ -193,7 +193,7 @@ export default function Home(props) {
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" px-1"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-1"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
@@ -250,7 +250,7 @@ export default function Home(props) {
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" px-1"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-1"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
