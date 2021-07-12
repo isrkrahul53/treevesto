@@ -33,7 +33,7 @@ export default function ReactCarousel(props){
     // containerClass={props.class}
     >
         {props.data?.map((e,k)=>(
-          <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
+          <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={props.customHeight ? "h-60 sm:h-64 md:h-80 lg:96":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
         ))}
   </Carousel>;
 }
