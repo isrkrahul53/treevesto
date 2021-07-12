@@ -53,6 +53,7 @@ export default function AddressPage(props) {
             fetch(`https://api.treevesto.com:4000/address`).then(d=>d.json()).then(json=>{
                 setUserAddress(json.result) 
                 json.result.length > 0 && setAddAddr(false)
+                console.log(json.result)
             })
         }else{
             router.replace("/auth/login")
@@ -65,6 +66,7 @@ export default function AddressPage(props) {
             fetch(`https://api.treevesto.com:4000/address/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
+                setSelected(null)
                 getUserAddress();
             })
         }
@@ -141,7 +143,7 @@ export default function AddressPage(props) {
                                 <span>{key+1}. {el.name} </span>
                                 <br/>
                                 <span>{el.phone}</span>
-                                <span>{el.address}</span>
+                                <span>{el.address} </span>
                                 <span>{el.pincode}</span>
                             </div>
                         })} 
@@ -164,8 +166,8 @@ export default function AddressPage(props) {
     
                         <h3 className="text-lg font-medium my-2">Address</h3>
                         <TextField className="my-2" type="number" name="pincode" label="Pin Code *" variant="outlined" 
-                        size="small" fullWidth  inputRef={register({required:true})}
-                        helperText={errors.pincode && (<span className="text-danger">Pincode is required</span>)}
+                        size="small" fullWidth  inputRef={register({required:true,minLength:6,maxLength:6})}
+                        helperText={errors.pincode && (<span className="text-danger">6 digit pincode is required</span>)}
                         defaultValue={address.pincode} onChange={(e)=>{setAddress({...address,pincode:e.target.value})}}
                         />
                         <TextField className="my-2" name="address" label="Address ( House no, Building, Street, Area )*" 
