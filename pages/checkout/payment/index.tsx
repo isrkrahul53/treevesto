@@ -75,7 +75,7 @@ export default function PaymentPage() {
         rzp1.createPayment(options);
 
         rzp1.on('payment.success', function(response) {
-            setPay({mode:"Online",transactionNo:response.razorpay_payment_id})
+            setPay({mode:"prepaid",transactionNo:response.razorpay_payment_id})
         });
 
         rzp1.on('payment.error', function(resp){
@@ -238,7 +238,7 @@ export default function PaymentPage() {
                                 {selectedMethods === 'cod' && <>
                                     <div className="w-2/3 mx-auto">
                                         <img src="/assets/images/checkout/cod.jpg" alt="Cash on delivery" className="w-full" />
-                                        <Button type="submit" onClick={()=>setPay({mode:"COD"})} variant="contained" color="primary" fullWidth className="my-4">
+                                        <Button type="submit" onClick={()=>setPay({mode:"cod"})} variant="contained" color="primary" fullWidth className="my-4">
                                         Place Order
                                         </Button>
                                     </div>

@@ -96,11 +96,11 @@ export default function Checkout(props) {
  
 
     useEffect(()=>{
-        if(props.pay?.mode === "Online"){
-            checkout("Online")
+        if(props.pay?.mode === "prepaid"){
+            checkout("prepaid")
         }
-        if(props.pay?.mode === "COD"){
-            checkout("COD")
+        if(props.pay?.mode === "cod"){
+            checkout("cod")
         }
     },[props.pay])
 
@@ -148,7 +148,7 @@ export default function Checkout(props) {
     }
  
     const checkout = (x) => {
-        console.log(selectedAddress)
+        // console.log(selectedAddress)
         var formData = new FormData();
         formData.append('cart',JSON.stringify(cart))
         formData.append('address',selectedAddress)
@@ -159,7 +159,7 @@ export default function Checkout(props) {
         formData.append('customerPhone',"6209460626")
         formData.append('customerState',"Jharkhand")
         formData.append('orderType',x)
-        x === "Online" && formData.append('transactionNo',props.pay.transactionNo)
+        x === "prepaid" && formData.append('transactionNo',props.pay.transactionNo)
 
         fetch(`https://api.treevesto.com:4000/order`,{
             method:"POST",
@@ -174,6 +174,7 @@ export default function Checkout(props) {
                     var formData1 = new FormData();
                     // formData1.append('userId',user.userId)
                     formData1.append('address',selectedAddress)
+                    formData1.append('orderId',json.result._id)
                     formData1.append('orderStatus',"1")
                     
                     Object.keys(el).map((key,i)=>{

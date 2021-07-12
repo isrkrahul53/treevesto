@@ -180,7 +180,7 @@ export default function Home(props) {
                         </div>
                       </>:<div key={key} className={`${responsiveCss}`}>
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
-                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-2`}>
+                        <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-1`}>
                           {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
                             return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
@@ -193,7 +193,7 @@ export default function Home(props) {
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" px-1"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
@@ -250,7 +250,7 @@ export default function Home(props) {
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
-                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-2"}> 
+                          return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" px-1"}> 
                                 <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
