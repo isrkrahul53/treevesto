@@ -97,7 +97,7 @@ export default function CartPage({coupon}) {
 }
 
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     
     const agent = new https.Agent({  
         rejectUnauthorized: false

@@ -96,7 +96,7 @@ console.log(props.gst)
   </Suspense>
 }
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
 
   const agent = new https.Agent({  
     rejectUnauthorized: false

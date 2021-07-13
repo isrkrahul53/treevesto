@@ -149,7 +149,7 @@ export default function HomepageBanner(props) {
     </Suspense>
 }
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
     const agent = new https.Agent({  
       rejectUnauthorized: false
     });

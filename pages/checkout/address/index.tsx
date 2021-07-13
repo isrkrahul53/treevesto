@@ -211,7 +211,7 @@ export default function AddressPage(props) {
     </div>
 }
  
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     
     const agent = new https.Agent({  
         rejectUnauthorized: false
