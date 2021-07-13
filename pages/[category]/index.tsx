@@ -209,7 +209,7 @@ export default function Product(props){
 
                 {isLoading ?<>
                   {props.products.length != 0 ? <> 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-4 my-2">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 my-2">
                       {[1,2,3,4].map(e=>(
                         <div key={e}>
                           <Skeleton className="my-1 w-full" variant="rect" height={140} />
@@ -229,7 +229,7 @@ export default function Product(props){
                   </>}
                 </>:<>
                   {products.length > 0 ?<>
-                        <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 md:gap-4 p-0"}>
+                        <div className={"grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 p-0"}>
                           {products?.map((el,key)=>(
                             <div key={key}>
                               <Suspense fallback={<div>

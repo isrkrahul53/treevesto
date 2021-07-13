@@ -39,4 +39,41 @@ a {
 .categoryHideScrollbar::-webkit-scrollbar {
   display: none;
 }
+ 
+.responsiveLatestProducts {
+  height: 235px;
+}
 
+@media screen and (min-width: 640px) {
+  
+  .responsiveLatestProducts {
+    height: 264px;
+  }
+
+}
+
+
+@media screen and (min-width: 768px) {
+  
+  .responsiveLatestProducts {
+    height: 320px;
+  }
+}
+
+
+@media screen and (min-width: 1024px) {
+  
+  .responsiveLatestProducts {
+    height: 433px;
+  }
+}
+
+
+@media screen and (min-width: 1280px) {
+  
+  .responsiveLatestProducts {
+    height: 320px;
+  }
+}
+
+ 

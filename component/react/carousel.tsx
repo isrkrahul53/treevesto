@@ -2,6 +2,7 @@ import React from 'react';
 import Carousel from "react-multi-carousel"; 
 import "react-multi-carousel/lib/styles.css"; 
 
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -33,7 +34,7 @@ export default function ReactCarousel(props){
     // containerClass={props.class}
     >
         {props.data?.map((e,k)=>(
-          <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={props.customHeight ? "h-60 sm:h-64 md:h-80 lg:96":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
+          <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={"responsiveLatestProducts"} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
         ))}
   </Carousel>;
 }
