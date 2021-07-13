@@ -1,11 +1,16 @@
 
-const getCart = async () => {
+try{
     var user = JSON.parse(localStorage.getItem('user'))
+
+}catch(err){
+    // console.log(err.message)
+}
+const getCart = async () => {
     if(!user) return []
-    const res = await fetch(`https://api.treevesto.com:4000/cart/user/`+user.userId,{
+    const res = await fetch(`https://api.treevesto.com:4000/cart/user/`+user?.userId,{
         method:"GET",
         headers:{
-            "token":user.token
+            "token":user?.token
         }
     })
     const json = await res.json();
@@ -13,10 +18,9 @@ const getCart = async () => {
     return data
 }
 
-const addtoCart = async (pro) => {
-    var user = JSON.parse(localStorage.getItem('user')) 
+const addtoCart = async (pro) => {    
     var formData = new FormData();
-    formData.append("userId",user.userId)
+    formData.append("userId",user?.userId)
     formData.append("productId",pro._id)
     formData.append("vendorId",pro.vendorId)
     formData.append("type","cart")
@@ -31,7 +35,7 @@ const addtoCart = async (pro) => {
         method:"POST",
         body:formData,
         headers:{
-            "token":user.token
+            "token":user?.token
         }
     })
     const json = await res.json();
