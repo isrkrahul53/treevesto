@@ -268,7 +268,7 @@ export default function Product(props){
   </div>
 }
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
@@ -295,22 +295,5 @@ export const getStaticProps = async (context) => {
       productsArr:arr,
       catName:category.data.result[0].catName
     }
-  };
-}
-
-export const getStaticPaths = async () => {
-  const agent = new https.Agent({  
-    rejectUnauthorized: false
-  });
-  const res = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
-  var data = [];
-  // res.data.result = res.data.result.filter(e=>(e.parentCatId != 0))
-  res.data.result.forEach((el,key)=>{
-    data[key] = {params:{category:el._id}}
-  })
-  
-  return {
-    paths: data,
-    fallback: false
   };
 }
