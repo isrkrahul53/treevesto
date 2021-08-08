@@ -9,6 +9,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -84,7 +85,7 @@ export default function MenuListComposition(props) {
               <Paper className="border-yellow-700 border-t-4" style={{backgroundColor:"#fff",borderRadius:"0px"}}>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" className="border shadow  p-0" onKeyDown={handleListKeyDown}>
-                    {props.subCat.map((el,key)=>(
+                    {/* {props.subCat.map((el,key)=>(
                         <Link href={`/${el._id}`} key={key}>
                             <MenuItem onClick={handleClose}>
                               <div style={{fontSize:"14px",fontWeight:400,fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
@@ -92,7 +93,31 @@ export default function MenuListComposition(props) {
                               </div>
                             </MenuItem>
                         </Link>
-                    ))} 
+                    ))}  */}
+                    <MenuItem onClick={handleClose}>
+                      <div className="container w-100">
+                        <div className="flex items-start">
+                          {[1,2,3,4,5,6,7,8].map(i=>(
+                            <div>
+                              {props.subCat.filter(e=>e.parentSubCatId === "0").filter((e,k,ar)=>k >= ar.length*((i-1)/8) && k <= ar.length*(i/8)).map((el,key)=>{
+                                return <div key={key} className="p-2">
+                                  <Link href={`/${el._id}`} key={key}><div className="text-red-800"> {el.catName} </div></Link>
+                                  {props.subCat.filter(e=>e.parentSubCatId === el._id).map((el,key)=>(
+                                    <Link href={`/${el._id}`} key={key}>
+                                        <div onClick={handleClose}>
+                                          <div style={{fontSize:"14px",fontWeight:400,fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
+                                            {el.catName}
+                                          </div>
+                                        </div>
+                                    </Link>
+                                  ))} 
+                                </div>  
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </MenuItem>
                     {/* <MenuItem onClick={handleClose}>My account</MenuItem>
                     <MenuItem onClick={handleClose}>Logout</MenuItem> */}
                   </MenuList>
