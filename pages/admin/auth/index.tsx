@@ -29,12 +29,12 @@ export default function AdminLoginPage() {
     const onSubmit = (data) => {
         var formData = new FormData() 
         formData.append('phone','+91'+data.phone)
-        formData.append('password',data.password) 
+        formData.append('password',data.password)
         fetch(`https://api.treevesto.com:4000/user/login`,{
             method:"POST",
             body:formData
-        }).then(d=>d.json()).then(json=>{ 
-            if(json.success == 1){ 
+        }).then(d=>d.json()).then(json=>{
+            if(json.success == 1){
                 var admin = {token:json.token,name:json.name,email:json.email,adminId:json._id,phone:data.phone}
                 localStorage.setItem('admin',JSON.stringify(admin))
                 router.replace("/admin")
