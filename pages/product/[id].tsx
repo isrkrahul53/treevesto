@@ -198,12 +198,14 @@ export default function Product(props) {
                             </div> 
                             <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
                                 <p>{props.product?.productDesc}</p>
-                                <div className="container">
+                                <div className="container-fluid">
+                                    <hr className="my-4"/>
+                                    <div className="text-secondary h5">Specification</div>
 
                                     {specsArr.filter(e=>props.product[e]).map((e,k)=>(
                                         <div className="row" key={k}>
-                                            <div className="col-md-3"> {e.replace("_"," ")} </div>
-                                            <div className="col-md-9"> {props.product[e]} </div>
+                                            <div className="col-6 col-md-3"> {e.replace("_"," ")} </div>
+                                            <div className="col-6 col-md-9"> {props.product[e]} </div>
                                         </div>
                                         
                                     ))}

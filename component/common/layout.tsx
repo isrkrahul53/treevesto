@@ -12,6 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SearchProducts from './searchProducts';
 import MenuListComposition from '../material/menu'
 import { useSelector, useDispatch } from "react-redux";
+import MenuListComposition2 from '../material/menu2';
 
 
 declare var $:any;
@@ -111,7 +112,7 @@ export default function Layout(props){
                         <li className={"dropdown"}>
                             <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden mx-2 cursor-pointer" width="20px" alt="user"/>
                             <div className="hidden md:block">
-                                <MenuListComposition 
+                                <MenuListComposition2
                                 cat={<img src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>} 
                                 subCat={[{_id:"account/profile",catName:<div className="p-1">
                                     

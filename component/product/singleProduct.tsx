@@ -56,12 +56,12 @@ export default function SingleProduct(props){
   
     return <div className={"cursor-pointer"} >
     {/* <ProductImageBanner indicator={false} images={productSelected?.productImages} /> */}
-    <Link href={"/product/"+productSelected._id}>
-      <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
-    </Link>
+    {/* <Link href={"/product/"+productSelected._id}>
+    </Link> */}
 
     <div className="p-2">
         <Link href={"/product/"+productSelected._id}><div>
+            <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
             <div className="text-sm text-secondary"> {productSelected?.productType} </div>
             <div className="text-sm font-normal hidden md:block">
                 {productSelected?.productName?.length > 28 ? productSelected?.productName.substring(0,28):productSelected?.productName}

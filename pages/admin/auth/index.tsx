@@ -30,6 +30,7 @@ export default function AdminLoginPage() {
         var formData = new FormData() 
         formData.append('phone','+91'+data.phone)
         formData.append('password',data.password) 
+        formData.append('userType',"1") 
         fetch(`https://api.treevesto.com:4000/user/login`,{
             method:"POST",
             body:formData
