@@ -26,8 +26,6 @@ export default function OverviewPage() {
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
             setUser(user)
-        }else{
-            router.replace("/auth/login")
         }
     },[])
     if (!isFront) return null;

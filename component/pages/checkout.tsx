@@ -50,11 +50,11 @@ export default function Checkout(props) {
     const [cart,setCart] = React.useState(null)
     const [user,setUser] = React.useState(null)
     const [discount,setDiscount] = React.useState(0)
-    const [deliveryFee,setDeliveryFee] = React.useState(50)
     const [searchCoupon,setSearchCoupon] = React.useState("")
     const [hidden,setHidden] = React.useState(false)
     const [couponUsed,setCouponUsed] = React.useState(null)
     const [totalPrice,setTotalPrice] = React.useState(null)
+    const [deliveryFee,setDeliveryFee] = React.useState(50)
     const [selectedAddress,setSelectedAddress] = React.useState(null);
 
 
@@ -85,6 +85,14 @@ export default function Checkout(props) {
         couponUsed && setCouponUsed(couponUsed)
 
     },[])
+
+    useEffect(()=>{
+        if(totalPrice > 0){
+            setDeliveryFee(50)
+        }else{
+            setDeliveryFee(0)
+        }
+    })
 
     props.getAmount(totalPrice + deliveryFee - discount)
     
@@ -298,7 +306,7 @@ export default function Checkout(props) {
                             {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
                                 Place Order
                             </Button> */}
-                            <button type="button" disabled={totalPrice <= 0} className="w-full my-4 px-4 py-1 rounded text-xl cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                            <button type="button" disabled={totalPrice <= 0} className={`w-full my-4 px-4 py-1 rounded text-xl ${totalPrice <= 0 ? 'bg-gray-400':'bg-gray-800 hover:bg-gray-50 hover:text-gray-800 border-gray-800'} text-gray-50 cursor-pointer border-2`}>
                                 Place Order
                             </button>
                             </Link>:<></>}
