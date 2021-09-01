@@ -79,6 +79,8 @@ export default function AddImagetoSectionModal(props){
         link += filters.from && '&from='+filters.from
         link += filters.to && '&to='+filters.to
         setLink(link)
+        var x = {target:{value:link}}
+        props.link(x)
         // console.log(link.split("?")[1].split("&"))
     },[filters])
 
@@ -88,7 +90,7 @@ export default function AddImagetoSectionModal(props){
     const addSizeFilter = (e) => {
         filters.size.find(a=>a==e) ? setFilters({...filters,size:[...filters.size.filter(a=>a!=e)]}):setFilters({...filters,size:[...filters.size,e]})
     }
-
+ 
     return <Container>
     {/*  
     <SelectInput id="language" label="Language *" options={[
