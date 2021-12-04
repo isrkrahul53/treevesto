@@ -61,7 +61,7 @@ export default function AdminCouponsPage(props){
     formData.append("discountType",discountType)
     formData.append("couponActive","1")
 
-    fetch(`https://api.treevesto.com:4000/coupon`,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}coupon`,{
       method:"POST",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -78,7 +78,7 @@ export default function AdminCouponsPage(props){
     var formData = new FormData();
     formData.append("couponActive",x)
     if(confirm('Are you sure to '+(x==="1"?"Activate":"Disable")+' it !')){
-      fetch(`https://api.treevesto.com:4000/coupon/`+id,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}coupon/`+id,{
         method:"PATCH",
         body:formData
       }).then(d=>d.json()).then(json=>{
@@ -89,7 +89,7 @@ export default function AdminCouponsPage(props){
 
   const removeCoupon = (id) => {
     if(confirm('Are you sure to remove it !')){
-      fetch(`https://api.treevesto.com:4000/coupon/`+id,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}coupon/`+id,{
         method:"DELETE",
       }).then(d=>d.json()).then(json=>{
         router.replace(router.asPath)
@@ -227,7 +227,7 @@ export const getServerSideProps = async (context) => {
     rejectUnauthorized: false
   });
   
-  const coupon = await axios.get(`https://api.treevesto.com:4000/coupon`,{httpsAgent:agent})
+  const coupon = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}coupon`,{httpsAgent:agent})
  
 
   return {

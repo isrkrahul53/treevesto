@@ -43,7 +43,7 @@ export default function EditBanner(props) {
         
         var id = router.query.id; 
         if(id){
-            fetch(`https://api.treevesto.com:4000/banner/`+id).then(d=>d.json()).then(json=>{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}banner/`+id).then(d=>d.json()).then(json=>{
                 var d = json.result;
                 if(json.success == 1){
                     setValues(d) 
@@ -101,7 +101,7 @@ export default function EditBanner(props) {
         formData.append('Meta_Description',data.Meta_Description)
         formData.append('Meta_image_URL',data.Meta_image_URL)
 
-        fetch(`https://api.treevesto.com:4000/banner/${values?._id}`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}banner/${values?._id}`,{
             method:"PATCH",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -190,8 +190,8 @@ export const getServerSideProps = async (context) => {
     const agent = new https.Agent({  
       rejectUnauthorized: false
     });
-    var category = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
-    const products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+    var category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/all`,{httpsAgent:agent})
+    const products = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product`,{httpsAgent:agent})
     
     category = category.data.result.filter(e=>e.parentCatId != "0")
     return {

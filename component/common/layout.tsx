@@ -74,12 +74,12 @@ export default function Layout(props){
     return <div>
       <CustomAlert />
         <div className="bg-white shadow-sm border position-sticky top-0 w-full xl:static" style={{zIndex:1250,}}>
-            <div className="container p-2 navbar navbar-expand-lg navbar-light p-0 w-full z-40">
+            <div className="container navbar navbar-expand-lg navbar-light p-0 px-md-0 px-3 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
                         <div className="xl:hidden"><Sidebar data={categories} /></div>
                         <Link href="/">
-                            <img src="/logo.png" className="w-20 hidden xl:block mx-2 cursor-pointer" alt="logo"/>
+                            <img src="/logo.png" className="w-24 hidden xl:block mx-2 cursor-pointer" alt="logo"/>
                         </Link>
                         <Link href="/">
                             <img src="/logoHead.png" className="w-10 xl:hidden mx-2 cursor-pointer" alt="logo"/>
@@ -98,18 +98,18 @@ export default function Layout(props){
                  
                 <div className="ml-auto">
                     <ul className="flex ml-auto items-center"> 
-                        <li className="cursor-pointer mx-1">
+                        <li className="cursor-pointer mx-0">
                             {/* <SearchProducts /> */}
-                            <div className="md:hidden">
-                                <Link href="/search"><img src="/assets/icons/search.png" className="mx-1" width="20px" alt="search"/></Link>
+                            <div className="md:hidden flex items-center border-l-2 border-r-2" style={{height:'55px'}}>
+                                <Link href="/search"><img src="/assets/icons/search.png" className="mx-3" width="20px" alt="search"/></Link>
                             </div>
 
-                            <div className="hidden md:flex items-center w-full bg-gray-100 rounded p-1 px-2">
+                            <div className="hidden md:flex items-center w-full bg-gray-0 border-l-2 border-r-2 p-1 px-2" style={{height:'55px'}}>
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
-                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-100" placeholder="Search" />
+                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-0" placeholder="Search" />
                             </div>
                         </li>
-                        <li className={"dropdown"}>
+                        <li className={"dropdown mx-1 mx-md-3"}>
                             <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden mx-2 cursor-pointer" width="20px" alt="user"/>
                             <div className="hidden md:block">
                                 <MenuListComposition2
@@ -133,17 +133,17 @@ export default function Layout(props){
                             </div>
                             
                         </li> 
-                        <li className="flex items-center justify-end">
+                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
                         <Link href="/wishlist">
                             <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/heart.png" className="mx-2" width="20px" alt="heart"/>
+                                <img src="/assets/icons/heart.png" className="mx-2 mx-md-4" width="20px" alt="heart"/>
                             </div>
                         </Link> 
                         </li>
-                        <li className="flex items-center justify-end">
+                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
                         <Link href="/checkout/cart">
-                            <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/shopping-bag.png" className="mx-2" width="20px" alt="shopping-bag"/>
+                            <div className="flex items-center cursor-pointer mx-2 mx-md-3">
+                                <img src="/assets/icons/shopping-bag.png" width="20px" alt="shopping-bag"/>
                                 <div style={{fontSize:"14px",fontWeight:500,color:"#282c3f",letterSpacing:"0.3px",fontFamily:"Whitney,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif"}}>
                                     <sup className="font-bold -ml-2 bg-danger text-white rounded-circle" style={{padding:"2px 5px"}} >{user ? cart : 0}</sup>
                                 </div>
@@ -151,7 +151,7 @@ export default function Layout(props){
                             </div>
                         </Link>
                         </li> 
-                        {user && <li className="flex items-center justify-end" onClick={logout}>
+                        {user && <li className="flex items-center justify-end border-l-2" onClick={logout} style={{height:'55px'}}>
                             <div className="flex items-center cursor-pointer">
                                 <img src="/assets/icons/logout.jpg" className="mx-2" width="20px" alt="logout"/>
                             </div>
@@ -176,7 +176,7 @@ export default function Layout(props){
                 <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 xl:grid-cols-6 justify-content-center my-2 gap-4">
                 {products?.map((el,key)=>(
                     <Link key={key} href={"/product/"+el._id}><div className="cursor-pointer">
-                    <img src={"https://api.treevesto.com:4000/"+el.productImages[0]}  alt={el.productName} />
+                    <img src={process.env.NEXT_PUBLIC_apiUrl+el.productImages[0]}  alt={el.productName} />
                     <div className="p-2">
                         <div>
                         {/* <div className="text-sm text-secondary"> {el?.productType} </div> */}

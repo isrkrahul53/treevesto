@@ -27,7 +27,7 @@ export default function MaterialDialog(props) {
     if(localStorage.getItem('user')){
       var user = JSON.parse(localStorage.getItem('user'))
       setUserId(user.userId)
-      fetch(`https://api.treevesto.com:4000/orderedproduct/getreview/`+user.userId+`/`+props.id).then(d=>d.json()).then(json=>{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}orderedproduct/getreview/`+user.userId+`/`+props.id).then(d=>d.json()).then(json=>{
         if(json.result === 1){
           setOpen(true);
           setVerify(true)
@@ -60,7 +60,7 @@ export default function MaterialDialog(props) {
       }
     })
 
-    fetch(`https://api.treevesto.com:4000/review/`,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}review/`,{
         method:"POST",
         body:formData
     }).then(d=>d.json()).then(json=>{

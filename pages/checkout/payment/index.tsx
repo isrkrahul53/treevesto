@@ -60,7 +60,7 @@ export default function PaymentPage() {
  
         var formData = new FormData();
         formData.append("amount",totalAmt.toString())
-		const data = await fetch(`https://api.treevesto.com:4000/checkout`,{
+		const data = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}checkout`,{
             method:"POST",
             body:formData, 
         }).then(d=>d.json())

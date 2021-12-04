@@ -34,7 +34,7 @@ export default function AddSection() {
         formData.append('position',data.position)
         formData.append('hiddenTitle',data.hiddenTitle)
 
-        fetch(`https://api.treevesto.com:4000/section`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}section`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{

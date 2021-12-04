@@ -31,7 +31,7 @@ console.log(props.gst)
     formData.append('label',data.label)
     formData.append('value',data.value)
     
-    fetch(`https://api.treevesto.com:4000/gst`,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}gst`,{
       method:"POST",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -45,7 +45,7 @@ console.log(props.gst)
     
   }
   const onDelte = (id) => {  
-    fetch(`https://api.treevesto.com:4000/gst/`+id,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}gst/`+id,{
         method:"DELETE",
     }).then(d=>d.json()).then(json=>{
       console.log(json)
@@ -101,7 +101,7 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const gst = await axios.get(`https://api.treevesto.com:4000/gst`,{httpsAgent:agent})
+  const gst = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}gst`,{httpsAgent:agent})
  
 
   return {

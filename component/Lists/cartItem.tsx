@@ -1,11 +1,12 @@
 import { Button } from "@material-ui/core";
+import Link from 'next/link';
 
 export default function CartItem(props) {
     return <>
         {props.cart.map((el,key)=>(
             <div key={key} className="">
                     <div className="flex items-start">
-                        <img src={el.image} className="w-20 rounded" />
+                        <Link href={"/product/"+el.productId}><img src={el.image} className="w-20 cursor-pointer rounded" /></Link>
                         <div className="px-2">
                             <div className="text-sm font-bold">{el.name.length > 30 ? el.name.substring(0,30)+" ...":el.name}</div>
                             <div className="text-sm text-secondary">Sold by : Flashtech Retail</div>

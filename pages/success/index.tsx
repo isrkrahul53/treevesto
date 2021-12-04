@@ -21,7 +21,7 @@ export default function SuccessPage(){
             setCart(JSON.parse(order.cart.toString()))
             setUser(JSON.parse(data.user.toString()))
             setOID(order._id)
-            fetch(`https://api.treevesto.com:4000/address/`+order.address).then(d=>d.json()).then(json=>{ 
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}address/`+order.address).then(d=>d.json()).then(json=>{ 
                 console.log(json)
                 if(json.success == 1){
                     setAddress(json.result)
@@ -39,7 +39,7 @@ export default function SuccessPage(){
             $(document).ready(()=>{
                 var formData = new FormData();
                 formData.append("emailContent",$("#emailContent").html())
-                fetch(`https://api.treevesto.com:4000/order/`+oid,{
+                fetch(`${process.env.NEXT_PUBLIC_apiUrl}order/`+oid,{
                     method:"PATCH",
                     body:formData
                 }).then(d=>d.json()).then(json=>{ 

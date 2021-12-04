@@ -51,7 +51,7 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const users = await axios.get(`https://api.treevesto.com:4000/user`,{httpsAgent:agent})
+  const users = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}user`,{httpsAgent:agent})
  
 
   return {

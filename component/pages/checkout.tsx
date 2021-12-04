@@ -113,12 +113,12 @@ export default function Checkout(props) {
     },[props.pay])
 
     const getCart = (x) => {
-        fetch(`https://api.treevesto.com:4000/cart/user/`+x).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/user/`+x).then(d=>d.json()).then(json=>{
             setCart(json.result.filter(e=>e.type === "cart"))
         })
     }
     const applyCoupon = (coupon) => {
-        fetch(`https://api.treevesto.com:4000/order`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}order`).then(d=>d.json()).then(json=>{
             if(json.result.filter(e=>e.couponId === coupon._id).length === 0){
                 if(localStorage.getItem("couponUsed") && localStorage.getItem("couponUsed") === couponUsed){
                     localStorage.removeItem("discount")
@@ -169,7 +169,7 @@ export default function Checkout(props) {
         formData.append('orderType',x)
         x === "prepaid" && formData.append('transactionNo',props.pay.transactionNo)
 
-        fetch(`https://api.treevesto.com:4000/order`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}order`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 
@@ -191,7 +191,7 @@ export default function Checkout(props) {
                         }
                     })
                     
-                    fetch(`https://api.treevesto.com:4000/orderedproduct`,{
+                    fetch(`${process.env.NEXT_PUBLIC_apiUrl}orderedproduct`,{
                         method:"POST",
                         body:formData1
                     }).then(d=>d.json()).then(json=>{ 
@@ -202,14 +202,14 @@ export default function Checkout(props) {
                             formData2.append("stock",stock.toString())
                             formData2.append("popular",popular.toString())
                             console.log(stock,popular)
-                            fetch(`https://api.treevesto.com:4000/product/`+el.productId,{
+                            fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/`+el.productId,{
                                 method:"PATCH",
                                 body:formData2
                             }).then(d=>d.json()).then(json=>{ 
                                 // console.log(json)
                             }).catch(err=>console.log(err.message))
                             
-                            fetch(`https://api.treevesto.com:4000/cart/user/${user.userId}`,{method:"DELETE"}).then(d=>d.json()).then(json=>{
+                            fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/user/${user.userId}`,{method:"DELETE"}).then(d=>d.json()).then(json=>{
                              console.log(json)   
                             }).catch(err=>console.log(err.message))
                         }
@@ -227,91 +227,97 @@ export default function Checkout(props) {
     return <div>
         {/* <CheckoutHeader active={active} /> */}
         <Layout error={error} success={success}>
-            <div className="">
+            <div className="my-4">
+                <div className="text-center my-2">
+                    <h1 className="display-6">Checkout</h1>
+                    <p className="text-secondary">Have a coupon <a href="">click here</a> to enter </p>
+                </div>
                 <div className="w-full lg:w-2/3 mx-auto flex-row lg:flex">
 
                     {/* First column */}
-                    <div className="w-full lg:w-2/3 px-2 lg:px-4 py-8 container">
-
-                        {props.children}
-
-
+                    <div className="w-full lg:w-2/3 lg:px-4">
+                        <div className="container shadow-md py-8 p-2">
+                            {props.children}
+                        </div>
                     </div>
                     {/* SEcond Column */}
-                    <div className="w-full lg:w-1/3 lg:border-l-2 border-gray-200 py-4 container">
-                        {active === 1?<>
+                    <div className="w-full lg:w-1/3">
+                        <div className="container shadow p-4">
+                            {active === 1?<>
 
-                            <div className="text-lg font-medium flex items-center"> 
-                                <CouponSVG /> <span className="px-2">Apply Coupons</span> 
-                                <div className="ml-auto">
-                                    <MaterialModal name="Apply Coupons" label={"Apply"} content={<> 
-                                        <div className="input-group my-2">
-                                            <input type="text" name="searchCoupon" id="searchCoupon" onChange={e=>setSearchCoupon(e.target.value)} placeholder="Search coupons ...." className="form-control" />
-                                            <div className="input-group-text">
-                                                <input className="form-check-input" title="Show hidden coupons" name="hidden" type="checkbox" defaultChecked={hidden} onChange={e=>setHidden(e.target.checked)} id="showHidden" />
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 my-3">
-                                            {props.coupon.
-                                            filter(e=>e.hidden === hidden.toString() && e.couponName.toLowerCase().search(searchCoupon.toLowerCase()) != -1)
-                                            ?.map((e,k)=>(
-                                                <div key={k} className={couponUsed != e._id?"border-2 bg-white shadow-sm my-1 py-2 px-2 rounded":"border bg-light shadow-sm my-1 py-2 px-2 rounded"}>
-                                                    <div className="text-lg font-medium flex items-center"> 
-                                                        <CouponSVG /> <span className="px-2">{e.couponName}</span> 
-                                                        <div className="ml-auto">
-                                                            <Button variant="text" color="primary" onClick={()=>applyCoupon(e)}>
-                                                                {couponUsed != e._id?"Apply":"Applied !"}
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-sm text-secondary"> {e.couponDesc} </div>
+                                <div className="text-lg font-medium flex items-center"> 
+                                    <CouponSVG /> <span className="px-2">Apply Coupons</span> 
+                                    <div className="ml-auto">
+                                        <MaterialModal name="Apply Coupons" label={"Apply"} content={<> 
+                                            <div className="input-group my-2">
+                                                <input type="text" name="searchCoupon" id="searchCoupon" onChange={e=>setSearchCoupon(e.target.value)} placeholder="Search coupons ...." className="form-control" />
+                                                <div className="input-group-text">
+                                                    <input className="form-check-input" title="Show hidden coupons" name="hidden" type="checkbox" defaultChecked={hidden} onChange={e=>setHidden(e.target.checked)} id="showHidden" />
                                                 </div>
-                                            ))}
-                                        </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 my-3">
+                                                {props.coupon.
+                                                filter(e=>e.hidden === hidden.toString() && e.couponName.toLowerCase().search(searchCoupon.toLowerCase()) != -1)
+                                                ?.map((e,k)=>(
+                                                    <div key={k} className={couponUsed != e._id?"border-2 bg-white shadow-sm my-1 py-2 px-2 rounded":"border bg-light shadow-sm my-1 py-2 px-2 rounded"}>
+                                                        <div className="text-lg font-medium flex items-center"> 
+                                                            <CouponSVG /> <span className="px-2">{e.couponName}</span> 
+                                                            <div className="ml-auto">
+                                                                <Button variant="text" color="primary" onClick={()=>applyCoupon(e)}>
+                                                                    {couponUsed != e._id?"Apply":"Applied !"}
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-sm text-secondary"> {e.couponDesc} </div>
+                                                    </div>
+                                                ))}
+                                            </div>
 
-                                            
-                                    </>} />
+                                                
+                                        </>} />
+                                    </div>
                                 </div>
-                            </div>
-                        </>:<></>} 
-                        
-                        <div className="flex items-center font-normal text-lg my-2">
-                            <img src="/assets/images/checkout/insurance.png" alt="Secured" className="w-8 mr-3" /> 100% SECURE
-                        </div>
-                        <div className="py-3">
-                            <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
-                            <div className="flex items-center justify-between">
-                                <h4 className="text-md">Total MRP</h4>
-                                <div>Rs.{totalPrice}</div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <h4 className="text-md">Delivery Fee</h4>
-                                <div>Rs. {deliveryFee} </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <h4 className="text-md">Discount on MRP</h4>
-                                <div>Rs. {discount} </div>
-                            </div>
-                            {/* <div className="flex items-center justify-between">
-                                <h4 className="text-md">Convenience fee</h4>
-                                <div><s>Rs.99</s> <span className="text-red-500">FREE</span> </div>
-                            </div> */}
-                            <hr className="my-2" />
-
-                            <div className="flex items-center justify-between">
-                                <h4 className="text-md">Total Amount</h4>
-                                <div>Rs. {totalPrice + deliveryFee - discount} </div>
-                            </div>
-                            {active == 1?<Link href="/checkout/address">
-                            {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
-                                Place Order
-                            </Button> */}
-                            <button type="button" disabled={totalPrice <= 0} className={`w-full my-4 px-4 py-1 rounded text-xl ${totalPrice <= 0 ? 'bg-gray-400':'bg-gray-800 hover:bg-gray-50 hover:text-gray-800 border-gray-800'} text-gray-50 cursor-pointer border-2`}>
-                                Place Order
-                            </button>
-                            </Link>:<></>}
-
+                            </>:<></>} 
                             
+                            <div className="flex items-center font-normal text-lg my-2">
+                                <img src="/assets/images/checkout/insurance.png" alt="Secured" className="w-8 mr-3" /> 100% SECURE
+                            </div>
+                            <div className="py-3">
+                                <h3 className="text-lg font-medium">Price Details ( {cart?.length} Items ) </h3>
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-md">Total MRP</h4>
+                                    <div>Rs.{totalPrice}</div>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-md">Delivery Fee</h4>
+                                    <div>Rs. {deliveryFee} </div>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-md">Discount on MRP</h4>
+                                    <div>Rs. {discount} </div>
+                                </div>
+                                {/* <div className="flex items-center justify-between">
+                                    <h4 className="text-md">Convenience fee</h4>
+                                    <div><s>Rs.99</s> <span className="text-red-500">FREE</span> </div>
+                                </div> */}
+                                <hr className="my-2" />
+
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-md">Total Amount</h4>
+                                    <div>Rs. {totalPrice + deliveryFee - discount} </div>
+                                </div>
+                                {active == 1?<Link href="/checkout/address">
+                                {/* <Button className="my-4" disabled={totalPrice == 0} fullWidth variant="contained" color="secondary">
+                                    Place Order
+                                </Button> */}
+                                <button type="button" disabled={totalPrice <= 0} className={`w-full my-4 px-4 py-1 rounded text-xl ${totalPrice <= 0 ? 'bg-gray-400':'bg-gray-800 hover:bg-gray-50 hover:text-gray-800 border-gray-800'} text-gray-50 cursor-pointer border-2`}>
+                                    Place Order
+                                </button>
+                                </Link>:<></>}
+
+                                
+                            </div>
+
                         </div>
 
 

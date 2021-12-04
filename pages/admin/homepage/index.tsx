@@ -57,15 +57,15 @@ export default function CustomizeHomepage(props) {
     },[])
     
     const fetchData = () => {
-        fetch(`https://api.treevesto.com:4000/banner`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}banner`).then(d=>d.json()).then(json=>{
             console.log(json.result)
             setBanner(json.result)
         }).catch(err=>console.log(err.message))
-        fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}section`).then(d=>d.json()).then(json=>{
             var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
             setSections(data)
         }).catch(err=>console.log(err.message))
-        fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}card`).then(d=>d.json()).then(json=>{
             setCards(json.result)
         }).catch(err=>console.log(err.message))
         
@@ -80,7 +80,7 @@ export default function CustomizeHomepage(props) {
           var formData = new FormData();
           formData.append('priority',value)
   
-          fetch(`https://api.treevesto.com:4000/section/`+id,{
+          fetch(`${process.env.NEXT_PUBLIC_apiUrl}section/`+id,{
               method:"PATCH",
               body:formData
           }).then(d=>d.json()).then(json=>{
@@ -97,7 +97,7 @@ export default function CustomizeHomepage(props) {
         var formData = new FormData();
         formData.append('hiddenTitle',e.target.checked)
 
-        fetch(`https://api.treevesto.com:4000/section/`+id,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}section/`+id,{
             method:"PATCH",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -112,7 +112,7 @@ export default function CustomizeHomepage(props) {
 
     const deleteBanner = (id) => {
         if(confirm('Are you sure to delete this banner')){
-            fetch(`https://api.treevesto.com:4000/banner/`+id,{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}banner/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -125,7 +125,7 @@ export default function CustomizeHomepage(props) {
     }
     const deleteSection = (id) => {
         if(confirm('Are you sure to delete this section')){
-            fetch(`https://api.treevesto.com:4000/section/`+id,{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}section/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -137,7 +137,7 @@ export default function CustomizeHomepage(props) {
     }
     const deleteCard = (id) => {
         if(confirm('Are you sure to delete this card')){
-            fetch(`https://api.treevesto.com:4000/card/`+id,{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}card/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 if(json.success == 1){
@@ -159,7 +159,7 @@ export default function CustomizeHomepage(props) {
         formData.append('Meta_Description',images.Meta_Description)
         formData.append('Meta_image_URL',images.Meta_image_URL)
 
-        fetch(`https://api.treevesto.com:4000/card`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}card`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -207,8 +207,8 @@ export default function CustomizeHomepage(props) {
                                 </div>
                             </CardActions>
                             <CardContent className="p-0 grid grid-cols-2">
-                                {element.image && <img key={key} src={"https://api.treevesto.com:4000/"+element.image} className="w-full border shadow-sm"  />}
-                                {element.mobileImage && <img key={key} src={"https://api.treevesto.com:4000/"+element.mobileImage} className="w-full border shadow-sm"  />}
+                                {element.image && <img key={key} src={process.env.NEXT_PUBLIC_apiUrl+element.image} className="w-full border shadow-sm"  />}
+                                {element.mobileImage && <img key={key} src={process.env.NEXT_PUBLIC_apiUrl+element.mobileImage} className="w-full border shadow-sm"  />}
                                 
                             </CardContent>
                         </Card>
@@ -243,7 +243,7 @@ export default function CustomizeHomepage(props) {
                                                 <div className="text-right">
                                                     <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
                                                 </div>
-                                                <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
+                                                <img src={process.env.NEXT_PUBLIC_apiUrl+e.image} width="100%" className="border shadow-sm" />
                                             </div> 
                                         })}
                                         
@@ -293,7 +293,7 @@ export default function CustomizeHomepage(props) {
                                                 <div className="text-right">
                                                     <span className="text-xl text-danger cursor-pointer" onClick={()=>deleteCard(e._id)}>&times;</span>
                                                 </div>
-                                                <img src={"https://api.treevesto.com:4000/"+e.image} width="100%" className="border shadow-sm" />
+                                                <img src={process.env.NEXT_PUBLIC_apiUrl+e.image} width="100%" className="border shadow-sm" />
                                             </div> 
                                         })}
                                     </div>

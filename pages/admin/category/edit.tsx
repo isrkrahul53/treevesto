@@ -41,7 +41,7 @@ export default function AdminCategoryEditPage(props){
   },[router.query])
   
   const initializeCategory = (x) => {
-    fetch(`https://api.treevesto.com:4000/category/id/`+x).then(d=>d.json()).then(json=>{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/id/`+x).then(d=>d.json()).then(json=>{
         console.log(json)
         var data = json.result[0];
         if(json.success == 1){
@@ -51,7 +51,7 @@ export default function AdminCategoryEditPage(props){
           setValue("Meta_Data",data.Meta_Data)
           setValue("Meta_Description",data.Meta_Description)
           setValue("Meta_image_URL",data.Meta_image_URL)
-          data.catImage && setImage({...image,dataURL:"https://api.treevesto.com:4000/"+data.catImage})
+          data.catImage && setImage({...image,dataURL:process.env.NEXT_PUBLIC_apiUrl+data.catImage})
         }
     }).catch(err=>console.log(err.message))
 
@@ -78,7 +78,7 @@ export default function AdminCategoryEditPage(props){
       }
     })
 
-    fetch(`https://api.treevesto.com:4000/category/`+router.query.id,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/`+router.query.id,{
       method:"PATCH",
       body:formData
     }).then(d=>d.json()).then(json=>{

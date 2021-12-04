@@ -20,7 +20,7 @@ export default function EditProfilePage() {
         });
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId).then(d=>d.json()).then(json=>{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}user/`+user.userId).then(d=>d.json()).then(json=>{
                 var data = json.result[0]
                 setUser(data)
                 Object.keys(data).forEach((element) => {
@@ -37,7 +37,7 @@ export default function EditProfilePage() {
         });
         formData.append("gender",gender)
         
-        fetch(`https://api.treevesto.com:4000/user/`+user._id,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}user/`+user._id,{
             method:"PATCH",
             body:formData,
             headers:{

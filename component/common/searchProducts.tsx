@@ -50,7 +50,7 @@ export default function SearchProducts(props) {
   useEffect(()=>{
     if(search.trim().length > 0){
       setLoading(true)
-      fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}product`).then(d=>d.json()).then(json=>{
         var pro = json.result.filter((e,k)=>e.productName.toLowerCase().search(search.toLocaleLowerCase()) > 0)
         setProducts(pro)
         setLoading(false)
@@ -89,7 +89,7 @@ export default function SearchProducts(props) {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-content-center my-2 gap-4">
             {products?.map((el,key)=>(
               <Link key={key} href={"/product/"+el._id}><div className="cursor-pointer">
-                <img src={"https://api.treevesto.com:4000/"+el.productImages[0]}  alt={el.productName} />
+                <img src={process.env.NEXT_PUBLIC_apiUrl+el.productImages[0]}  alt={el.productName} />
                 <div className="p-2">
                   <div>
                     <div className="text-sm text-secondary"> {el?.productType} </div>
