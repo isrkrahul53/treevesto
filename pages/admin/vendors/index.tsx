@@ -68,7 +68,7 @@ export default function VendorPage(props) {
   useEffect(()=>{
     isLoading = true;
     if(selectedVendor != ""){
-      fetch(`https://api.treevesto.com:4000/product/vendor/`+selectedVendor).then(d=>d.json()).then(json=>{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/vendor/`+selectedVendor).then(d=>d.json()).then(json=>{
         setProducts(json.result)
         isLoading = false;
       })
@@ -84,7 +84,7 @@ export default function VendorPage(props) {
     // console.log(!x)
     var formData = new FormData();
     formData.append("assured",val)
-    fetch(`https://api.treevesto.com:4000/vendor/email/`+x,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}vendor/email/`+x,{
       method:"PATCH",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -102,7 +102,7 @@ export default function VendorPage(props) {
       }
     })
 
-    fetch(`https://api.treevesto.com:4000/product/`+data.id,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/`+data.id,{
       method:"PATCH",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -114,7 +114,7 @@ export default function VendorPage(props) {
 
   const deleteVendor = (x) => {
     if(confirm('Are you sure to delete this vendor')){
-      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}vendor/`+x,{
         method:"DELETE"
       }).then(d=>d.json()).then(json=>{
         router.replace(router.asPath)
@@ -127,7 +127,7 @@ export default function VendorPage(props) {
     if(confirm('Are you sure to approve it !')){
       const formData = new FormData();
       formData.append(y,"2")
-      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}vendor/`+x,{
         method:"PATCH",
         body:formData
       }).then(d=>d.json()).then(json=>{
@@ -141,7 +141,7 @@ export default function VendorPage(props) {
     if(confirm('Are you sure to disapprove it !')){
       const formData = new FormData();
       formData.append(y,"-1")
-      fetch(`https://api.treevesto.com:4000/vendor/`+x,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}vendor/`+x,{
         method:"PATCH",
         body:formData
       }).then(d=>d.json()).then(json=>{
@@ -239,8 +239,8 @@ export default function VendorPage(props) {
                   <TableCell> {e.name} </TableCell>
                   <TableCell> {e.store_name || '-'} </TableCell>
                   <TableCell className="flex"> 
-                    <img src={"https://api.treevesto.com:4000/"+e.signature_docs} width="20px" className="rounded shadow-sm border" alt=""/>
-                    <a href={"https://api.treevesto.com:4000/"+e.signature_docs} target="_blank">
+                    <img src={process.env.NEXT_PUBLIC_apiUrl+e.signature_docs} width="20px" className="rounded shadow-sm border" alt=""/>
+                    <a href={process.env.NEXT_PUBLIC_apiUrl+e.signature_docs} target="_blank">
                       <VisibilityIcon className="mx-2 cursor-pointer" />
                     </a>
                   </TableCell>
@@ -281,7 +281,7 @@ export default function VendorPage(props) {
               <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
                 {products.map((el,key)=>(
                   <div key={key} className="bg-white border shadow-sm relative">
-                    <img src={"https://api.treevesto.com:4000/"+el.productImages[0]} alt=""/>
+                    <img src={process.env.NEXT_PUBLIC_apiUrl+el.productImages[0]} alt=""/>
                     <div className="p-1">
                       <div>
                         <span className="text-sm"> {el.productName.lengTableCell>16?el.productName.substr(0,16):el.productName} </span>
@@ -335,7 +335,7 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const vendors = await axios.get(`https://api.treevesto.com:4000/vendor`,{httpsAgent:agent})
+  const vendors = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}vendor`,{httpsAgent:agent})
  
 
   return {

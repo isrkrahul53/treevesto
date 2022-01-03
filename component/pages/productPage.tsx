@@ -29,7 +29,7 @@ export default function ProductPage(props) {
     const wishlistPromise = useSelector((state:any)=>state.wishlist)
     
     useEffect(()=>{
-        fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}product`).then(d=>d.json()).then(json=>{
             var product = json.result.filter(e=>e.productCode === props.data.productCode) 
             setProducts(product)
             setSizeList(product.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
@@ -85,23 +85,20 @@ export default function ProductPage(props) {
         </h4>
         <h5 className="text-success">inclusive of all taxes</h5>
 
-        <h4 className="h5 mt-4">Select Colour</h4>
+        <h4 className="h5 mt-4">Colour <span className="text-secondary"> ( {colour} ) </span> </h4>
         <div className="flex flex-wrap items-center">
             {colourList.map((e,k)=>(
-                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"p-1 cursor-pointer hover:shadow m-1 border-dark rounded-circle border-2":"p-1 cursor-pointer hover:shadow m-1 rounded-circle border-2"}>
-                    <div className="p-2 rounded-circle" style={{backgroundColor:e}} title={e}></div>
+                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"cursor-pointer hover:shadow m-1 border-dark border-2":"cursor-pointer hover:shadow m-1 border-2"}>
+                    <div className="p-3" style={{backgroundColor:e}} title={e}></div>
                 </div>
             ))}
         </div>
-        <h4 className="h5 mt-4">Select Sizes</h4>
+        <h4 className="h5 mt-4">Sizes <span className="text-secondary">( {size} )</span> </h4>
         <div className="flex flex-wrap items-center">
             {sizeList.map((e,k)=>(
-                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded-circle border-2 m-1":"cursor-pointer hover:shadow rounded-circle border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
+                <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded border-2 m-1":"cursor-pointer hover:shadow rounded border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
             ))}
         </div>
-        <p className="my-3">
-            {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
-        </p>
 
         {props.data?.stock > 0 && <>
         
@@ -118,7 +115,7 @@ export default function ProductPage(props) {
                         </Button>
                     </div>
                 </>:<>
-                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                         <LocalMallOutlinedIcon /> Add Bag
                     </button>
                 </>}
@@ -128,20 +125,20 @@ export default function ProductPage(props) {
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </div></Link>
                 </>:<>
-                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full p-2 mr-1 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full p-2 mr-1 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </button>
                 </>}
                 {/* <div className="p-2 border-2 border-dark mr-1">
                     <a target="_blank" href={"whatsapp://send?text=https://admiring-bardeen-fc41ec.netlify.app"+router.asPath}>
-                        <WhatsAppIcon />
+                    <WhatsAppIcon />
                     </a>
-    
+                    
                 </div> */}
             </div> 
 
             {/* Desktop */}
-            <div className="md:flex items-center justify-around w-3/5 hidden my-2">
+            <div className="md:block items-center justify-around w-full hidden my-2">
                 {cart?<>
                     {/* <Link href="/checkout/cart"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
                         <LocalMallOutlinedIcon /> Go to Bag
@@ -156,37 +153,40 @@ export default function ProductPage(props) {
                         </Button>
                     </div>
                 </>:<>
-                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-800 text-yellow-50 hover:bg-yellow-50 hover:text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full my-1 px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
                         <LocalMallOutlinedIcon /> Add To Bag
                     </button>
                 </>}
                 <div className="px-1"></div>
                 {wishlist ? <>
-                    <Link href="/wishlist"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
+                    <Link href="/wishlist"><div className="w-full my-1 px-4 py-2 cursor-pointer text-center border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
                         <FavoriteBorderOutlinedIcon /> Go to Wishlist
                     </div></Link>
                 </>:<>
-                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full px-4 py-2 cursor-pointer border-2 border-yellow-800 bg-yellow-50 text-yellow-800">
+                    <button type="button" onClick={()=>dispatchMiddleware("addToWishlist",props.data)} className="w-full my-1 px-4 py-2 cursor-pointer border-2 border-gray-800 bg-gray-50 text-gray-800">
                         <FavoriteBorderOutlinedIcon /> Wishlist
                     </button>
                 </>}
             </div> 
         
         </>}
+        <p className="my-3">
+            {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
+        </p>
 
         {/* <hr/>
         <div className="my-3">
-            <h4>Rs. {props.data?.regularPrice}</h4>
+        <h4>Rs. {props.data?.regularPrice}</h4>
         </div>
         <hr/>
         
         <div className="my-3">
-            <h4 className="h5">DELIVERY OPTIONS </h4>
+        <h4 className="h5">DELIVERY OPTIONS </h4>
         </div>
-
+        
         
         <div className="my-3">
-            <h4 className="h5">PRODUCT DETAILS </h4>
+        <h4 className="h5">PRODUCT DETAILS </h4>
         </div> */}
 
 

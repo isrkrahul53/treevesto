@@ -63,10 +63,10 @@ export default function AddImagetoSectionModal(props){
     })
 
     useEffect(()=>{
-        fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}product`).then(d=>d.json()).then(json=>{
             setProducts(json.result)
         })
-        fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/all`).then(d=>d.json()).then(json=>{
             setCategory(json.result.filter(e=>e.parentCatId != "0"))
         })
     },[])

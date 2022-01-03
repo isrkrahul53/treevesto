@@ -77,7 +77,7 @@ export default function Product(props){
 
   const filterProduct = async (colour,size,sort,from,to) => {
     var arr = []
-    const res = await fetch(`https://api.treevesto.com:4000/product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category);
     const json = await res.json();
     if(json.success === 1){ 
       var temp = await json.result;
@@ -237,7 +237,7 @@ export default function Product(props){
                                 <Skeleton className="w-full" variant="text" height={20} />
                                 <Skeleton className="w-2/5" variant="text" height={20} />
                                 </div>}>
-                                  <SingleProduct data={el} dispatch={dispatch} />
+                                  <SingleProduct data={el} hideDetails={true} dispatch={dispatch} />
                               </Suspense>
 
                             </div> 
@@ -272,14 +272,14 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const res = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${context.params.category}`,{httpsAgent:agent})
-  const category = await axios.get(`https://api.treevesto.com:4000/category/id/${context.params.category}`,{httpsAgent:agent})
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/cat/subcat/${context.params.category}`,{httpsAgent:agent})
+  const category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/id/${context.params.category}`,{httpsAgent:agent})
   
   var data = []
   res.data.result.forEach(element => {
     var images = [];
     element.productImages.forEach(e => {
-      images.push({src:"https://api.treevesto.com:4000/"+e,href:"/product/"+element._id})
+      images.push({src:process.env.NEXT_PUBLIC_apiUrl+e,href:"/product/"+element._id})
     });
     data.push({...element,productImages:images})
   }); 

@@ -215,10 +215,10 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const vendors = await axios.get(`https://api.treevesto.com:4000/vendor`,{httpsAgent:agent})
-  const sales = await axios.get(`https://api.treevesto.com:4000/orderedproduct`,{httpsAgent:agent})
-  const products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
-  const users = await axios.get(`https://api.treevesto.com:4000/user`,{httpsAgent:agent})
+  const vendors = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}vendor`,{httpsAgent:agent})
+  const sales = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}orderedproduct`,{httpsAgent:agent})
+  const products = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product`,{httpsAgent:agent})
+  const users = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}user`,{httpsAgent:agent})
  
 
   return {

@@ -53,28 +53,26 @@ export default function AccountPage(props) {
         {user && <>
             <Layout error={error} success={success} close={closeAlert}>
                 <div className="w-full md:w-75 mx-auto my-8 container">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-lg font-medium">Account</h3>
-                            <h3 className="text-sm">{user?.name || user?.email}</h3>
-                        </div>
-                        <div className="md:hidden">
-                            
-                            <MoreVertIcon onClick={handleClick} />
-                            <Menu
-                                id="simple-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}><Link href="/account/overview">Overview</Link></MenuItem> 
-                                <MenuItem onClick={handleClose}><Link href="/account/orders">Orders & Returns</Link></MenuItem> 
-                                <MenuItem onClick={handleClose}><Link href="/account/profile">Profile</Link></MenuItem> 
-                                <MenuItem onClick={handleClose}><Link href="/account/addresses">Addresses</Link></MenuItem> 
-                            </Menu>
-                        </div>
+                    <div className="md:hidden float-right">
+                        
+                        <MoreVertIcon onClick={handleClick} />
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}><Link href="/account/overview">Overview</Link></MenuItem> 
+                            <MenuItem onClick={handleClose}><Link href="/account/orders">Orders & Returns</Link></MenuItem> 
+                            <MenuItem onClick={handleClose}><Link href="/account/profile">Profile</Link></MenuItem> 
+                            <MenuItem onClick={handleClose}><Link href="/account/addresses">Addresses</Link></MenuItem> 
+                        </Menu>
                     </div>
+                    <div className="text-center my-2">
+                        <h1 className="display-6">Account</h1>
+                        <p className="text-secondary">{user?.name || user?.email}</p>
+                    </div> 
                     <hr className="my-2" />
                     <div className="flex-row md:flex">
                         <div className="w-full md:w-1/5 md:border-r-2 border-gray-300 hidden md:block">

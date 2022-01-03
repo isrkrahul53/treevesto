@@ -34,7 +34,7 @@ export default function ReactCarousel(props){
     // containerClass={props.class}
     >
         {props.data?.map((e,k)=>(
-          <img key={k} src={"https://api.treevesto.com:4000/"+e} alt="" className={"responsiveLatestProducts"} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
+          <img key={k} src={process.env.NEXT_PUBLIC_apiUrl+e} alt="" className={"responsiveLatestProducts"} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
         ))}
   </Carousel>;
 }

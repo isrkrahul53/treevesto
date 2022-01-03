@@ -25,7 +25,7 @@ const responsive = {
   }
 };
 export default function ReactBannerCarousel(props){
-    const apiUrl = "https://api.treevesto.com:4000/"; 
+    const apiUrl = process.env.NEXT_PUBLIC_apiUrl; 
     const [autoplay,setAutoplay] = React.useState(false)
     return <>
       {props.mobile ? <>
@@ -40,7 +40,7 @@ export default function ReactBannerCarousel(props){
         >
             {props.data?.length > 0 && props.data?.filter(e=>e.mobileImage).map((e,k)=>{
                 return <Link href={e.link} key={k}>
-                  <img src={"https://api.treevesto.com:4000/"+e.mobileImage} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
+                  <img src={process.env.NEXT_PUBLIC_apiUrl+e.mobileImage} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
                 </Link>
             })}
         </Carousel>
@@ -57,7 +57,7 @@ export default function ReactBannerCarousel(props){
           >
             {props.data?.length > 0 && props.data?.filter(e=>e.image).map((e,k)=>{
                 return <Link href={e.link} key={k}>
-                  <img src={"https://api.treevesto.com:4000/"+e.image} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
+                  <img src={process.env.NEXT_PUBLIC_apiUrl+e.image} alt="" className={props.customHeight ? "h-56 md:h-72 lg:80":""} style={{width:"100%"}} onMouseEnter={e=>setAutoplay(true)} onMouseLeave={e=>setAutoplay(false)} />
                 </Link>
             })}
         </Carousel>

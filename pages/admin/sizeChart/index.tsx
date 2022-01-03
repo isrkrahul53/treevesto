@@ -63,7 +63,7 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  const sizeChart = await axios.get(`https://api.treevesto.com:4000/sizechart`,{httpsAgent:agent})
+  const sizeChart = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}sizechart`,{httpsAgent:agent})
   
   return {
     props: { 

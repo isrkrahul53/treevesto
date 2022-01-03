@@ -21,7 +21,7 @@ export default function EditSection() {
         });
         var id = router.query.id; 
         if(id){
-            fetch(`https://api.treevesto.com:4000/section/`+id).then(d=>d.json()).then(json=>{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}section/`+id).then(d=>d.json()).then(json=>{
                 var d = json.result;
                 setValues(d)
                 setLoading(false)
@@ -40,7 +40,7 @@ export default function EditSection() {
         formData.append('mobileView',data.mobileView)
         formData.append('position',data.position)
 
-        fetch(`https://api.treevesto.com:4000/section/${router.query.id}`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}section/${router.query.id}`,{
                 method:"PATCH",
                 body:formData
             }).then(d=>d.json()).then(json=>{

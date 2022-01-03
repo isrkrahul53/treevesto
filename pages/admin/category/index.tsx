@@ -69,7 +69,7 @@ export default function AdminCategoryPage(props){
     formData.append("parentSubCatId",data.parentSubCatId)
     formData.append("catName",data.catName)
     formData.append("desc",data.desc)
-    fetch(`https://api.treevesto.com:4000/category`,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}category`,{
       method:"POST",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -82,7 +82,7 @@ export default function AdminCategoryPage(props){
     // console.log(x,val)
     var formData = new FormData();
     formData.append("assured",val)
-    fetch(`https://api.treevesto.com:4000/category/`+x,{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/`+x,{
       method:"PATCH",
       body:formData
     }).then(d=>d.json()).then(json=>{
@@ -93,7 +93,7 @@ export default function AdminCategoryPage(props){
   
   const removeCategory = (id) => {
     if(confirm('Are you sure to remove it !')){
-      fetch(`https://api.treevesto.com:4000/category/`+id,{
+      fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/`+id,{
         method:"DELETE",
       }).then(d=>d.json()).then(json=>{
         router.replace(router.asPath)
@@ -226,8 +226,8 @@ export const getServerSideProps = async (context) => {
   const agent = new https.Agent({  
     rejectUnauthorized: false
   });
-  var categories = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
-  const category = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
+  var categories = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/all`,{httpsAgent:agent})
+  const category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category`,{httpsAgent:agent})
  
   categories = categories.data.result.filter(e=>e.parentCatId !== "0")
 

@@ -65,21 +65,21 @@ export default function Home(props) {
     const agent = new https.Agent({  
       rejectUnauthorized: false
     });
-    fetch(`https://api.treevesto.com:4000/section`).then(d=>d.json()).then(json=>{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}section`).then(d=>d.json()).then(json=>{
       var data = json.result.sort((a,b)=>Number(a.priority) - Number(b.priority))
       setSections(data)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
-    fetch(`https://api.treevesto.com:4000/card`).then(d=>d.json()).then(json=>{
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}card`).then(d=>d.json()).then(json=>{
         setCards(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
      
-    fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
+    fetch(`${process.env.NEXT_PUBLIC_apiUrl}category/all`).then(d=>d.json()).then(json=>{ 
         setCategories(json.result)
     }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
     
-    var banner = await axios.get(`https://api.treevesto.com:4000/banner`,{httpsAgent:agent})
-    var products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
-    var categories = await axios.get(`https://api.treevesto.com:4000/category`,{httpsAgent:agent})
+    var banner = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}banner`,{httpsAgent:agent})
+    var products = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product`,{httpsAgent:agent})
+    var categories = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category`,{httpsAgent:agent})
 
     var bannerData = await banner.data.result;
     var productData = await products.data.result;
@@ -121,7 +121,7 @@ export default function Home(props) {
                   {values?.categories.map((e,k)=>(
                     <div className="px-2" key={k}>
                       <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
-                        <img src={"https://api.treevesto.com:4000/"+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
+                        <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
                         <div className="text-sm p-1">  {e.catName} </div>
                       </div></Link>
                     </div>
@@ -140,7 +140,7 @@ export default function Home(props) {
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
-          <div className="container-fluid my-2"> 
+          <div className="px-5 my-2"> 
             
             {/* =========================================== */}
             {/* Sections Top */}
@@ -166,7 +166,7 @@ export default function Home(props) {
                           <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                           <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
                             {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                              return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
+                              return <Link href={e.link} key={k}><div className="px-0"><div style={{width:"220px"}}><img src={process.env.NEXT_PUBLIC_apiUrl+e.image || ""} className="border cursor-pointer" /></div></div></Link> 
                             })}
                           </div>
                         </div>
@@ -174,7 +174,7 @@ export default function Home(props) {
                           <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                           <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-2`}>
                             {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                              return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
+                              return <Link href={e.link} key={k}><div className="px-0"><div><img src={process.env.NEXT_PUBLIC_apiUrl+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                             })}
                           </div>
                         </div>
@@ -182,7 +182,7 @@ export default function Home(props) {
                         <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.title}  </h3>
                         <div className={`grid grid-cols-${el.mobileGrid} md:grid-cols-5 gap-1`}>
                           {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{ 
-                            return <Link href={e.link} key={k}><div className="px-0"><div><img src={"https://api.treevesto.com:4000/"+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
+                            return <Link href={e.link} key={k}><div className="px-0"><div><img src={process.env.NEXT_PUBLIC_apiUrl+e.image || ""} className="w-full border cursor-pointer" /></div></div></Link> 
                           })}
                         </div>
                       </div>}
@@ -194,7 +194,7 @@ export default function Home(props) {
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
                           return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-1"}> 
-                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
+                                <Link href={e.link}><img src={process.env.NEXT_PUBLIC_apiUrl+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
                     </div>
@@ -224,7 +224,7 @@ export default function Home(props) {
               </div>}>
               <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
                     <div key={k} className="p-1">
-                        <SingleProduct key={k} data={e} hideDetails={false} dispatch={dispatch} />
+                        <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
                     </div>
                 ))} />
             </Suspense>
@@ -251,7 +251,7 @@ export default function Home(props) {
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
                           return <div key={k} className={"col-"+(mobile > 0 ? (12/mobile):(k === 0 || k === (cards?.filter(e=>el._id === e.sectionId)?.length - 1) ? 12 : 6))+" col-md-"+(12/el.grid)+" p-1"}> 
-                                <Link href={e.link}><img src={"https://api.treevesto.com:4000/"+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
+                                <Link href={e.link}><img src={process.env.NEXT_PUBLIC_apiUrl+e.image || ""} alt={e.Meta_Keywords || ""}  className="w-full border cursor-pointer" /></Link>
                             </div> 
                         })} 
                     </div>

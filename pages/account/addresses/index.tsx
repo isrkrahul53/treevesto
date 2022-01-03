@@ -20,13 +20,13 @@ export default function Addresses(){
     const fetchAddress = () => {
         var user = JSON.parse(localStorage.getItem('user'))
         if(user){
-            fetch(`https://api.treevesto.com:4000/user/`+user.userId,{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}user/`+user.userId,{
                 method:"GET",
                 headers:{
                     "token":user.token
                 }
             }).then(d=>d.json()).then(json=>{
-                fetch(`https://api.treevesto.com:4000/address/user/`+json.result[0]._id,{
+                fetch(`${process.env.NEXT_PUBLIC_apiUrl}address/user/`+json.result[0]._id,{
                     method:"GET",
                     headers:{
                         "token":user.token
@@ -40,7 +40,7 @@ export default function Addresses(){
 
     const removeAddress = (id) => {
         var user = JSON.parse(localStorage.getItem('user'))
-        fetch(`https://api.treevesto.com:4000/address/`+id,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}address/`+id,{
             method:"DELETE",
             headers:{
                 "token":user.token

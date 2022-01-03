@@ -28,7 +28,7 @@ export default function CreateSizeChartAdminPage(){
         formData.append("image",x.image[0])
         formData.append("name",x.name)
         formData.append("data",JSON.stringify(data))
-        fetch(`https://api.treevesto.com:4000/sizechart/`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}sizechart/`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{

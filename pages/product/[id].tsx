@@ -34,7 +34,7 @@ function RatingUI(props){
     </div>
 }
                
-const apiUrl = "https://api.treevesto.com:4000/";
+const apiUrl = process.env.NEXT_PUBLIC_apiUrl;
 export default function Product(props) { 
 
     const dispatch = useDispatch();
@@ -60,14 +60,14 @@ export default function Product(props) {
 
     useEffect(()=>{
         setSelectedImage(apiUrl+props.product?.productImages[0])
-        fetch(`https://api.treevesto.com:4000/vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}vendor/`+props.product.vendorId).then(d=>d.json()).then(json=>{
             setVendordata(json.result[0])
         }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
         
-        fetch(`https://api.treevesto.com:4000/specificationTable`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}specificationTable`).then(d=>d.json()).then(json=>{
             setSpecsArr(json.result.filter(e=>e.catId === props.product.catId)[0].field) 
         })
-        fetch(`https://api.treevesto.com:4000/product/`).then(d=>d.json()).then(json=>{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/`).then(d=>d.json()).then(json=>{
             setSize(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
             setColour(json.result.filter(e=>e.productCode === props.product?.productCode).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
         }).catch(err=>dispatch({type:"setAlert",payloads:err.message}))
@@ -105,7 +105,7 @@ export default function Product(props) {
                 <div className="md:hidden">
                     <ReactCarouselZoom data={props.product?.productImages} arrows={false} showDots={true} /> 
                 </div>
-                <div className="container mb-20">
+                <div className="container my-4">
                     <nav className="breadcrumb hidden md:block" aria-label="breadcrumb">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item"><Link href="/">Home</Link></li> 
@@ -133,42 +133,42 @@ export default function Product(props) {
                                     </Suspense>
                                 </div>
                             </div>
-                            <div className="col-md-3 py-2">
+                            <div className="col-md-5 py-2">
                                 {/* <img src={selectedImage} className="w-full md:w-75 hover:zoom-25" /> */}
                                 <div className="hidden md:block">
                                     
-                                <Suspense fallback={<div>
-                                        <Skeleton className="w-full" height={240} />
-                                        <Skeleton className="w-full" height={240} />
-                                        <Skeleton className="w-full" height={240} />
-                                    </div>}>
+                                    <Suspense fallback={<div>
+                                            <Skeleton className="w-full" height={240} />
+                                            <Skeleton className="w-full" height={240} />
+                                            <Skeleton className="w-full" height={240} />
+                                        </div>}>
 
-                                    <TransformWrapper
-                                        defaultScale={1}
-                                        defaultPositionX={200}
-                                        defaultPositionY={100}
-                                    >
-                                        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                        <React.Fragment>
-                                            <div className="tools text-right">
-                                                {/* <button className="btn m-1 btn-sm btn-primary" onClick={zoomIn}>+</button>
-                                                <button className="btn m-1 btn-sm btn-primary" onClick={zoomOut}>-</button>
-                                                <button className="btn m-1 btn-sm btn-danger" onClick={resetTransform}>x</button> */}
-                                            </div>
-                                            <TransformComponent>
-                                            <img src={selectedImage || "image.jpg"} width="100%" alt="test" />
-                                            </TransformComponent>
-                                        </React.Fragment>
-                                        )}
-                                    </TransformWrapper>
+                                        <TransformWrapper
+                                            defaultScale={1}
+                                            defaultPositionX={200}
+                                            defaultPositionY={100}
+                                        >
+                                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                            <React.Fragment>
+                                                <div className="tools text-right">
+                                                    {/* <button className="btn m-1 btn-sm btn-primary" onClick={zoomIn}>+</button>
+                                                    <button className="btn m-1 btn-sm btn-primary" onClick={zoomOut}>-</button>
+                                                    <button className="btn m-1 btn-sm btn-danger" onClick={resetTransform}>x</button> */}
+                                                </div>
+                                                <TransformComponent>
+                                                <img src={selectedImage || "image.jpg"} width="1200px" alt="test" />
+                                                </TransformComponent>
+                                            </React.Fragment>
+                                            )}
+                                        </TransformWrapper>
 
-                                </Suspense>
+                                    </Suspense>
 
                                 </div>
     
 
                             </div>
-                            <div className="col-md-8">
+                            <div className="col-md-5">
                                 
                                 <Suspense fallback={<div className="text-center py-10">
                                         <div className="spinner-border text-primary"></div>
@@ -180,115 +180,123 @@ export default function Product(props) {
                         </div>
                     </div>:<></>}
         
-                    <div className="my-2">
-                        <ul className="nav nav-tabs" id="myTab" role="tablist">
-                            {/* <li className="nav-item" role="presentation">
-                            <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
-                            </li> */}
-                            <li className="nav-item" role="presentation">
-                            <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
-                            </li>
-                            {/* <li className="nav-item" role="presentation">
-                            <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Specification table-tab" data-bs-toggle="tab" data-bs-target="#Specification table" role="tab" aria-controls="Specification table" aria-selected="false">Specification table</span>
-                            </li> */}
-                        </ul>
-                        <div className="tab-content" id="myTabContent">
-                            <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
-                                
-                            </div> 
-                            <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
-                                <p>{props.product?.productDesc}</p>
-                                <div className="container-fluid">
-                                    <hr className="my-4"/>
-                                    <div className="text-secondary h5">Specification</div>
+                    <div className="container">
+                        {/* <div className="col-md-1"></div> */}
+                        <div className="col-md-11 offset-md-1">
+                            <div className="my-2">
+                                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                    {/* <li className="nav-item" role="presentation">
+                                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
+                                    </li> */}
+                                    <li className="nav-item" role="presentation">
+                                    <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
+                                    </li>
+                                    {/* <li className="nav-item" role="presentation">
+                                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Specification table-tab" data-bs-toggle="tab" data-bs-target="#Specification table" role="tab" aria-controls="Specification table" aria-selected="false">Specification table</span>
+                                    </li> */}
+                                </ul>
+                                <div className="tab-content" id="myTabContent">
+                                    <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
+                                        
+                                    </div> 
+                                    <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
+                                        <p>{props.product?.productDesc}</p>
+                                        <div className="container-fluid">
+                                            <hr className="my-4"/>
+                                            <div className="text-secondary h5">Specification</div>
 
-                                    {specsArr.filter(e=>props.product[e]).map((e,k)=>(
-                                        <div className="row" key={k}>
-                                            <div className="col-6 col-md-3"> {e.replace("_"," ")} </div>
-                                            <div className="col-6 col-md-9"> {props.product[e]} </div>
+                                            {specsArr.filter(e=>props.product[e]).map((e,k)=>(
+                                                <div className="row" key={k}>
+                                                    <div className="col-6 col-md-3"> {e.replace("_"," ")} </div>
+                                                    <div className="col-6 col-md-9"> {props.product[e]} </div>
+                                                </div>
+                                                
+                                            ))}
+
+                                        </div>
+                                    </div> 
+                                    <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
+                                        
+                                    </div> 
+                                </div>
+                            </div> 
+
+                            <table className="table table-hover border">
+                                <thead> 
+                                </thead>
+                                <tbody>
+                                    {props.product.sizeChart && JSON.parse(props.product.sizeChart?.data)?.map((el,key)=>(<tr key={key}> 
+                                        {el?.map((e,k)=>(
+                                            <td> {e} </td>
+                                        ))} 
+                                    </tr>))}
+                                </tbody>
+                            </table> 
+
+                            <div className="my-2">
+                                
+                                <Suspense fallback={<Skeleton className="w-full" height={180} />}>
+                                    <div className="bg-white p-3 border">
+                                        <div className="flex item-center">
+                                            <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
+                                            <div className="ml-auto">
+                                                <MaterialDialog button="Rate Product" title="Write a Review" id={props.product?._id} />
+                                            </div>
                                         </div>
                                         
+                                        <div className="my-2">
+                                            <div className="flex-row md:flex item-center">
+                                                <div className="mr-3">
+                                                    <div className="text-4xl">{rating} <StarRateIcon /></div>
+                                                    <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
+                                                </div>
+                                                <div className="mr-3">
+                                                    <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                    <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                    <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                    <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
+                                                    <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Suspense>
+
+
+                                <Suspense fallback={<Skeleton className="w-full" height={180} />}>
+                                    {props.review.map((e,k)=>(
+                                        <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
+                                            <div className="flex items-center">
+                                                <div className={
+                                                    e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
+                                                }>
+                                                    {e.rating}<StarRateIcon />
+                                                </div>
+                                                <h3 className="text-lg md:text-2xl">{e.title}</h3>
+                                            </div>
+                                            <div className="my-2">{e.desc}</div>
+                                            {/* <div className="text-right">
+                                                <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> {e.likes}
+                                                <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />{e.dislikes}
+                                            </div> */}
+                                        </div>
                                     ))}
+                                </Suspense>
 
-                                </div>
-                            </div> 
-                            <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
-                                
-                            </div> 
-                        </div>
-                    </div> 
-                    
-                    <table className="table table-hover border">
-                        <thead> 
-                        </thead>
-                        <tbody>
-                            {props.product.sizeChart && JSON.parse(props.product.sizeChart?.data)?.map((el,key)=>(<tr key={key}> 
-                                {el?.map((e,k)=>(
-                                    <td> {e} </td>
-                                ))} 
-                            </tr>))}
-                        </tbody>
-                    </table> 
-
-                    <div className="my-2">
-                        
-                        <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                            <div className="bg-white p-3 border">
-                                <div className="flex item-center">
-                                    <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
-                                    <div className="ml-auto">
-                                        <MaterialDialog button="Rate Product" title="Write a Review" id={props.product?._id} />
-                                    </div>
-                                </div>
-                                
-                                <div className="my-2">
-                                    <div className="flex-row md:flex item-center">
-                                        <div className="mr-3">
-                                            <div className="text-4xl">{rating} <StarRateIcon /></div>
-                                            <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
-                                        </div>
-                                        <div className="mr-3">
-                                            <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                            <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                            <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                            <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
-                                            <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                        </Suspense>
 
-
-                        <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                            {props.review.map((e,k)=>(
-                                <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
-                                    <div className="flex items-center">
-                                        <div className={
-                                            e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
-                                        }>
-                                            {e.rating}<StarRateIcon />
-                                        </div>
-                                        <h3 className="text-lg md:text-2xl">{e.title}</h3>
-                                    </div>
-                                    <div className="my-2">{e.desc}</div>
-                                    {/* <div className="text-right">
-                                        <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> {e.likes}
-                                        <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />{e.dislikes}
-                                    </div> */}
-                                </div>
-                            ))}
-                        </Suspense>
-
+                        </div>
                     </div>
+                    
 
-                    <h3 className="text-lg md:text-2xl mt-2 px-2">Related Products</h3>
+
+                    <h3 className="text-lg md:text-3xl text-center mt-5 mb-3 px-2">Related Products</h3>
                     {/* <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} /> */}
 
                     <Suspense fallback={<Skeleton className="w-full" height={180} />}>
                         <ReactMultiCarousel showDots={true} arrows={true} content={props.similarProduct.map((e,k)=>(
                         <div key={k} className="p-1">
-                            <SingleProduct data={e} hideDetails={false} dispatch={dispatch} />
+                            <SingleProduct data={e} hideDetails={true} dispatch={dispatch} />
                         </div>
                         ))} />
                     </Suspense>
@@ -313,12 +321,12 @@ export const getServerSideProps = async (context) => {
     const agent = new https.Agent({  
         rejectUnauthorized: false
     });
-    const res = await axios.get(`https://api.treevesto.com:4000/product/${context.params.id}`,{httpsAgent:agent})
-    const review = await axios.get(`https://api.treevesto.com:4000/review/product/${context.params.id}`,{httpsAgent:agent})
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/${context.params.id}`,{httpsAgent:agent})
+    const review = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}review/product/${context.params.id}`,{httpsAgent:agent})
     const productData = await res.data.result;
 
-    const category = await axios.get(`https://api.treevesto.com:4000/category/id/${productData[0].subcatId}`,{httpsAgent:agent})
-    const similarProduct = await axios.get(`https://api.treevesto.com:4000/product/cat/subcat/${productData[0].subcatId}`,{httpsAgent:agent})    
+    const category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/id/${productData[0].subcatId}`,{httpsAgent:agent})
+    const similarProduct = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/cat/subcat/${productData[0].subcatId}`,{httpsAgent:agent})    
  
     var temp = await similarProduct.data.result;
     var arr = []

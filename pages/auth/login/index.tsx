@@ -41,7 +41,7 @@ export default function LoginPage(){
         var formData = new FormData() 
         formData.append('phone','+91'+data.phone)
         formData.append('password',data.password) 
-        fetch(`https://api.treevesto.com:4000/user/login`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}user/login`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{

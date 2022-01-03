@@ -91,7 +91,7 @@ export default function RegisterPage(){
         formData.append('phone',values.phone)
         formData.append('password',values.password)
         formData.append('cpassword',values.cpassword)
-        fetch(`https://api.treevesto.com:4000/user/register`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}user/register`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{ 

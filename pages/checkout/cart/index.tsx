@@ -55,22 +55,7 @@ export default function CartPage({coupon}) {
                     </ol>
                 </nav>
 
-                
-
-                {/* <div className="my-4">
-                    <div className="flex items-center">
-                        <SettingSVG />
-                        <div className="text-xl px-2">Available Offers</div>        
-                    </div>
-                    <span className="text-sm text-secondary">10% Instant Discount with Standard Chartered Credit and Debit Cards on a min spend of Rs 4000. TCA</span>
-                </div>
-                
-                <div className="flex items-center my-4">
-                    <img src="/assets/images/checkout/free-delivery-truck-icon-2049-thumb.png" width="30px" />
-                    <div className="text-lg mx-2">Yah ! No Convenience fee on this order.</div>
-                </div> */}
-
-
+                 
                 <Suspense fallback={<div className="text-center py-10">
                         <div className="spinner-border text-primary"></div>
                     </div>}>
@@ -102,7 +87,7 @@ export const getServerSideProps = async () => {
     const agent = new https.Agent({  
         rejectUnauthorized: false
     });
-    const res = await axios.get(`https://api.treevesto.com:4000/coupon`,{httpsAgent:agent})
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}coupon`,{httpsAgent:agent})
     
 
     return {

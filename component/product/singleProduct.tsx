@@ -59,19 +59,19 @@ export default function SingleProduct(props){
     {/* <Link href={"/product/"+productSelected._id}>
     </Link> */}
 
-    <div className="p-2">
+    <div className="p-0 pb-4">
         <Link href={"/product/"+productSelected._id}><div>
             <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
-            <div className="text-sm text-secondary"> {productSelected?.productType} </div>
-            <div className="text-sm font-normal hidden md:block">
-                {productSelected?.productName?.length > 28 ? productSelected?.productName.substring(0,28):productSelected?.productName}
-                {productSelected?.productName?.length > 28 ? " ...":""}
+            {/* <div className="text-sm text-secondary"> {productSelected?.productType} </div> */}
+            <div className="text-lg font-light text-center hidden md:block">
+                {productSelected?.productName?.length > 20 ? productSelected?.productName.substring(0,20):productSelected?.productName}
+                {productSelected?.productName?.length > 20 ? " ...":""}
             </div>
             <div className="text-sm font-normal md:hidden">
                 {productSelected?.productName?.length > 15 ? productSelected?.productName.substring(0,15):productSelected?.productName}
                 {productSelected?.productName?.length > 15 ? " ...":""}
             </div>
-            <div className="text-lg font-normal"> <s className="text-sm text-secondary">Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice}</div>
+            <div className="text-lg text-center font-normal"> <s className="text-sm text-secondary">Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice}</div>
         </div></Link>
       {!props.hideDetails && <>
         <div className="flex items-center">

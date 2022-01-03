@@ -65,7 +65,7 @@ export default function HomepageBanner(props) {
         formData.append('Meta_Description',data.Meta_Description)
         formData.append('Meta_image_URL',data.Meta_image_URL)
 
-        fetch(`https://api.treevesto.com:4000/banner`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}banner`,{
             method:"POST",
             body:formData
         }).then(d=>d.json()).then(json=>{
@@ -153,8 +153,8 @@ export const getServerSideProps = async (context) => {
     const agent = new https.Agent({  
       rejectUnauthorized: false
     });
-    var category = await axios.get(`https://api.treevesto.com:4000/category/all`,{httpsAgent:agent})
-    const products = await axios.get(`https://api.treevesto.com:4000/product`,{httpsAgent:agent})
+    var category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/all`,{httpsAgent:agent})
+    const products = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product`,{httpsAgent:agent})
     
     category = category.data.result.filter(e=>e.parentCatId != "0")
     return {

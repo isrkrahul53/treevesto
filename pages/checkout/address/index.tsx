@@ -49,8 +49,8 @@ export default function AddressPage(props) {
         if(localStorage.getItem('user')){
             var data = JSON.parse(localStorage.getItem('user')) 
             setAddress({...address,userId:data.userId,name:data.name,phone:data.phone})
-            // fetch(`https://api.treevesto.com:4000/address/user/`+data.userId).then(d=>d.json()).then(json=>{
-            fetch(`https://api.treevesto.com:4000/address`).then(d=>d.json()).then(json=>{
+            // fetch(`${process.env.NEXT_PUBLIC_apiUrl}address/user/`+data.userId).then(d=>d.json()).then(json=>{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}address`).then(d=>d.json()).then(json=>{
                 setUserAddress(json.result) 
                 json.result.length > 0 && setAddAddr(false)
                 console.log(json.result)
@@ -63,7 +63,7 @@ export default function AddressPage(props) {
 
     const deleteAddress = (id) => {
         if(confirm('Are you sure to delete this address')){
-            fetch(`https://api.treevesto.com:4000/address/`+id,{
+            fetch(`${process.env.NEXT_PUBLIC_apiUrl}address/`+id,{
                 method:"DELETE",
             }).then(d=>d.json()).then(json=>{
                 setSelected(null)
@@ -84,7 +84,7 @@ export default function AddressPage(props) {
         formData.append('state',address.state)
         formData.append('country',address.country)
 
-        fetch(`https://api.treevesto.com:4000/address`,{
+        fetch(`${process.env.NEXT_PUBLIC_apiUrl}address`,{
             method:"POST",
             body:formData,
             headers:{
@@ -216,7 +216,7 @@ export const getServerSideProps = async () => {
     const agent = new https.Agent({  
         rejectUnauthorized: false
     });
-    const res = await axios.get(`https://api.treevesto.com:4000/coupon`,{httpsAgent:agent})
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}coupon`,{httpsAgent:agent})
     
 
     return {

@@ -7,7 +7,7 @@ try{
 }
 const getCart = async () => {
     if(!user) return []
-    const res = await fetch(`https://api.treevesto.com:4000/cart/user/`+user?.userId,{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/user/`+user?.userId,{
         method:"GET",
         headers:{
             "token":user?.token
@@ -24,14 +24,14 @@ const addtoCart = async (pro) => {
     formData.append("productId",pro._id)
     formData.append("vendorId",pro.vendorId)
     formData.append("type","cart")
-    formData.append("image","https://api.treevesto.com:4000/"+pro.productImages[0])
+    formData.append("image",process.env.NEXT_PUBLIC_apiUrl+pro.productImages[0])
     formData.append("name",pro.productName)
     formData.append("price",pro.sellingPrice)
     formData.append("qty","1")
     formData.append("stock",pro.stock) 
     formData.append("size",pro.size) 
 
-    const res = await fetch(`https://api.treevesto.com:4000/cart/`,{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/`,{
         method:"POST",
         body:formData,
         headers:{
@@ -43,7 +43,7 @@ const addtoCart = async (pro) => {
 }
 
 const deleteCartItem = async (x) => {
-    const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"DELETE"})
+    const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/`+x,{method:"DELETE"})
     const json = await res.json();
     return getCart();
 
@@ -55,7 +55,7 @@ const updateItemQty = async (x,qty) => {
     }else{
         var formData = new FormData();
         formData.append("qty",qty)
-        const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData})
+        const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/`+x,{method:"PATCH",body:formData})
         const json = await res.json();
     }
     return getCart();
@@ -64,7 +64,7 @@ const updateItemQty = async (x,qty) => {
 const movetoWishlist = async (x) => { 
     var formData = new FormData();
     formData.append("type","wishlist")
-    const res = await fetch(`https://api.treevesto.com:4000/cart/`+x,{method:"PATCH",body:formData})
+    const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}cart/`+x,{method:"PATCH",body:formData})
     const json = await res.json();
     return getCart();
 }
