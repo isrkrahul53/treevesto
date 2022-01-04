@@ -140,7 +140,7 @@ export default function Home(props) {
           </Suspense>
               
           {/* {console.log(isMobileDevice)} */}
-          <div className="px-5 my-2"> 
+          <div className="container my-2"> 
             
             {/* =========================================== */}
             {/* Sections Top */}
@@ -272,4 +272,3 @@ export default function Home(props) {
     </div>
   )
 }
- 
