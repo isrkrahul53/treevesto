@@ -220,7 +220,7 @@ export default function Product(props) {
                                  
                             </div> 
 
-                            <h1 className='text-xl p-2 pt-4'>Size Chart</h1>
+                            {/* <h1 className='text-xl p-2 pt-4'>Size Chart</h1>
                             <table className="table table-hover border">
                                 <thead> 
                                 </thead>
@@ -231,7 +231,7 @@ export default function Product(props) {
                                         ))} 
                                     </tr>))}
                                 </tbody>
-                            </table> 
+                            </table>  */}
 
                             <div className="my-2">
                                 

@@ -93,7 +93,10 @@ export default function ProductPage(props) {
                 </div>
             ))}
         </div>
-        <h4 className="h5 mt-4">Sizes <span className="text-secondary">( {size} )</span> </h4>
+        <div className="d-flex align-items-center justify-content-between">
+            <h4 className="h5 mt-4">Sizes <span className="text-secondary">( {size} )</span> </h4>
+            <a className='cursor-pointer underline mt-4'>Size Chart</a>
+        </div>
         <div className="flex flex-wrap items-center">
             {sizeList.map((e,k)=>(
                 <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded border-2 m-1":"cursor-pointer hover:shadow rounded border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
