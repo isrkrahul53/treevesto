@@ -184,43 +184,43 @@ export default function Product(props) {
                         {/* <div className="col-md-1"></div> */}
                         <div className="col-md-11 offset-md-1">
                             <div className="my-2">
+
                                 <ul className="nav nav-tabs" id="myTab" role="tablist">
-                                    {/* <li className="nav-item" role="presentation">
-                                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(0)} id="DELIVERY OPTIONS-tab" data-bs-toggle="tab" data-bs-target="#DELIVERY OPTIONS" role="tab" aria-controls="DELIVERY OPTIONS" aria-selected="true">DELIVERY OPTIONS</span>
-                                    </li> */}
                                     <li className="nav-item" role="presentation">
-                                    <span className="nav-link cursor-pointer active" onClick={e=>handleNavigationChange(1)} id="PRODUCT DETAILS-tab" data-bs-toggle="tab" data-bs-target="#PRODUCT DETAILS" role="tab" aria-controls="PRODUCT DETAILS" aria-selected="false">PRODUCT DETAILS</span>
+                                    <div className="nav-link cursor-pointer" id="specification-tab" data-bs-toggle="tab" data-bs-target="#specification" role="tab" aria-controls="specification" aria-selected="false">Specification</div>
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                    <div className="nav-link cursor-pointer active" id="productDetails-tab" data-bs-toggle="tab" data-bs-target="#productDetails" role="tab" aria-controls="productDetails" aria-selected="true">Product Details</div>
                                     </li>
                                     {/* <li className="nav-item" role="presentation">
-                                    <span className="nav-link cursor-pointer" onClick={e=>handleNavigationChange(2)} id="Specification table-tab" data-bs-toggle="tab" data-bs-target="#Specification table" role="tab" aria-controls="Specification table" aria-selected="false">Specification table</span>
+                                    <div className="nav-link cursor-pointer" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</div>
                                     </li> */}
                                 </ul>
                                 <div className="tab-content" id="myTabContent">
-                                    <div className={navigation === 0?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="DELIVERY OPTIONS" role="tabpanel" aria-labelledby="DELIVERY OPTIONS-tab">
+                                    <div className="tab-pane border p-3 fade show active" id="productDetails" role="tabpanel" aria-labelledby="productDetails-tab">
                                         
-                                    </div> 
-                                    <div className={navigation === 1?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="PRODUCT DETAILS" role="tabpanel" aria-labelledby="PRODUCT DETAILS-tab">
                                         <p>{props.product?.productDesc}</p>
-                                        <div className="container-fluid">
-                                            <hr className="my-4"/>
-                                            <div className="text-secondary h5">Specification</div>
 
-                                            {specsArr.filter(e=>props.product[e]).map((e,k)=>(
-                                                <div className="row" key={k}>
-                                                    <div className="col-6 col-md-3"> {e.replace("_"," ")} </div>
-                                                    <div className="col-6 col-md-9"> {props.product[e]} </div>
-                                                </div>
-                                                
-                                            ))}
+                                    </div>
+                                    <div className="tab-pane border p-3 fade" id="specification" role="tabpanel" aria-labelledby="specification-tab">
 
-                                        </div>
-                                    </div> 
-                                    <div className={navigation === 2?"tab-pane bg-white p-4 fade show active":"tab-pane bg-white p-4 fade"} id="Specification table" role="tabpanel" aria-labelledby="Specification table-tab">
+                                        {specsArr.filter(e=>props.product[e]).map((e,k)=>(
+                                            <div className="row" key={k}>
+                                                <div className="col-6 col-md-3"> {e.replace("_"," ")} </div>
+                                                <div className="col-6 col-md-9"> {props.product[e]} </div>
+                                            </div>
+                                            
+                                        ))}
+
                                         
-                                    </div> 
+                                    </div>
+                                    <div className="tab-pane border p-3 fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                                 </div>
+                                
+                                 
                             </div> 
 
+                            <h1 className='text-xl p-2 pt-4'>Size Chart</h1>
                             <table className="table table-hover border">
                                 <thead> 
                                 </thead>

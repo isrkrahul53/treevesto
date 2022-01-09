@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 
 export default function Footer(){
     const router = useRouter();
-    const [showMore,setShowMore] = React.useState(false)
+    const [showMore,setShowMore] = React.useState(true)
     
     if(router.pathname === "/"){
         return <div className="container-fluid bg-light border-t-2">

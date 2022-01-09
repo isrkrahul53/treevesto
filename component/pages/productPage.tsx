@@ -170,9 +170,9 @@ export default function ProductPage(props) {
             </div> 
         
         </>}
-        <p className="my-3">
+        {/* <p className="my-3">
             {props.data?.productDesc.length > 140  ? props.data?.productDesc.substr(0,140) + " ..." : props.data?.productDesc}
-        </p>
+        </p> */}
 
         {/* <hr/>
         <div className="my-3">
