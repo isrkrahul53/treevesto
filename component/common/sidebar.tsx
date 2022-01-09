@@ -88,7 +88,7 @@ export default function Sidebar(props) {
         aria-controls="panel1a-content"
         id="panel1a-header"
         >
-        <Typography component={"span"} variant={'body2'}> {el.catName} </Typography>
+        <Typography component={"span"} className="text-uppercase" variant={'body2'}> {el.catName} </Typography>
         </AccordionSummary>
         <AccordionDetails>
         <Typography component={"span"} variant={'body2'}> 
@@ -96,7 +96,7 @@ export default function Sidebar(props) {
                 {props.data.filter(e=>e.parentCatId === el._id).map((text, index) => (
                   <ListItem button key={index} onClick={toggleDrawer('left', false)}>
                       {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                      <Link href={"/"+text._id}><ListItemText primary={text.catName} /></Link>
+                      <Link href={"/"+text._id}><ListItemText className="text-uppercase" primary={text.catName} /></Link>
                   </ListItem>
                 ))}
             </List>

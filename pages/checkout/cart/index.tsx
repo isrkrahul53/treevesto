@@ -49,18 +49,32 @@ export default function CartPage({coupon}) {
         <Checkout cart={cart} coupon={coupon} getAmount={(amt)=>setTotalAmt(amt)}>
             <CustomAlert />
             <div className="container-fluid">
-                <nav aria-label="breadcrumb">
+                {/* <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item active text-2xl" aria-current="page">My Bag ( {cart.length} )</li>
                     </ol>
-                </nav>
+                </nav> */}
 
                  
                 <Suspense fallback={<div className="text-center py-10">
                         <div className="spinner-border text-primary"></div>
                     </div>}>
                         {cart.length > 0 ? <>
-                            <CartItem {...props} />
+                            <table className='table shadow'>
+                                <tr className='text-2xl border shadow-sm'>
+                                    <td className='p-2 text-center'>Product</td>
+                                    <td className='p-2'>Price</td>
+                                    <td className='p-2'>Qty</td>
+                                    <td className='p-2'>Total</td>
+                                </tr>
+                                <CartItem {...props} />
+                                <tr className='border shadow-sm'>
+                                    <td className='p-2'></td>
+                                    <td className='p-2'></td>
+                                    <td className='p-2 text-xl'>SubTotal</td>
+                                    <td className='p-2'>Rs {totalAmt}</td>
+                                </tr>
+                            </table>
                         </>:<>
                             <div className="py-4">
                                 <div className="display-6"> Cart is Empty </div>

@@ -122,7 +122,7 @@ export default function Home(props) {
                     <div className="px-2" key={k}>
                       <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
                         <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
-                        <div className="text-sm p-1">  {e.catName} </div>
+                        <div className="text-sm p-1 text-uppercase">  {e.catName} </div>
                       </div></Link>
                     </div>
                   ))}

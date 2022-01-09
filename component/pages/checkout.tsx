@@ -232,11 +232,11 @@ export default function Checkout(props) {
                     <h1 className="display-6">Checkout</h1>
                     <p className="text-secondary">Have a coupon <a href="">click here</a> to enter </p>
                 </div>
-                <div className="w-full lg:w-2/3 mx-auto flex-row lg:flex">
+                <div className="w-full lg:w-5/6 mx-auto flex-row lg:flex">
 
                     {/* First column */}
                     <div className="w-full lg:w-2/3 lg:px-4">
-                        <div className="container shadow-md py-8 p-2">
+                        <div className="py-4">
                             {props.children}
                         </div>
                     </div>
@@ -323,7 +323,7 @@ export default function Checkout(props) {
 
                     </div>
                 </div>
-                <div className="hidden lg:flex items-center justify-between my-10 lg:w-2/3 mx-auto">
+                <div className="hidden lg:flex items-center justify-between my-10 lg:w-5/6 mx-auto">
                     <img src="/assets/images/checkout/payment-method_69e7ec.svg" alt="" className="w-full" />
                     {/* <div className="text-sm cursor-pointer">Need Help ? Contact Us</div> */}
                 </div>

@@ -192,9 +192,9 @@ export default function Product(props) {
                                     <li className="nav-item" role="presentation">
                                     <div className="nav-link cursor-pointer active" id="productDetails-tab" data-bs-toggle="tab" data-bs-target="#productDetails" role="tab" aria-controls="productDetails" aria-selected="true">Product Details</div>
                                     </li>
-                                    {/* <li className="nav-item" role="presentation">
-                                    <div className="nav-link cursor-pointer" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</div>
-                                    </li> */}
+                                    <li className="nav-item" role="presentation">
+                                    <div className="nav-link cursor-pointer" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</div>
+                                    </li>
                                 </ul>
                                 <div className="tab-content" id="myTabContent">
                                     <div className="tab-pane border p-3 fade show active" id="productDetails" role="tabpanel" aria-labelledby="productDetails-tab">
@@ -214,7 +214,60 @@ export default function Product(props) {
 
                                         
                                     </div>
-                                    <div className="tab-pane border p-3 fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                                    <div className="tab-pane border p-3 fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                                        <div className="my-2">
+                                            
+                                            <Suspense fallback={<Skeleton className="w-full" height={180} />}>
+                                                <div className="bg-white">
+                                                    <div className="flex item-center">
+                                                        <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
+                                                        <div className="ml-auto">
+                                                            <MaterialDialog button="Rate Product" title="Write a Review" id={props.product?._id} />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="my-2">
+                                                        <div className="flex-row md:flex item-center">
+                                                            <div className="mr-3">
+                                                                <div className="text-4xl">{rating} <StarRateIcon /></div>
+                                                                <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
+                                                            </div>
+                                                            <div className="mr-3">
+                                                                <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
+                                                                <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Suspense>
+
+
+                                            <Suspense fallback={<Skeleton className="w-full" height={180} />}>
+                                                {props.review.map((e,k)=>(
+                                                    <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
+                                                        <div className="flex items-center">
+                                                            <div className={
+                                                                e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
+                                                            }>
+                                                                {e.rating}<StarRateIcon />
+                                                            </div>
+                                                            <h3 className="text-lg md:text-2xl">{e.title}</h3>
+                                                        </div>
+                                                        <div className="my-2">{e.desc}</div>
+                                                        {/* <div className="text-right">
+                                                            <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> {e.likes}
+                                                            <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />{e.dislikes}
+                                                        </div> */}
+                                                    </div>
+                                                ))}
+                                            </Suspense>
+
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                                 
                                  
@@ -233,57 +286,6 @@ export default function Product(props) {
                                 </tbody>
                             </table>  */}
 
-                            <div className="my-2">
-                                
-                                <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                                    <div className="bg-white p-3 border">
-                                        <div className="flex item-center">
-                                            <h3 className="text-lg md:text-2xl">Ratings & Reviews</h3>
-                                            <div className="ml-auto">
-                                                <MaterialDialog button="Rate Product" title="Write a Review" id={props.product?._id} />
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="my-2">
-                                            <div className="flex-row md:flex item-center">
-                                                <div className="mr-3">
-                                                    <div className="text-4xl">{rating} <StarRateIcon /></div>
-                                                    <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
-                                                </div>
-                                                <div className="mr-3">
-                                                    <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                    <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                    <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                    <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
-                                                    <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Suspense>
-
-
-                                <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                                    {props.review.map((e,k)=>(
-                                        <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
-                                            <div className="flex items-center">
-                                                <div className={
-                                                    e.rating >= 3?"bg-success text-white p-1 px-2 mr-2 rounded shadow-sm":e.rating === 2?"bg-warning text-white p-1 px-2 mr-2 rounded shadow-sm":"bg-danger text-white p-1 px-2 mr-2 rounded shadow-sm"
-                                                }>
-                                                    {e.rating}<StarRateIcon />
-                                                </div>
-                                                <h3 className="text-lg md:text-2xl">{e.title}</h3>
-                                            </div>
-                                            <div className="my-2">{e.desc}</div>
-                                            {/* <div className="text-right">
-                                                <ThumbUpIcon className="mx-2 text-secondary cursor-pointer" /> {e.likes}
-                                                <ThumbDownIcon className="mx-2 text-secondary cursor-pointer" />{e.dislikes}
-                                            </div> */}
-                                        </div>
-                                    ))}
-                                </Suspense>
-
-                            </div>
 
                         </div>
                     </div>
