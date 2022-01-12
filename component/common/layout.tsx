@@ -35,7 +35,7 @@ export default function Layout(props){
     
     
     useEffect(()=>{
-        fetch(`https://api.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
+        fetch(`https://apis.treevesto.com:4000/category/all`).then(d=>d.json()).then(json=>{ 
             setCategories(json.result)
         })
         setUser(JSON.parse(localStorage.getItem('user')))
@@ -56,7 +56,7 @@ export default function Layout(props){
 
         if(search.trim().length > 0){
             setLoading(true)
-            const res = await fetch(`https://api.treevesto.com:4000/product`).then(d=>d.json()) 
+            const res = await fetch(`https://apis.treevesto.com:4000/product`).then(d=>d.json()) 
             var json = await res.result;
             json = json.filter((e,k)=>e.productName.toLowerCase().search(search.toLocaleLowerCase()) >= 0)
             setProducts(json)
