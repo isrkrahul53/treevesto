@@ -74,17 +74,21 @@ export default function Product(props){
     filterProduct(colourFilter,sizeFilter,sortFilter,fromFilter,toFilter) 
     // router.replace("/"+router.query.category+"?"+colourFilter+"&"+sizeFilter+"&"+fromFilter+"&"+toFilter)
   },[filterData.colour,filterData.size,filterData.sort,filterData.priceRange])
-
+  
   const filterProduct = async (colour,size,sort,from,to) => {
     var arr = []
+    if(colour.search('color=') === -1 || size.search('size=') === -1 || from.search('from=') === -1 || to.search('to=') === -1) return;
     const res = await fetch(`${process.env.NEXT_PUBLIC_apiUrl}product/filter?`+colour+`&`+size+`&`+sort+`&`+from+`&`+to+`&subcatId=`+router.query.category);
     const json = await res.json();
-    if(json.success === 1){ 
+    if(json.success === 1 && props.products.length > 0){ 
       var temp = await json.result;
       await temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
         arr.push(temp.filter(e=>e.productCode === el))
       })
       setProducts(arr)
+      setLoading(false)
+    }else{
+      setProducts([])
       setLoading(false)
     }
 

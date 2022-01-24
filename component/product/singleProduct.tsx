@@ -60,7 +60,7 @@ export default function SingleProduct(props){
     </Link> */}
 
     <div className="p-0 pb-4">
-        <Link href={"/product/"+productSelected?._id}><div>
+        <a href={"/product/"+productSelected?._id}><div>
             <ReactCarousel customHeight={true} data={[productSelected?.productImages[0]]} arrows={false} autoplayOnhover={true} />
             {/* <div className="text-sm text-secondary"> {productSelected?.productType} </div> */}
             <div className="text-lg font-light hidden md:block">
@@ -78,7 +78,7 @@ export default function SingleProduct(props){
               </small>}
               
             </div>
-        </div></Link>
+        </div></a>
       {!props.hideDetails && <>
         {/* <div className="flex items-center">
           {colour.map((e,k)=>(
