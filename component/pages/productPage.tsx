@@ -82,7 +82,7 @@ export default function ProductPage(props) {
           Rs. {props.data?.sellingPrice}
           {/* <small className="text-success px-2">{(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice)*100).toFixed(2)+"% off"}</small> */}
           {Math.round(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice) * 100) > 0 && <small className="text-primary px-2">
-            {Math.round(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice) * 100)} % OFF
+            {Math.round(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice) * 100)}% OFF
             </small>}
         </h4>
         <h5 className="text-success">inclusive of all taxes</h5>

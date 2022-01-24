@@ -71,10 +71,12 @@ export default function SingleProduct(props){
                 {productSelected?.productName?.length > 15 ? productSelected?.productName.substring(0,15):productSelected?.productName}
                 {productSelected?.productName?.length > 15 ? " ...":""}
             </div>
-            <div className="text-lg font-normal"> <s className="text-sm text-secondary">
-              Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice} 
+            <div className="text-sm font-normal"> 
+              <strong>Rs. {productSelected?.sellingPrice} </strong>
+              <s className="text-sm text-secondary"> Rs. {productSelected?.regularPrice} </s> 
+              
               {Math.round(((productSelected?.regularPrice - productSelected?.sellingPrice)/productSelected?.regularPrice) * 100) > 0 && <small className="text-primary px-2">
-                {Math.round(((productSelected?.regularPrice - productSelected?.sellingPrice)/productSelected?.regularPrice) * 100)} % OFF
+                ({Math.round(((productSelected?.regularPrice - productSelected?.sellingPrice)/productSelected?.regularPrice) * 100)}% OFF)
               </small>}
               
             </div>
