@@ -233,15 +233,15 @@ export default function Product(props){
                   </>}
                 </>:<>
                   {products.length > 0 ?<>
-                        <div className={"grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 p-0"}>
+                        <div className={"grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 p-0"}>
                           {products?.map((el,key)=>(
-                            <div key={key}>
+                            <div key={key} className="border">
                               <Suspense fallback={<div>
                                 <Skeleton className="my-1 w-full" variant="rect" height={140} />
                                 <Skeleton className="w-full" variant="text" height={20} />
                                 <Skeleton className="w-2/5" variant="text" height={20} />
                                 </div>}>
-                                  <SingleProduct data={el} hideDetails={false} dispatch={dispatch} />
+                                  <SingleProduct data={el} hideDetails={true} dispatch={dispatch} />
                               </Suspense>
 
                             </div> 
