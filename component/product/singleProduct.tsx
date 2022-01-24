@@ -60,21 +60,27 @@ export default function SingleProduct(props){
     </Link> */}
 
     <div className="p-0 pb-4">
-        <Link href={"/product/"+productSelected._id}><div>
+        <Link href={"/product/"+productSelected?._id}><div>
             <ReactCarousel customHeight={true} data={[productSelected?.productImages[0]]} arrows={false} autoplayOnhover={true} />
             {/* <div className="text-sm text-secondary"> {productSelected?.productType} </div> */}
-            <div className="text-lg font-light text-center hidden md:block">
+            <div className="text-lg font-light hidden md:block">
                 {productSelected?.productName?.length > 20 ? productSelected?.productName.substring(0,20):productSelected?.productName}
                 {productSelected?.productName?.length > 20 ? " ...":""}
             </div>
-            <div className="text-sm font-normal text-center md:hidden">
+            <div className="text-sm font-normal md:hidden">
                 {productSelected?.productName?.length > 15 ? productSelected?.productName.substring(0,15):productSelected?.productName}
                 {productSelected?.productName?.length > 15 ? " ...":""}
             </div>
-            <div className="text-lg text-center font-normal"> <s className="text-sm text-secondary">Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice}</div>
+            <div className="text-lg font-normal"> <s className="text-sm text-secondary">
+              Rs. {productSelected?.regularPrice} </s> Rs. {productSelected?.sellingPrice} 
+              {Math.round(((productSelected?.regularPrice - productSelected?.sellingPrice)/productSelected?.regularPrice) * 100) > 0 && <small className="text-primary px-2">
+                {Math.round(((productSelected?.regularPrice - productSelected?.sellingPrice)/productSelected?.regularPrice) * 100)} % OFF
+              </small>}
+              
+            </div>
         </div></Link>
       {!props.hideDetails && <>
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           {colour.map((e,k)=>(
             <span key={k} onClick={()=>setColourSelected(k)} className={k === colourSelected?"rounded-circle mr-1 border-2 border-dark":"rounded-circle border mr-1"} style={{backgroundColor:e,padding:"8px"}}></span>
           ))}
@@ -83,7 +89,7 @@ export default function SingleProduct(props){
           {size.map((e,k)=>(
             <span key={k} onClick={()=>setSizeSelected(k)} className={k === sizeSelected?"rounded-circle border mr-1 border-2 border-dark":"rounded-circle border mr-1"} style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}} >{e}</span>
           ))}
-        </div>
+        </div> */}
         <div className="my-2 flex items-center">
           {+productSelected?.stock <= 0 ? <>
             <span className="text-center py-2 w-full text-sm font-normal border-1 border-red-200 bg-red-200 text-red-500">
@@ -93,8 +99,8 @@ export default function SingleProduct(props){
               {cart?<> 
                 <UpdatQtyButton pro={productSelected} cart={cart} dispatch={dispatchMiddleware} />
               </>:<> 
-                <button type="button"  onClick={()=>dispatchMiddleware("addToCart",productSelected)} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-yellow-800 hover:bg-yellow-800 hover:text-white">
-                  ADD TO CART
+                <button type="button"  onClick={()=>dispatchMiddleware("addToWishlist",productSelected)} className="text-center py-2 w-full text-sm font-normal cursor-pointer border-1 border-gray-800 hover:bg-gray-800 hover:text-white">
+                  ADD TO WISHLIST
                 </button>
               </>}
           </>}

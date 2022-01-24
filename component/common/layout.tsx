@@ -7,9 +7,6 @@ import CustomAlert from './customAlert';
 import { useRouter } from 'next/router';
 import Sidebar from './sidebar';
 import Footer from './footer';
-import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchProducts from './searchProducts';
 import MenuListComposition from '../material/menu'
 import { useSelector, useDispatch } from "react-redux";
 import MenuListComposition2 from '../material/menu2';
@@ -77,7 +74,7 @@ export default function Layout(props){
             <div className="container navbar navbar-expand-lg navbar-light p-0 px-md-0 px-3 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
-                        <div className="xl:hidden"><Sidebar data={categories} /></div>
+                        <div className="xl:hidden"><Sidebar data={categories} user={user} logout={logout} /></div>
                         <Link href="/">
                             <img src="/logo.png" className="w-24 hidden xl:block mx-2 cursor-pointer" alt="logo"/>
                         </Link>
@@ -104,9 +101,9 @@ export default function Layout(props){
                                 <Link href="/search"><img src="/assets/icons/search.png" className="mx-3" width="20px" alt="search"/></Link>
                             </div>
 
-                            <div className="hidden md:flex items-center w-full bg-gray-0 p-1 px-2" style={{height:'55px'}}>
+                            <div className="hidden md:flex items-center w-full shadow-sm bg-gray-100 p-1 px-2" style={{height:'35px'}}>
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
-                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-0" placeholder="Search" />
+                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-100" placeholder="Search" />
                             </div>
                         </li>
                         <li className={"dropdown mx-1 mx-md-3"}>

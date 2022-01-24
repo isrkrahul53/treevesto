@@ -237,7 +237,7 @@ export default function Product(props){
                                 <Skeleton className="w-full" variant="text" height={20} />
                                 <Skeleton className="w-2/5" variant="text" height={20} />
                                 </div>}>
-                                  <SingleProduct data={el} hideDetails={true} dispatch={dispatch} />
+                                  <SingleProduct data={el} hideDetails={false} dispatch={dispatch} />
                               </Suspense>
 
                             </div> 

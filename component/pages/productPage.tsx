@@ -33,9 +33,8 @@ export default function ProductPage(props) {
             var product = json.result.filter(e=>e.productCode === props.data.productCode) 
             setProducts(product)
             setSizeList(product.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
-            setColourList(product.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
+            setColourList(product.filter(e=>e.size == size).map(e=>({colour:e.colour,img:e.productImages[0]})).filter((e,k,ar)=>ar.indexOf(e) === k))
         })
-        
     },[])
     
     useEffect(()=>{
@@ -49,7 +48,7 @@ export default function ProductPage(props) {
 
     useEffect(()=>{
         setSizeList(products.filter(e=>e.colour == colour).map(e=>e.size).filter((e,k,ar)=>ar.indexOf(e) === k))
-        setColourList(products.filter(e=>e.size == size).map(e=>e.colour).filter((e,k,ar)=>ar.indexOf(e) === k))
+        setColourList(products.filter(e=>e.size == size).map(e=>({colour:e.colour,img:e.productImages[0]})).filter((e,k,ar)=>ar.indexOf(e) === k))
         var pid = products.filter(e=>e.colour === colour && e.size === size)[0]?._id;
         pid && router.replace("/product/"+pid)
     },[size,colour])
@@ -81,15 +80,19 @@ export default function ProductPage(props) {
         <h4 className="text-3xl mt-3"> 
             {props.data?.regularPrice != props.data?.sellingPrice && <s className="text-xl pr-2 text-secondary">Rs. {props.data?.regularPrice}</s>}
           Rs. {props.data?.sellingPrice}
-          <small className="text-success px-2">{(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice)*100).toFixed(2)+"% off"}</small>
+          {/* <small className="text-success px-2">{(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice)*100).toFixed(2)+"% off"}</small> */}
+          {Math.round(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice) * 100) > 0 && <small className="text-primary px-2">
+            {Math.round(((props.data?.regularPrice - props.data?.sellingPrice)/props.data?.regularPrice) * 100)} % OFF
+            </small>}
         </h4>
         <h5 className="text-success">inclusive of all taxes</h5>
 
         <h4 className="h5 mt-4">Colour <span className="text-secondary"> ( {colour} ) </span> </h4>
         <div className="flex flex-wrap items-center">
             {colourList.map((e,k)=>(
-                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"cursor-pointer hover:shadow m-1 border-dark rounded border-2":"cursor-pointer hover:shadow m-1 rounded border-2"}>
-                    <div className="p-3" style={{backgroundColor:e}} title={e}></div>
+                <div key={k} onClick={()=>{setColour(e.colour)}} className={colour == e?.colour?"cursor-pointer hover:shadow m-1 border-dark rounded border-2":"cursor-pointer hover:shadow m-1 rounded border-2"}>
+                    {/* <div className="p-3" style={{backgroundColor:e}} title={e}></div> */}
+                    <img src={process.env.NEXT_PUBLIC_apiUrl+e?.img} width="40px" className="rounded" alt="" />
                 </div>
             ))}
         </div>
@@ -107,21 +110,6 @@ export default function ProductPage(props) {
         
             {/* Mobile */}
             <div className="md:hidden flex items-center justify-around fixed left-0 bottom-0 z-50 bg-white w-full py-1" style={{zIndex:1200}} >
-                {cart?<>
-                    <div className="flex items-center justify-between mx-1 w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
-                        <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
-                        <RemoveIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty-1})} />
-                        </Button>
-                        <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
-                        <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
-                        <AddIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty+1})} />
-                        </Button>
-                    </div>
-                </>:<>
-                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
-                        <LocalMallOutlinedIcon /> Add Bag
-                    </button>
-                </>}
                 
                 {wishlist ? <>
                     <Link href="/wishlist"><div className="w-full px-4 py-2 cursor-pointer border-2 border-blue-800 bg-blue-800 text-blue-50 hover:bg-blue-50 hover:text-blue-800">
@@ -138,6 +126,21 @@ export default function ProductPage(props) {
                     </a>
                     
                 </div> */}
+                {cart?<>
+                    <div className="flex items-center justify-between mx-1 w-full border-2 border-blue-800 text-blue-800 text-blue-50 px-1">
+                        <Button variant="text" color="primary" disabled={+cart.qty <= 0}>
+                        <RemoveIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty-1})} />
+                        </Button>
+                        <div className="p-2 px-3 text-lg font-medium">{cart.qty}</div>
+                        <Button variant="text" color="primary" disabled={+cart.qty >= (+props.data.stock)}>
+                        <AddIcon onClick={()=>dispatchMiddleware("updateItemQty",{id:cart._id,qty:+cart.qty+1})} />
+                        </Button>
+                    </div>
+                </>:<>
+                    <button type="button" onClick={()=>dispatchMiddleware("addToCart",props.data)} className="w-full px-4 mx-1 py-2 cursor-pointer border-2 border-gray-800 bg-gray-800 text-gray-50 hover:bg-gray-50 hover:text-gray-800">
+                        <LocalMallOutlinedIcon /> Add Bag
+                    </button>
+                </>}
             </div> 
 
             {/* Desktop */}
