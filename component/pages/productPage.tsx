@@ -105,7 +105,7 @@ export default function ProductPage(props) {
                 <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded border-2 m-1":"cursor-pointer hover:shadow rounded border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
             ))} */}
             {allSize.map((e,k)=>(
-                <div key={k} onClick={()=>{sizeList.find(d=>d===e) && setSize(e)}} className={`cursor-pointer hover:shadow rounded m-1 ${sizeList.find(d=>d===e) ? size === e ? 'border-2 border-dark':'border-2':'text-gray-400'}`}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
+                <div key={k} onClick={()=>{sizeList.find(d=>d===e) && setSize(e)}} className={`cursor-pointer hover:shadow rounded m-1 ${sizeList.find(d=>d===e) ? size === e ? 'border-2 font-bold border-dark':'border-2 font-bold':'text-gray-400'}`}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
             ))}
         </div>
 

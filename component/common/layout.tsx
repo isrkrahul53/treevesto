@@ -107,10 +107,10 @@ export default function Layout(props){
                             </div>
                         </li>
                         <li className={"dropdown mx-1 mx-md-3"}>
-                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden mx-2 cursor-pointer" width="20px" alt="user"/>
+                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden cursor-pointer" width="20px" alt="user"/>
                             <div className="hidden md:block">
                                 <MenuListComposition2
-                                cat={<img src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>} 
+                                cat={<img src="/assets/icons/user.png" className="cursor-pointer" width="20px" alt="user"/>} 
                                 subCat={[{_id:"account/profile",catName:<div className="p-1">
                                     
                                     <h2 className="text-xl px-1"> {user ? user?.name || user?.email : "Welcome"}</h2>
@@ -133,7 +133,7 @@ export default function Layout(props){
                         <li className="flex items-center justify-end" style={{height:'55px'}}>
                         <Link href="/wishlist">
                             <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/heart.png" className="mx-2 mx-md-4" width="20px" alt="heart"/>
+                                <img src="/assets/icons/heart.png" className="mx-2" width="20px" alt="heart"/>
                             </div>
                         </Link> 
                         </li>
