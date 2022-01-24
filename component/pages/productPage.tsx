@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField'
 import CustomAlert from '../common/customAlert';
 import { useRouter } from 'next/router';
 
-
+const allSize = ["XS","S","M","L","XL","XXL","3XL"]
 export default function ProductPage(props) {
     
     const router = useRouter();
@@ -64,7 +64,7 @@ export default function ProductPage(props) {
         props.dispatch({type,payloads})
 
     }
-    
+    console.log(sizeList)
     return  <div> 
 
         {props.data?.stock > 3 ? <>
@@ -101,8 +101,11 @@ export default function ProductPage(props) {
             <a className='cursor-pointer underline mt-4'>Size Chart</a>
         </div>
         <div className="flex flex-wrap items-center">
-            {sizeList.map((e,k)=>(
+            {/* {sizeList.map((e,k)=>(
                 <div key={k} onClick={()=>{setSize(e)}} className={size == e?"cursor-pointer hover:shadow border-dark rounded border-2 m-1":"cursor-pointer hover:shadow rounded border-2 m-1"}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
+            ))} */}
+            {allSize.map((e,k)=>(
+                <div key={k} onClick={()=>{sizeList.find(d=>d===e) && setSize(e)}} className={`cursor-pointer hover:shadow rounded m-1 ${sizeList.find(d=>d===e) ? size === e ? 'border-2 border-dark':'border-2':'text-gray-400'}`}   style={{height:"50px",width:"50px",padding:"10px",textAlign:"center"}}>{e}</div>
             ))}
         </div>
 
