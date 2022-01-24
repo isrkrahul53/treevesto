@@ -157,7 +157,7 @@ export default function Home(props) {
               {sections?.filter(e=>e.position === "Top").map((el,key)=>{
                 var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
                 
-                return <div key={key}>
+                return <div key={key} className='-mx-2'>
                   {el.title === "Wedding Collection" ? <>
                     <div key={key} className={`mb-2 -m-2 ${responsiveCss}`}> 
 
@@ -222,7 +222,7 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-                <div className='-mx-3'>
+                <div className='-mx-4'>
                   <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
                         <div key={k} className="p-1">
                             <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
@@ -248,7 +248,7 @@ export default function Home(props) {
               {sections?.filter(e=>e.position === "Bottom").map((el,key)=>{
                 var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
 
-                return <div key={key} className={`${responsiveCss}`}>
+                return <div key={key} className={`${responsiveCss} -mx-2`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
