@@ -100,11 +100,11 @@ export default function Layout(props){
                     <ul className="flex ml-auto items-center"> 
                         <li className="cursor-pointer mx-0">
                             {/* <SearchProducts /> */}
-                            <div className="md:hidden flex items-center border-l-2 border-r-2" style={{height:'55px'}}>
+                            <div className="md:hidden flex items-center" style={{height:'55px'}}>
                                 <Link href="/search"><img src="/assets/icons/search.png" className="mx-3" width="20px" alt="search"/></Link>
                             </div>
 
-                            <div className="hidden md:flex items-center w-full bg-gray-0 border-l-2 border-r-2 p-1 px-2" style={{height:'55px'}}>
+                            <div className="hidden md:flex items-center w-full bg-gray-0 p-1 px-2" style={{height:'55px'}}>
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
                                 <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-0" placeholder="Search" />
                             </div>
@@ -133,14 +133,14 @@ export default function Layout(props){
                             </div>
                             
                         </li> 
-                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
+                        <li className="flex items-center justify-end" style={{height:'55px'}}>
                         <Link href="/wishlist">
                             <div className="flex items-center cursor-pointer">
                                 <img src="/assets/icons/heart.png" className="mx-2 mx-md-4" width="20px" alt="heart"/>
                             </div>
                         </Link> 
                         </li>
-                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
+                        <li className="flex items-center justify-end" style={{height:'55px'}}>
                         <Link href="/checkout/cart">
                             <div className="flex items-center cursor-pointer mx-2 mx-md-3">
                                 <img src="/assets/icons/shopping-bag.png" width="20px" alt="shopping-bag"/>
@@ -151,7 +151,7 @@ export default function Layout(props){
                             </div>
                         </Link>
                         </li> 
-                        {user && <li className="flex items-center justify-end border-l-2" onClick={logout} style={{height:'55px'}}>
+                        {user && <li className="flex items-center justify-end" onClick={logout} style={{height:'55px'}}>
                             <div className="flex items-center cursor-pointer">
                                 <img src="/assets/icons/logout.jpg" className="mx-2" width="20px" alt="logout"/>
                             </div>
@@ -201,10 +201,10 @@ export default function Layout(props){
                 </div>   
             </>}
             </>}
-        </div>:<>
+        </div>:<div className='mb-5'>
             {props.children}
             <Footer />
-        </>}
+        </div>}
 
 
     </div>

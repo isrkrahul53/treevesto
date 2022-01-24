@@ -88,7 +88,7 @@ export default function ProductPage(props) {
         <h4 className="h5 mt-4">Colour <span className="text-secondary"> ( {colour} ) </span> </h4>
         <div className="flex flex-wrap items-center">
             {colourList.map((e,k)=>(
-                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"cursor-pointer hover:shadow m-1 border-dark border-2":"cursor-pointer hover:shadow m-1 border-2"}>
+                <div key={k} onClick={()=>{setColour(e)}} className={colour == e?"cursor-pointer hover:shadow m-1 border-dark rounded border-2":"cursor-pointer hover:shadow m-1 rounded border-2"}>
                     <div className="p-3" style={{backgroundColor:e}} title={e}></div>
                 </div>
             ))}

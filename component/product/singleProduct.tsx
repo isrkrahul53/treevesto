@@ -61,13 +61,13 @@ export default function SingleProduct(props){
 
     <div className="p-0 pb-4">
         <Link href={"/product/"+productSelected._id}><div>
-            <ReactCarousel customHeight={true} data={productSelected?.productImages} arrows={false} autoplayOnhover={true} />
+            <ReactCarousel customHeight={true} data={[productSelected?.productImages[0]]} arrows={false} autoplayOnhover={true} />
             {/* <div className="text-sm text-secondary"> {productSelected?.productType} </div> */}
             <div className="text-lg font-light text-center hidden md:block">
                 {productSelected?.productName?.length > 20 ? productSelected?.productName.substring(0,20):productSelected?.productName}
                 {productSelected?.productName?.length > 20 ? " ...":""}
             </div>
-            <div className="text-sm font-normal md:hidden">
+            <div className="text-sm font-normal text-center md:hidden">
                 {productSelected?.productName?.length > 15 ? productSelected?.productName.substring(0,15):productSelected?.productName}
                 {productSelected?.productName?.length > 15 ? " ...":""}
             </div>

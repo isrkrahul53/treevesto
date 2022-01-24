@@ -117,12 +117,12 @@ export default function Home(props) {
           
           <div className="sm:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
-                <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                <div className="flex flex-nowrap my-2 overflow-auto categoryHideScrollbar">
                   {values?.categories.map((e,k)=>(
-                    <div className="px-2" key={k}>
-                      <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
-                        <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
-                        <div className="text-sm p-1 text-uppercase">  {e.catName} </div>
+                    <div className="" key={k}>
+                      <Link href={"/"+e._id}><div className="text-center shadow-sm rounded" style={{width:"65px"}}>
+                        <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"70px",height:"95px"}} className="mx-auto"  />
+                        {/* <div className="text-sm p-1 text-uppercase">  {e.catName} </div> */}
                       </div></Link>
                     </div>
                   ))}
@@ -159,7 +159,7 @@ export default function Home(props) {
                 
                 return <div key={key}>
                   {el.title === "Wedding Collection" ? <>
-                    <div key={key} className={`mb-2 -m-1 ${responsiveCss}`}> 
+                    <div key={key} className={`mb-2 -m-2 ${responsiveCss}`}> 
 
                       {el.mobileGrid === ""?<>
                         <div className="sm:hidden">
@@ -222,11 +222,14 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
-                    <div key={k} className="p-1">
-                        <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
-                    </div>
-                ))} />
+                <div className='-mx-3'>
+                  <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
+                        <div key={k} className="p-1">
+                            <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
+                        </div>
+                    ))} />
+
+                </div>
             </Suspense>
 
 
