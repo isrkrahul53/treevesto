@@ -197,7 +197,8 @@ export default function RegisterPage(){
                         <form className="w-full md:w-3/5 xl:w-2/5 mx-auto my-10 relative bg-white p-6 opacity-90 md:border shadow-sm rounded" onSubmit={handleSubmit(verifyCode)}>
                             <img src="/assets/images/otp.jpg" className="w-32 rounded-circle" />
                             <h4 className="text-2xl">Verify With OTP</h4>
-                            <h5 className="text-sm text-secondary">Sent to : 6209460626</h5>
+                            <h5 className="text-sm text-secondary">OTP Sent Successfully To Your Number </h5>
+                            {/* <h5 className="text-sm text-secondary">Sent to : {values.phone} </h5> */}
 
                             
                             {cResult?<div className="flex border border-dark my-3"> 
