@@ -25,7 +25,7 @@ const responsive = {
 export default function ReactCarousel(props){
     const [autoplay,setAutoplay] = React.useState(false)
     return <Carousel 
-    infinite={true}
+    infinite={false}
     showDots={props.showDots}
     autoPlay={props.autoplayOnhover?autoplay:true}
     autoPlaySpeed={props.autoplayOnhover && 900}

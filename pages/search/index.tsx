@@ -6,6 +6,7 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Divider from '@material-ui/core/Divider'; 
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Layout from '../../component/common/layout' 
+import { useRouter } from 'next/router';
  
 
 const useStyles = makeStyles({
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
 });
 
 export default function SearchProducts(props) {
-
+  let router = useRouter();
    
   const classes = useStyles();
   const [state, setState] = React.useState({
@@ -68,7 +69,7 @@ export default function SearchProducts(props) {
       <div className="position-sticky top-0 bg-white w-full z-50 py-2">
         <div className="flex items-center justify-between">
           <h3 className="text-secondary text-md md:text-2xl py-2">WHAT ARE YOU LOOKING FOR?</h3>
-          <div className="cursor-pointer text-4xl" onClick={toggleDrawer('top', false)}>&times;</div>
+          <div className="cursor-pointer text-4xl" onClick={()=>router.back()}>&times;</div>
         </div>
         <div className="flex items-center justify-between">
           <input type="text" name="search" id="search" autoFocus onChange={e=>setSearch(e.target.value)}

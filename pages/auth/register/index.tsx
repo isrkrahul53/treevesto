@@ -108,7 +108,7 @@ export default function RegisterPage(){
         var x = data.phone;
         const phoneNumber = '+91'+x; 
         // setValues({...values,phone:x})
-        recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'invisible'});
         const appVerifier = recaptchaVerifier;
         firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
             .then((confirmationResult) => {

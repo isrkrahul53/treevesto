@@ -117,12 +117,12 @@ export default function Home(props) {
           
           <div className="sm:hidden">
             <Suspense fallback={<Skeleton className="w-full" variant="rect" height={240} />}>
-                <div className="flex flex-nowrap mt-1 overflow-auto categoryHideScrollbar">
+                <div className="flex flex-nowrap my-2 overflow-auto categoryHideScrollbar">
                   {values?.categories.map((e,k)=>(
-                    <div className="px-2" key={k}>
-                      <Link href={"/"+e._id}><div className="text-center" style={{width:"65px"}}>
-                        <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"65px",height:"65px"}} className="mx-auto rounded-circle"  />
-                        <div className="text-sm p-1 text-uppercase">  {e.catName} </div>
+                    <div className="" key={k}>
+                      <Link href={"/"+e._id}><div className="text-center shadow-sm rounded" style={{width:"65px"}}>
+                        <img src={process.env.NEXT_PUBLIC_apiUrl+e.catImage} alt={e.catName} style={{width:"70px",height:"95px"}} className="mx-auto"  />
+                        {/* <div className="text-sm p-1 text-uppercase">  {e.catName} </div> */}
                       </div></Link>
                     </div>
                   ))}
@@ -157,9 +157,9 @@ export default function Home(props) {
               {sections?.filter(e=>e.position === "Top").map((el,key)=>{
                 var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
                 
-                return <div key={key}>
+                return <div key={key} className='-mx-2'>
                   {el.title === "Wedding Collection" ? <>
-                    <div key={key} className={`mb-2 -m-1 ${responsiveCss}`}> 
+                    <div key={key} className={`mb-2 -m-2 ${responsiveCss}`}> 
 
                       {el.mobileGrid === ""?<>
                         <div className="sm:hidden">
@@ -189,7 +189,7 @@ export default function Home(props) {
                       
                     </div>
                   </>:<div key={key} className={`${responsiveCss}`}>
-                    <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
+                    <h3 className="text-lg md:text-4xl mt-1 -m-2 md:mb-3 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{
                           var mobile = Number(el.mobileGrid)
@@ -213,7 +213,7 @@ export default function Home(props) {
             {/* ========================================================================= */}
 
 
-            <h3 className="text-lg md:text-4xl mt-1 text-secondary"> Latest Products  </h3>  
+            <h3 className="text-lg md:text-4xl mt-1 -mx-3 text-secondary"> Latest Products  </h3>  
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2"> 
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
@@ -222,11 +222,14 @@ export default function Home(props) {
                 <Skeleton className="w-full" variant="rect" height={240} />
                 <Skeleton className="w-full" variant="rect" height={240} />
               </div>}>
-              <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
-                    <div key={k} className="p-1">
-                        <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
-                    </div>
-                ))} />
+                <div className='-mx-5'>
+                  <ReactMultiCarousel showDots={true} arrows={true} content={values?.products?.map((e,k)=>(
+                        <div key={k} className="p-1">
+                            <SingleProduct key={k} data={e} hideDetails={true} dispatch={dispatch} />
+                        </div>
+                    ))} />
+
+                </div>
             </Suspense>
 
 
@@ -245,7 +248,7 @@ export default function Home(props) {
               {sections?.filter(e=>e.position === "Bottom").map((el,key)=>{
                 var responsiveCss = el.desktopView === "true" && el.mobileView === "true" ? "" : el.desktopView === "false" && el.mobileView === "false" ? "hidden": el.desktopView === "true" && el.mobileView === "false" ? "hidden lg:block":"lg:hidden" ;
 
-                return <div key={key} className={`${responsiveCss}`}>
+                return <div key={key} className={`${responsiveCss} -mx-2`}>
                     <h3 className="text-lg md:text-4xl mt-1 md:mb-4 md:mt-8 text-secondary"> {el.hiddenTitle === "false" && el.title}  </h3>
                     <div className={"row"}>
                         {cards?.filter(e=>el._id === e.sectionId)?.map((e,k)=>{

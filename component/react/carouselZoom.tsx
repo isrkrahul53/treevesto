@@ -34,7 +34,7 @@ export default function ReactCarouselZoom(props){
     arrows={props.arrows && true}
     responsive={responsive}>
         {props.data.map((e,k)=>(
-          <img src={process.env.NEXT_PUBLIC_apiUrl+e || "image.jpg"} width="100%" alt="" />
+          <img key={k} src={process.env.NEXT_PUBLIC_apiUrl+e || "image.jpg"} width="100%" alt="" />
         ))}
   </Carousel>;
 }

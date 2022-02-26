@@ -8,8 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -22,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Link from 'next/link';
+import Person from '@material-ui/icons/Person';
 
 const useStyles = makeStyles({
   list: {
@@ -105,11 +104,22 @@ export default function Sidebar(props) {
     </Accordion>
     ))}
     <Divider />
-    <List> 
-        <ListItem button>
-            <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
-            <ListItemText primary={"Logout"} />        
-        </ListItem>
+    <List>
+        {props.user ? <>
+          <ListItem button>
+              <ListItemIcon> <Person /> </ListItemIcon>
+              <Link href={"/account/overview"}><ListItemText primary={"Account"} /></Link>
+          </ListItem>
+          <ListItem button>
+              <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
+              <ListItemText onClick={props.logout} primary={"Logout"} />        
+          </ListItem>
+        </>:<>
+          <ListItem button>
+              <ListItemIcon> <Person /> </ListItemIcon>
+              <Link href={"/auth/login"}><ListItemText primary={"Login / SignUp"} /></Link>
+          </ListItem>
+        </>}
     </List>
 
     </div>

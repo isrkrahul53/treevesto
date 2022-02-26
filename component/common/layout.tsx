@@ -7,9 +7,6 @@ import CustomAlert from './customAlert';
 import { useRouter } from 'next/router';
 import Sidebar from './sidebar';
 import Footer from './footer';
-import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchProducts from './searchProducts';
 import MenuListComposition from '../material/menu'
 import { useSelector, useDispatch } from "react-redux";
 import MenuListComposition2 from '../material/menu2';
@@ -77,7 +74,7 @@ export default function Layout(props){
             <div className="container navbar navbar-expand-lg navbar-light p-0 px-md-0 px-3 w-full z-40">
                 <div className="flex items-center p-0">
                     <span className="navbar-brand flex items-center">
-                        <div className="xl:hidden"><Sidebar data={categories} /></div>
+                        <div className="xl:hidden"><Sidebar data={categories} user={user} logout={logout} /></div>
                         <Link href="/">
                             <img src="/logo.png" className="w-24 hidden xl:block mx-2 cursor-pointer" alt="logo"/>
                         </Link>
@@ -100,20 +97,20 @@ export default function Layout(props){
                     <ul className="flex ml-auto items-center"> 
                         <li className="cursor-pointer mx-0">
                             {/* <SearchProducts /> */}
-                            <div className="md:hidden flex items-center border-l-2 border-r-2" style={{height:'55px'}}>
+                            <div className="md:hidden flex items-center" style={{height:'55px'}}>
                                 <Link href="/search"><img src="/assets/icons/search.png" className="mx-3" width="20px" alt="search"/></Link>
                             </div>
 
-                            <div className="hidden md:flex items-center w-full bg-gray-0 border-l-2 border-r-2 p-1 px-2" style={{height:'55px'}}>
+                            <div className="hidden md:flex items-center w-full shadow-sm bg-gray-100 p-1 px-2" style={{height:'35px'}}>
                                 <img src="/assets/icons/search.png" className="mx-2" width="15px" alt="search"/>
-                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-0" placeholder="Search" />
+                                <input type="text" onChange={e=>setSearch(e.target.value)} name="search" className="w-full outline-none p-1 bg-gray-100" placeholder="Search" />
                             </div>
                         </li>
                         <li className={"dropdown mx-1 mx-md-3"}>
-                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden mx-2 cursor-pointer" width="20px" alt="user"/>
+                            <img onClick={e=>router.push("/account/overview")} src="/assets/icons/user.png" className="md:hidden cursor-pointer" width="20px" alt="user"/>
                             <div className="hidden md:block">
                                 <MenuListComposition2
-                                cat={<img src="/assets/icons/user.png" className="mx-2 cursor-pointer" width="20px" alt="user"/>} 
+                                cat={<img src="/assets/icons/user.png" className="cursor-pointer" width="20px" alt="user"/>} 
                                 subCat={[{_id:"account/profile",catName:<div className="p-1">
                                     
                                     <h2 className="text-xl px-1"> {user ? user?.name || user?.email : "Welcome"}</h2>
@@ -133,14 +130,14 @@ export default function Layout(props){
                             </div>
                             
                         </li> 
-                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
+                        <li className="flex items-center justify-end" style={{height:'55px'}}>
                         <Link href="/wishlist">
                             <div className="flex items-center cursor-pointer">
-                                <img src="/assets/icons/heart.png" className="mx-2 mx-md-4" width="20px" alt="heart"/>
+                                <img src="/assets/icons/heart.png" className="mx-2" width="20px" alt="heart"/>
                             </div>
                         </Link> 
                         </li>
-                        <li className="flex items-center justify-end border-l-2" style={{height:'55px'}}>
+                        <li className="flex items-center justify-end" style={{height:'55px'}}>
                         <Link href="/checkout/cart">
                             <div className="flex items-center cursor-pointer mx-2 mx-md-3">
                                 <img src="/assets/icons/shopping-bag.png" width="20px" alt="shopping-bag"/>
@@ -151,7 +148,7 @@ export default function Layout(props){
                             </div>
                         </Link>
                         </li> 
-                        {user && <li className="flex items-center justify-end border-l-2" onClick={logout} style={{height:'55px'}}>
+                        {user && <li className="flex items-center justify-end" onClick={logout} style={{height:'55px'}}>
                             <div className="flex items-center cursor-pointer">
                                 <img src="/assets/icons/logout.jpg" className="mx-2" width="20px" alt="logout"/>
                             </div>
@@ -201,10 +198,10 @@ export default function Layout(props){
                 </div>   
             </>}
             </>}
-        </div>:<>
+        </div>:<div className='mb-5'>
             {props.children}
             <Footer />
-        </>}
+        </div>}
 
 
     </div>

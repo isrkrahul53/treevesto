@@ -33,16 +33,22 @@ function RatingUI(props){
         </div>
     </div>
 }
-               
+
 const apiUrl = process.env.NEXT_PUBLIC_apiUrl;
+
+const agent = new https.Agent({  
+    rejectUnauthorized: false
+});
 export default function Product(props) { 
 
     const dispatch = useDispatch();
     const router = useRouter();
     
-    const rating = props.review.length > 0 ? (props.review.map(e=>+e.rating).reduce((a,b)=>a+b)/props.review.length).toFixed(2) : 0
     const [grid,setGrid] = React.useState(1);
     const [selectedImage,setSelectedImage] = React.useState(null)
+    const [similarProduct,setSimilarProducts] = React.useState([])
+    const [reviews,setReviews] = React.useState([])
+    const rating = reviews.length > 0 ? (reviews.map(e=>+e.rating).reduce((a,b)=>a+b)/reviews.length).toFixed(2) : 0
     const imageProps = {width: 400, height: 250, zoomWidth: 500, img: selectedImage};
     const [vendordata,setVendordata] = React.useState(null)
       
@@ -57,6 +63,11 @@ export default function Product(props) {
     const handleNavigationChange  = (x) => {
         setNavigation(x)
     }
+    
+    useEffect(()=>{
+        getSimilarProducts();
+        getProductReviews();
+    },[])
 
     useEffect(()=>{
         setSelectedImage(apiUrl+props.product?.productImages[0])
@@ -74,6 +85,21 @@ export default function Product(props) {
     },[props.product])
     
 
+    const getSimilarProducts = async () => {
+        const similarProduct = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/cat/subcat/${props.product.subcatId}`,{httpsAgent:agent})    
+        var temp = await similarProduct.data.result;
+        var arr = []
+        temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
+          arr.push(temp.filter(e=>e.productCode === el))
+        })
+        setSimilarProducts(arr)
+
+    }
+
+    const getProductReviews = async () => {
+        const review = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}review/product/${props.paramId}`,{httpsAgent:agent})
+        setReviews(review.data.result)
+    }
 
     useEffect(()=>{
         process.nextTick(() => {
@@ -230,14 +256,14 @@ export default function Product(props) {
                                                         <div className="flex-row md:flex item-center">
                                                             <div className="mr-3">
                                                                 <div className="text-4xl">{rating} <StarRateIcon /></div>
-                                                                <div className="text-sm text-secondary">{props.review.length} Ratings & Reviews</div>
+                                                                <div className="text-sm text-secondary">{reviews.length} Ratings & Reviews</div>
                                                             </div>
                                                             <div className="mr-3">
-                                                                <RatingUI val={5} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "5").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                                <RatingUI val={4} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "4").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                                <RatingUI val={3} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "3").length/props.review.length)*100+"%" : 0+"%"} color={"success"} />
-                                                                <RatingUI val={2} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "2").length/props.review.length)*100+"%" : 0+"%"} color={"warning"} />
-                                                                <RatingUI val={1} width={props.review.length > 0 ? (props.review.filter(e=>e.rating === "1").length/props.review.length)*100+"%" : 0+"%"} color={"danger"} />
+                                                                <RatingUI val={5} width={reviews.length > 0 ? (reviews.filter(e=>e.rating === "5").length/reviews.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={4} width={reviews.length > 0 ? (reviews.filter(e=>e.rating === "4").length/reviews.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={3} width={reviews.length > 0 ? (reviews.filter(e=>e.rating === "3").length/reviews.length)*100+"%" : 0+"%"} color={"success"} />
+                                                                <RatingUI val={2} width={reviews.length > 0 ? (reviews.filter(e=>e.rating === "2").length/reviews.length)*100+"%" : 0+"%"} color={"warning"} />
+                                                                <RatingUI val={1} width={reviews.length > 0 ? (reviews.filter(e=>e.rating === "1").length/reviews.length)*100+"%" : 0+"%"} color={"danger"} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -246,7 +272,7 @@ export default function Product(props) {
 
 
                                             <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                                                {props.review.map((e,k)=>(
+                                                {reviews.map((e,k)=>(
                                                     <div key={k} className="bg-white p-3 my-2 border border-left border-right border-bottom">
                                                         <div className="flex items-center">
                                                             <div className={
@@ -296,7 +322,7 @@ export default function Product(props) {
                     {/* <ReactMultiCarousel data={props.similarProduct} hideDetails={false} cart={addtoCart} /> */}
 
                     <Suspense fallback={<Skeleton className="w-full" height={180} />}>
-                        <ReactMultiCarousel showDots={true} arrows={true} content={props.similarProduct.map((e,k)=>(
+                        <ReactMultiCarousel showDots={true} arrows={true} content={similarProduct.map((e,k)=>(
                         <div key={k} className="p-1">
                             <SingleProduct data={e} hideDetails={true} dispatch={dispatch} />
                         </div>
@@ -319,29 +345,16 @@ export default function Product(props) {
 
 
 export const getServerSideProps = async (context) => {
-    
-    const agent = new https.Agent({  
-        rejectUnauthorized: false
-    });
     const res = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/${context.params.id}`,{httpsAgent:agent})
-    const review = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}review/product/${context.params.id}`,{httpsAgent:agent})
     const productData = await res.data.result;
-
     const category = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}category/id/${productData[0].subcatId}`,{httpsAgent:agent})
-    const similarProduct = await axios.get(`${process.env.NEXT_PUBLIC_apiUrl}product/cat/subcat/${productData[0].subcatId}`,{httpsAgent:agent})    
  
-    var temp = await similarProduct.data.result;
-    var arr = []
-    temp.map(e=>e.productCode).filter((e,k,ar)=>ar.indexOf(e) === k).map(el=>{
-      arr.push(temp.filter(e=>e.productCode === el))
-    })
     
     return {
       props: {
         product:productData[0] || [],
-        review:review.data.result,
         catName:category.data.result[0].catName,
-        similarProduct:arr
+        paramId:context.params.id
       }
     };
   }
